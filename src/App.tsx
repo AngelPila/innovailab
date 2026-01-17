@@ -1,11 +1,12 @@
 import Chatbot from "./components/Chatbot";
+import StopsPlannerPanel from "./components/StopsPlannerPanel";
 import "./App.css";
-
 
 import catalog from "./catalogs/catalog.json";
 import { buildStopsFromCatalogAndChat, type RouteInput } from "./planner/buildStops";
 
 function App() {
+  // ✅ Demo rápida (la que ya tenías)
   const input: RouteInput = {
     tramiteId: "NOTARIA_CERTIFICACION_DOC",
     requirementsStatus: {
@@ -23,6 +24,7 @@ function App() {
     <>
       <Chatbot />
 
+      {/* ✅ Tu demo actual (lista fija) */}
       <div style={{ maxWidth: 720, margin: "32px auto", padding: 16 }}>
         <h2>Planner de trámites (prueba)</h2>
         <h3>{tramiteName}</h3>
@@ -47,6 +49,9 @@ function App() {
           ))}
         </ul>
       </div>
+
+      {/* ✅ Panel nuevo con botón (Mapbox resolver) */}
+      <StopsPlannerPanel />
     </>
   );
 }
