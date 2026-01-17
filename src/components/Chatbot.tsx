@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, type KeyboardEvent } from 'react'
 import '../styles/Chatbot.css'
 
 interface Message {
@@ -43,13 +43,13 @@ const Chatbot = () => {
 
     try {
       // Preparar historial de conversación
-      const contents = [
-        ...conversationHistoryRef.current,
-        {
-          role: 'user',
-          parts: [{ text: userMessage }],
-        },
-      ]
+      const contents: ConversationHistory[] = [
+  ...conversationHistoryRef.current,
+  {
+    role: 'user',
+    parts: [{ text: userMessage }],
+  },
+]
 
       // Llamar a la API de Gemini
       const response = await fetch(
