@@ -78,19 +78,23 @@ export default function GobotChat() {
     <div className="flex h-screen bg-gray-50">
       <Sidebar connections={connections} toggleConnection={toggleConnection} history={historyMock} />
 
-      <div className="flex-1 flex flex-col bg-yellow-400">
-        {showWelcome && <div className="h-[140px]" />}
+      <div className="flex-1 flex flex-col">
+        {/* Encabezado amarillo continuo */}
+        <div className="bg-yellow-400">
+          {showWelcome && <div className="h-[140px]" />}
 
-        {!showWelcome && (
-          <Tabs
-            tabs={tabs}
-            activeTabId={activeTabId}
-            onSwitch={switchTab}
-            onClose={closeTab}
-            onAdd={addNewTab}
-          />
-        )}
+          {!showWelcome && (
+            <Tabs
+              tabs={tabs}
+              activeTabId={activeTabId}
+              onSwitch={switchTab}
+              onClose={closeTab}
+              onAdd={addNewTab}
+            />
+          )}
+        </div>
 
+        {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
           {showWelcome ? (
             <Welcome
