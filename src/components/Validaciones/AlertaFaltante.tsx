@@ -1,12 +1,13 @@
-import { AlertTriangle, Plus } from 'lucide-react';
+import { AlertTriangle, Plus, SkipForward } from 'lucide-react';
 import type { Prerequisito } from '../../types/tramite.types';
 
 interface Props {
   prerequisito: Prerequisito;
   onAbrirRama: () => void;
+  onOmitir?: () => void;
 }
 
-export function AlertaFaltante({ prerequisito, onAbrirRama }: Props) {
+export function AlertaFaltante({ prerequisito, onAbrirRama, onOmitir }: Props) {
   return (
     <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mt-2 mb-4">
       <div className="flex items-start gap-3">
@@ -21,7 +22,7 @@ export function AlertaFaltante({ prerequisito, onAbrirRama }: Props) {
           </p>
 
           {prerequisito.tramiteRelacionado && (
-            <div className="bg-white border border-red-200 rounded-lg p-3">
+            <div className="bg-white border border-red-200 rounded-lg p-3 mb-3">
               <p className="text-xs text-gray-600 mb-3 flex items-center gap-1">
                 <span className="text-red-600 font-bold">→</span>
                 Se abrirá una nueva pestaña para que completes este requisito
@@ -37,11 +38,22 @@ export function AlertaFaltante({ prerequisito, onAbrirRama }: Props) {
           )}
 
           {!prerequisito.tramiteRelacionado && (
-            <div className="bg-gray-100 border border-gray-300 rounded-lg p-3">
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-3 mb-3">
               <p className="text-sm text-gray-700 italic">
                 📌 Deberás obtener este documento por tu cuenta. Una vez lo tengas, marca la opción "Sí" arriba.
               </p>
             </div>
+          )}
+
+          {/* Botón de omitir */}
+          {onOmitir && (
+            <button
+              onClick={onOmitir}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium text-sm transition-colors"
+            >
+              <SkipForward className="w-4 h-4" />
+              Omitir por ahora (completar después)
+            </button>
           )}
         </div>
       </div>

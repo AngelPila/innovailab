@@ -1,5 +1,6 @@
 import { CheckCircle2, AlertCircle, ArrowRight, Clock } from 'lucide-react';
 import { tramitesService } from '../../services/tramitesService';
+import { LugaresRuta } from '../Mapa';
 import type { Tramite } from '../../types/tramite.types';
 
 interface Props {
@@ -95,6 +96,16 @@ export function FaseSeguimiento({ tramite, tabsAbiertos = [], prerequisitosCumpl
             <p className="text-green-800">
               Has completado todos los requisitos necesarios para tu <strong>{tramite.nombre}</strong>.
             </p>
+          </div>
+        )}
+
+        {/* Componente de Lugares y Ruta - Solo mostrar cuando todos los requisitos están completos */}
+        {todosCompletos && (
+          <div className="mb-6">
+            <LugaresRuta 
+              tramiteId={tramite.id} 
+              nombreTramite={tramite.nombre}
+            />
           </div>
         )}
 

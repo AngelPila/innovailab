@@ -8,6 +8,7 @@ import { useChatTabs } from "./useChatTabs";
 import { useAutoScroll } from "./useAutoScroll";
 import type { Connections, HistoryItem, Message } from "./types";
 import { TramiteFlow } from "../components/Tramites";
+import { SelectorTramiteMapa, ModalLugaresMapa } from "../components/Mapa";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
 import { useTramiteStore } from "../store/tramiteStore";
@@ -43,6 +44,10 @@ export default function GobotChat() {
     calendar: false,
     gmail: false,
   });
+  
+  // Estados para el mapa
+  const [mostrarSelectorMapa, setMostrarSelectorMapa] = useState(false);
+  const [mapaConTramite, setMapaConTramite] = useState<{ id: string; nombre: string } | null>(null);
 
   const endRef = useRef<HTMLDivElement>(null);
   useAutoScroll(endRef, [currentMessages.length, activeTabId]);
@@ -68,14 +73,40 @@ export default function GobotChat() {
     addNewTab(tramiteId);
   };
 
+  const handleVolverAlChat = () => {
+    // Limpiar el trámite activo de la pestaña actual para volver al chat
+    // Las pestañas se mantienen abiertas
+    setTramiteActivo(null);
+    setTabTramite(activeTabId, null);
+    // No limpiar el progreso global, solo el de esta pestaña
+  };
+
   const onGenerateRoute = () => {
-    const routeMessage: Message = {
-      id: Date.now(),
-      role: "assistant",
-      content: "Te armé la mejor ruta según tu ubicación...",
-      isRoute: true,
-    };
-    pushMessages(activeTabId, [routeMessage]);
+    // Verificar si hay un trámite activo en la conversación actual
+    const tramiteEnConversacion = currentTramite || tramiteActivo;
+    
+    if (tramiteEnConversacion) {
+      // Si hay trámite, obtener su nombre y mostrar directamente el mapa
+      const tramiteInfo = tramitesService.getPorId(tramiteEnConversacion);
+      if (tramiteInfo) {
+        setMapaConTramite({ id: tramiteEnConversacion, nombre: tramiteInfo.nombre });
+      } else {
+        // Fallback si no encontramos el trámite
+        setMostrarSelectorMapa(true);
+      }
+    } else {
+      // Si no hay trámite, mostrar el selector para que el usuario elija
+      setMostrarSelectorMapa(true);
+    }
+  };
+
+  const handleSeleccionarTramiteMapa = (tramiteId: string, nombreTramite: string) => {
+    setMostrarSelectorMapa(false);
+    setMapaConTramite({ id: tramiteId, nombre: nombreTramite });
+  };
+
+  const handleCerrarMapa = () => {
+    setMapaConTramite(null);
   };
 
   const onSend = async () => {
@@ -163,9 +194,8 @@ export default function GobotChat() {
       <div className="flex-1 flex flex-col">
         {/* Encabezado amarillo - Pestañas de chat */}
         <div className="bg-yellow-400">
-          {showWelcome && <div className="h-[140px]" />}
-
-          {!showWelcome && (
+          {/* Mostrar pestañas solo si hay más de una, O si hay mensajes/trámites */}
+          {(tabs.length > 1 || !showWelcome) ? (
             <Tabs
               tabs={tabs}
               activeTabId={activeTabId}
@@ -173,6 +203,8 @@ export default function GobotChat() {
               onClose={closeTab}
               onAdd={addNewTab}
             />
+          ) : (
+            <div className="h-[140px]" />
           )}
         </div>
 
@@ -183,12 +215,14 @@ export default function GobotChat() {
               tramiteId={currentTramite}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
               tabsAbiertos={tabs.map(t => t.title)}
+              onVolverAlChat={handleVolverAlChat}
             />
           ) : tramiteActivo ? (
             <TramiteFlow 
               tramiteId={tramiteActivo}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
               tabsAbiertos={tabs.map(t => t.title)}
+              onVolverAlChat={handleVolverAlChat}
             />
           ) : showWelcome ? (
             <Welcome
@@ -205,7 +239,7 @@ export default function GobotChat() {
           )}
         </div>
 
-        {!showWelcome && !tramiteActivo && (
+        {!showWelcome && !tramiteActivo && !currentTramite && (
           <ChatInput
             inputValue={inputValue}
             setInputValue={setInputValue}
@@ -217,6 +251,23 @@ export default function GobotChat() {
           />
         )}
       </div>
+
+      {/* Modal: Selector de trámite para mapa */}
+      {mostrarSelectorMapa && (
+        <SelectorTramiteMapa
+          onSelectTramite={handleSeleccionarTramiteMapa}
+          onClose={() => setMostrarSelectorMapa(false)}
+        />
+      )}
+
+      {/* Modal: Mapa con lugares del trámite */}
+      {mapaConTramite && (
+        <ModalLugaresMapa
+          tramiteId={mapaConTramite.id}
+          nombreTramite={mapaConTramite.nombre}
+          onClose={handleCerrarMapa}
+        />
+      )}
     </div>
   );
 }

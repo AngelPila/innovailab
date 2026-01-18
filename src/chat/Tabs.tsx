@@ -25,22 +25,29 @@ export default function Tabs({ tabs, activeTabId, onSwitch, onClose, onAdd }: Pr
         >
           <span className="whitespace-nowrap">{tab.title}</span>
 
-          {tabs.length > 1 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose(tab.id);
-              }}
-              className="hover:bg-black/10 rounded p-0.5"
-              aria-label="Cerrar tab"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
+          {/* Permitir cerrar cualquier pestaña, incluso la última */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose(tab.id);
+            }}
+            className="hover:bg-black/10 rounded p-0.5"
+            aria-label="Cerrar tab"
+          >
+            <X className="w-3 h-3" />
+          </button>
         </div>
       ))}
 
-      <button onClick={onAdd} className="p-1.5 hover:bg-gray-100 rounded-md" aria-label="Nuevo tab">
+      <button 
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onAdd();
+        }} 
+        className="p-1.5 hover:bg-gray-100 rounded-md" 
+        aria-label="Nuevo tab"
+      >
         <Plus className="w-4 h-4 text-gray-600" />
       </button>
     </div>

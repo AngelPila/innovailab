@@ -7,7 +7,7 @@ import { PrerequisitosCheck } from './PrerequisitosCheck';
 import { FaseContenido } from './FaseContenido';
 import { FasePago } from './FasePago';
 import { FaseSeguimiento } from './FaseSeguimiento';
-import { Clock, DollarSign, FileText } from 'lucide-react';
+import { Clock, DollarSign, FileText, ArrowLeft, MessageCircle } from 'lucide-react';
 import type { FaseTramite } from '../../types/tramite.types';
 import { SegmentacionPasaporte } from './SegmentacionPasaporte';
 
@@ -17,9 +17,10 @@ interface Props {
   onCompletarRama?: () => void;
   onAbrirRamaEnPestaña?: (tramiteId: string, nombreTramite: string, prerequisitoId: string) => void;
   tabsAbiertos?: string[];
+  onVolverAlChat?: () => void;
 }
 
-export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbrirRamaEnPestaña, tabsAbiertos = [] }: Props) {
+export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbrirRamaEnPestaña, tabsAbiertos = [], onVolverAlChat }: Props) {
   const tramite = tramitesService.getPorId(tramiteId);
   const { iniciarTramite, progresoActual, progresoMultiple } = useTramiteStore();
   
@@ -80,6 +81,18 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
       {!esRama && (
         <div className="bg-yellow-400 px-6 py-6">
           <div className="max-w-4xl mx-auto">
+            {/* Botón volver al chat */}
+            {onVolverAlChat && (
+              <button
+                onClick={onVolverAlChat}
+                className="flex items-center gap-2 mb-4 px-4 py-2 bg-white/80 hover:bg-white text-gray-800 rounded-lg transition-colors text-sm font-medium"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <MessageCircle className="w-4 h-4" />
+                Volver al Chat
+              </button>
+            )}
+            
             <h1 className="text-4xl font-bold text-gray-900 mb-2">{tramite.nombre}</h1>
             <p className="text-lg text-gray-700 mb-4">{tramite.descripcion}</p>
             

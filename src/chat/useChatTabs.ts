@@ -28,23 +28,28 @@ export function useChatTabs() {
       licencia_conducir: '↳ Licencia de Conducir',
     };
     
-    let titulo = `Trámite ${newId}`;
-    if (tramiteId) {
-      titulo = nombresTramites[tramiteId] || `↳ ${tramiteId}`;
-      setTramitesByTab((prev) => ({ ...prev, [newId]: tramiteId }));
-    }
+    // Si no se proporciona tramiteId, crear un chat vacío
+    let titulo = tramiteId ? (nombresTramites[tramiteId] || `↳ ${tramiteId}`) : `Chat ${newId}`;
     
     setTabs((prev) => [...prev, { id: newId, title: titulo }]);
     setMessagesByTab((prev) => ({ ...prev, [newId]: [] }));
+    setTramitesByTab((prev) => ({ ...prev, [newId]: tramiteId || null }));
     setActiveTabId(newId);
   };
 
   const closeTab = (tabId: number) => {
-    if (tabs.length === 1) return;
-
     const nextTabs = tabs.filter((t) => t.id !== tabId);
-    setTabs(nextTabs);
+    
+    // Si no quedan pestañas, volver al estado inicial con Consulta Principal vacía
+    if (nextTabs.length === 0) {
+      setTabs([{ id: 1, title: "Consulta Principal" }]);
+      setMessagesByTab({ 1: [] });
+      setTramitesByTab({ 1: null });
+      setActiveTabId(1);
+      return;
+    }
 
+    setTabs(nextTabs);
     if (activeTabId === tabId) setActiveTabId(nextTabs[0].id);
 
     setMessagesByTab((prev) => {

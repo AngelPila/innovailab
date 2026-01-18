@@ -2,10 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Leaflet styles fix */
+@import 'leaflet/dist/leaflet.css';
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Custom marker styles */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.user-marker {
+  background: transparent;
+  border: none;
+}
+
+/* Leaflet container fix */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 1;
 }
 
 body {
