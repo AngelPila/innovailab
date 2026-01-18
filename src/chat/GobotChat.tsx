@@ -6,17 +6,13 @@ import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import { useChatTabs } from "./useChatTabs";
 import { useAutoScroll } from "./useAutoScroll";
-import type { Connections, HistoryItem, Message } from "./types";
+import type { Message } from "./types";
 import { TramiteFlow } from "../components/Tramites";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
 import { useTramiteStore } from "../store/tramiteStore";
-
-const historyMock: HistoryItem[] = [
-  { id: 1, title: "Renovación de cédula", date: "Hace 2 horas", status: "completed" },
-  { id: 2, title: "Visa americana", date: "Ayer", status: "in-progress" },
-  { id: 3, title: "Licencia de conducir", date: "Hace 3 días", status: "completed" },
-];
+import SelectTramiteModal from "../components/SelectTramiteModal";
+import { getPlacesForTramite, placeLabelMap } from "../config/tramiteLugaresConfig";
 
 export default function GobotChat() {
   const { 
@@ -33,16 +29,12 @@ export default function GobotChat() {
     updateTabTitle,
   } = useChatTabs();
 
-  const { limpiarProgreso } = useTramiteStore();
+  const { limpiarProgreso, progresoActual } = useTramiteStore();
 
   const [inputValue, setInputValue] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [tramiteActivo, setTramiteActivo] = useState<string | null>(null);
-  const [connections, setConnections] = useState<Connections>({
-    whatsapp: false,
-    calendar: false,
-    gmail: false,
-  });
+  const [showTramiteModal, setShowTramiteModal] = useState<boolean>(false);
 
   const endRef = useRef<HTMLDivElement>(null);
   useAutoScroll(endRef, [currentMessages.length, activeTabId]);
@@ -57,10 +49,6 @@ export default function GobotChat() {
   // showWelcome solo si no hay mensajes Y no hay un trámite activo en esta pestaña
   const showWelcome = currentMessages.length === 0 && !currentTramite;
 
-  const toggleConnection = (service: keyof Connections) => {
-    setConnections((prev) => ({ ...prev, [service]: !prev[service] }));
-  };
-
   const onToggleRecording = () => setIsRecording((v) => !v);
 
   const handleAbrirRamaEnPestaña = (tramiteId: string, nombreTramite: string, prerequisitoId: string) => {
@@ -69,13 +57,41 @@ export default function GobotChat() {
   };
 
   const onGenerateRoute = () => {
+    // Verificar si hay trámite activo
+    const tramiteIdActual = currentTramite || tramiteActivo || progresoActual?.tramiteActual;
+    
+    if (!tramiteIdActual) {
+      // Si NO hay trámite activo, mostrar modal de selección
+      setShowTramiteModal(true);
+      return;
+    }
+
+    // Si SÍ hay trámite activo, generar ruta con lugares específicos
+    generateRouteForTramite(tramiteIdActual);
+  };
+
+  const generateRouteForTramite = (tramiteId: string) => {
+    // Obtener los tipos de lugares necesarios para este trámite
+    const placesTypes = getPlacesForTramite(tramiteId);
+    
+    // Construir lista de lugares con sus nombres legibles
+    const placesText = placesTypes
+      .map((type, index) => `${index + 1}. ${placeLabelMap[type] || type}`)
+      .join('\n');
+
     const routeMessage: Message = {
       id: Date.now(),
       role: "assistant",
-      content: "Te armé la mejor ruta según tu ubicación...",
+      content: `🗺️ **Ruta optimizada para tu trámite**\n\nTe armé la mejor ruta según tu ubicación y los lugares que necesitas visitar:\n\n${placesText}\n\nLos lugares están ordenados para minimizar tu tiempo de viaje.`,
       isRoute: true,
     };
+    
     pushMessages(activeTabId, [routeMessage]);
+  };
+
+  const handleTramiteSelect = (tramiteId: string) => {
+    // Usuario seleccionó un trámite desde el modal
+    generateRouteForTramite(tramiteId);
   };
 
   const onSend = async () => {
@@ -158,23 +174,26 @@ export default function GobotChat() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar connections={connections} toggleConnection={toggleConnection} history={historyMock} />
+      {/* Sidebar con tabs */}
+      <Sidebar
+        tabs={tabs}
+        activeTabId={activeTabId}
+        onSwitchTab={switchTab}
+        onCloseTab={closeTab}
+        onNewChat={addNewTab}
+      />
 
       <div className="flex-1 flex flex-col">
-        {/* Encabezado amarillo - Pestañas de chat */}
-        <div className="bg-yellow-400">
-          {showWelcome && <div className="h-[140px]" />}
-
-          {!showWelcome && (
-            <Tabs
-              tabs={tabs}
-              activeTabId={activeTabId}
-              onSwitch={switchTab}
-              onClose={closeTab}
-              onAdd={addNewTab}
-            />
-          )}
-        </div>
+        {/* Tabs de chat (solo si no es Welcome) */}
+        {!showWelcome && (
+          <Tabs
+            tabs={tabs}
+            activeTabId={activeTabId}
+            onSwitch={switchTab}
+            onClose={closeTab}
+            onAdd={addNewTab}
+          />
+        )}
 
         {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
@@ -205,7 +224,8 @@ export default function GobotChat() {
           )}
         </div>
 
-        {!showWelcome && !tramiteActivo && (
+        {/* ChatInput (solo si no es Welcome ni hay trámite activo) */}
+        {!showWelcome && !tramiteActivo && !currentTramite && (
           <ChatInput
             inputValue={inputValue}
             setInputValue={setInputValue}
@@ -217,6 +237,13 @@ export default function GobotChat() {
           />
         )}
       </div>
+
+      {/* Modal de selección de trámite */}
+      <SelectTramiteModal
+        isOpen={showTramiteModal}
+        onClose={() => setShowTramiteModal(false)}
+        onSelect={handleTramiteSelect}
+      />
     </div>
   );
 }
