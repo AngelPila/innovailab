@@ -7,6 +7,9 @@ import ChatInput from "./ChatInput";
 import { useChatTabs } from "./useChatTabs";
 import { useAutoScroll } from "./useAutoScroll";
 import type { Connections, HistoryItem, Message } from "./types";
+import { TramiteFlow } from "../components/Tramites";
+import { tramitesService } from "../services/tramitesService";
+import { aiService } from "../services/aiService";
 
 const historyMock: HistoryItem[] = [
   { id: 1, title: "Renovación de cédula", date: "Hace 2 horas", status: "completed" },
@@ -20,6 +23,7 @@ export default function GobotChat() {
 
   const [inputValue, setInputValue] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [tramiteActivo, setTramiteActivo] = useState<string | null>(null);
   const [connections, setConnections] = useState<Connections>({
     whatsapp: false,
     calendar: false,
@@ -47,7 +51,7 @@ export default function GobotChat() {
     pushMessages(activeTabId, [routeMessage]);
   };
 
-  const onSend = () => {
+  const onSend = async () => {
     if (!inputValue.trim()) return;
 
     const userMessage: Message = { id: Date.now(), role: "user", content: inputValue };
@@ -56,15 +60,54 @@ export default function GobotChat() {
     setTabMessages(activeTabId, nextMessages);
     setInputValue("");
 
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: Date.now() + 1,
-        role: "assistant",
-        content: "Entendido. Para ese trámite vas a necesitar algunos documentos específicos...",
-        showRouteButton: true,
-      };
-      setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
-    }, 800);
+    // Obtener respuesta de la IA
+    try {
+      const respuestaIA = await aiService.sendMessage(inputValue);
+      
+      // Verificar si la IA detectó un trámite
+      const tramiteDetectado = aiService.detectarTramiteEnRespuesta(respuestaIA);
+      
+      if (tramiteDetectado) {
+        // Limpiar la respuesta del marcador y mostrarla
+        const respuestaLimpia = aiService.limpiarRespuesta(respuestaIA);
+        
+        const assistantMessage: Message = {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: respuestaLimpia,
+        };
+        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        
+        // Activar el flujo de trámite después de un momento
+        setTimeout(() => {
+          setTramiteActivo(tramiteDetectado);
+        }, 1000);
+      } else {
+        // Respuesta normal del chatbot
+        const assistantMessage: Message = {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: respuestaIA,
+        };
+        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+      }
+    } catch (error) {
+      console.error('Error al obtener respuesta de IA:', error);
+      
+      // Fallback a detección simple
+      const tramiteDetectado = tramitesService.detectarIntencion(inputValue);
+      
+      if (tramiteDetectado) {
+        setTramiteActivo(tramiteDetectado.id);
+      } else {
+        const assistantMessage: Message = {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: "Lo siento, tuve un problema al procesar tu mensaje. ¿Podrías intentar de nuevo?",
+        };
+        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+      }
+    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,7 +126,7 @@ export default function GobotChat() {
         <div className="bg-yellow-400">
           {showWelcome && <div className="h-[140px]" />}
 
-          {!showWelcome && (
+          {!showWelcome && !tramiteActivo && (
             <Tabs
               tabs={tabs}
               activeTabId={activeTabId}
@@ -96,7 +139,9 @@ export default function GobotChat() {
 
         {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
-          {showWelcome ? (
+          {tramiteActivo ? (
+            <TramiteFlow tramiteId={tramiteActivo} />
+          ) : showWelcome ? (
             <Welcome
               inputValue={inputValue}
               setInputValue={setInputValue}
@@ -111,7 +156,7 @@ export default function GobotChat() {
           )}
         </div>
 
-        {!showWelcome && (
+        {!showWelcome && !tramiteActivo && (
           <ChatInput
             inputValue={inputValue}
             setInputValue={setInputValue}
