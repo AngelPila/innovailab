@@ -1,26 +1,20 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useTramiteStore } from '../store/tramiteStore';
 import { tramitesService } from '../services/tramitesService';
-import type { FaseTramite, RamaSecundaria, PasoTramite } from '../types/tramite.types';
+import type { FaseTramite, RamaSecundaria } from '../types/tramite.types';
 
 export function useTramiteFlow(tramiteId: string) {
   const store = useTramiteStore();
   const tramite = tramitesService.getPorId(tramiteId);
 
-  const [faseActual, setFaseActual] = useState<FaseTramite>('informacion');
-  const [fasesCompletadas, setFasesCompletadas] = useState<FaseTramite[]>([]);
+  // Usar directamente progresoActual del store, que ya está sincronizado por TramiteFlow.iniciarTramite
+  const faseActual = store.progresoActual?.faseActual || 'informacion';
+  const fasesCompletadas = store.progresoActual?.pasosCompletados || [];
 
-  // Sincronizar con el store
-  useEffect(() => {
-    if (store.progresoActual && store.progresoActual.tramiteActual === tramiteId) {
-      setFaseActual(store.progresoActual.faseActual);
-    }
-  }, [store.progresoActual, tramiteId]);
-
-  // Obtener prerequisitos cumplidos del store
+  // Obtener prerequisitos cumplidos del store para este tramite
   const prerequisitosCumplidos = useMemo(() => {
     return store.progresoActual?.prerequisitosCumplidos || {};
-  }, [store.progresoActual]);
+  }, [store.progresoActual?.prerequisitosCumplidos]);
 
   // Obtener prerequisitos dinámicos según segmentación
   const prerequisitosDinamicos = useMemo(() => {
@@ -36,7 +30,7 @@ export function useTramiteFlow(tramiteId: string) {
         (rama) => rama.estado === 'en-progreso' || rama.estado === 'pendiente'
       ) || []
     );
-  }, [store.progresoActual]);
+  }, [store.progresoActual?.ramasAbiertas]);
 
   // Obtener paso actual según la fase
   const pasoActual = useMemo(() => {
@@ -45,25 +39,15 @@ export function useTramiteFlow(tramiteId: string) {
   }, [tramite, faseActual]);
 
   const cambiarFase = (nuevaFase: FaseTramite) => {
-    setFaseActual(nuevaFase);
     store.cambiarFase(nuevaFase);
-
-    // Marcar fase anterior como completada
-    if (!fasesCompletadas.includes(faseActual)) {
-      setFasesCompletadas([...fasesCompletadas, faseActual]);
-    }
   };
 
   const completarPaso = (pasoId: string) => {
     store.completarPaso(pasoId);
     
     // Marcar fase actual como completada y avanzar
-    if (!fasesCompletadas.includes(faseActual)) {
-      setFasesCompletadas([...fasesCompletadas, faseActual]);
-    }
-
-    // Avanzar automáticamente a la siguiente fase
-    const fases: FaseTramite[] = ['informacion', 'requisitos', 'documentacion', 'pago', 'seguimiento'];
+    // MVP: Fases sin Documentación - Información → Requisitos → Pago → Seguimiento
+    const fases: FaseTramite[] = ['informacion', 'requisitos', 'pago', 'seguimiento'];
     const indiceActual = fases.indexOf(faseActual);
     if (indiceActual < fases.length - 1) {
       const siguienteFase = fases[indiceActual + 1];

@@ -5,15 +5,36 @@ export function useChatTabs() {
   const [tabs, setTabs] = useState<Tab[]>([{ id: 1, title: "Consulta Principal" }]);
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [messagesByTab, setMessagesByTab] = useState<Record<number, Message[]>>({ 1: [] });
+  const [tramitesByTab, setTramitesByTab] = useState<Record<number, string | null>>({ 1: null });
 
   const currentMessages = useMemo(
     () => messagesByTab[activeTabId] || [],
     [messagesByTab, activeTabId]
   );
 
-  const addNewTab = () => {
-    const newId = Math.max(...tabs.map((t) => t.id)) + 1;
-    setTabs((prev) => [...prev, { id: newId, title: `Consulta ${newId}` }]);
+  const currentTramite = useMemo(
+    () => tramitesByTab[activeTabId] || null,
+    [tramitesByTab, activeTabId]
+  );
+
+  const addNewTab = (tramiteId?: string) => {
+    const newId = Math.max(...tabs.map((t) => t.id), 0) + 1;
+    
+    // Mapeo de IDs a nombres amigables
+    const nombresTramites: Record<string, string> = {
+      renovacion_cedula: '↳ Renovación Cédula',
+      obtener_pasaporte: '↳ Obtener Pasaporte',
+      visa_americana: '↳ Visa Americana',
+      licencia_conducir: '↳ Licencia de Conducir',
+    };
+    
+    let titulo = `Trámite ${newId}`;
+    if (tramiteId) {
+      titulo = nombresTramites[tramiteId] || `↳ ${tramiteId}`;
+      setTramitesByTab((prev) => ({ ...prev, [newId]: tramiteId }));
+    }
+    
+    setTabs((prev) => [...prev, { id: newId, title: titulo }]);
     setMessagesByTab((prev) => ({ ...prev, [newId]: [] }));
     setActiveTabId(newId);
   };
@@ -27,6 +48,12 @@ export function useChatTabs() {
     if (activeTabId === tabId) setActiveTabId(nextTabs[0].id);
 
     setMessagesByTab((prev) => {
+      const next = { ...prev };
+      delete next[tabId];
+      return next;
+    });
+
+    setTramitesByTab((prev) => {
       const next = { ...prev };
       delete next[tabId];
       return next;
@@ -46,14 +73,25 @@ export function useChatTabs() {
     }));
   };
 
+  const setTabTramite = (tabId: number, tramiteId: string | null) => {
+    setTramitesByTab((prev) => ({ ...prev, [tabId]: tramiteId }));
+  };
+
+  const updateTabTitle = (tabId: number, title: string) => {
+    setTabs((prev) => prev.map((t) => (t.id === tabId ? { ...t, title } : t)));
+  };
+
   return {
     tabs,
     activeTabId,
     currentMessages,
+    currentTramite,
     addNewTab,
     closeTab,
     switchTab,
     setTabMessages,
     pushMessages,
+    setTabTramite,
+    updateTabTitle,
   };
 }

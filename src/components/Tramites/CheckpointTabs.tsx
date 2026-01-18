@@ -7,12 +7,12 @@ interface Props {
   fasesCompletadas: FaseTramite[];
 }
 
+// MVP: Fases principales - Información, Requisitos, Pago, Seguimiento
 const FASES: { id: FaseTramite; nombre: string }[] = [
-  { id: 'informacion', nombre: 'Información' },
-  { id: 'requisitos', nombre: 'Requisitos' },
-  { id: 'documentacion', nombre: 'Documentación' },
-  { id: 'pago', nombre: 'Pago' },
-  { id: 'seguimiento', nombre: 'Seguimiento' },
+  { id: 'informacion', nombre: '📋 Información' },
+  { id: 'requisitos', nombre: '✓ Requisitos' },
+  { id: 'pago', nombre: '💳 Pago' },
+  { id: 'seguimiento', nombre: '📍 Seguimiento' },
 ];
 
 export function CheckpointTabs({ faseActual, onCambiarFase, fasesCompletadas }: Props) {

@@ -5,9 +5,12 @@ import type { ProgresoUsuario, RamaSecundaria, FaseTramite } from '../types/tram
 interface TramiteStore {
   // Estado
   progresoActual: ProgresoUsuario | null;
+  progresoMultiple: Record<string, ProgresoUsuario>; // Guardar progreso de cada tramite abierto
   
   // Acciones
-  iniciarTramite: (tramiteId: string) => void;
+  iniciarTramite: (tramiteId: string, reset?: boolean) => void;
+  obtenerProgresoTramite: (tramiteId: string) => ProgresoUsuario;
+  guardarProgresoTramite: (tramiteId: string, progreso: ProgresoUsuario) => void;
   actualizarPrerequisito: (prerequisitoId: string, cumplido: boolean) => void;
   abrirRama: (rama: RamaSecundaria) => void;
   cerrarRama: (ramaId: string) => void;
@@ -34,15 +37,74 @@ export const useTramiteStore = create<TramiteStore>()(
   persist(
     (set, get) => ({
       progresoActual: null,
+      progresoMultiple: {},
 
-      iniciarTramite: (tramiteId: string) => {
-        set({
-          progresoActual: {
+      obtenerProgresoTramite: (tramiteId: string) => {
+        const state = get();
+        // Si existe en progresoMultiple, devolverlo; si no, crear uno nuevo
+        if (state.progresoMultiple[tramiteId]) {
+          return state.progresoMultiple[tramiteId];
+        }
+        // Retornar estado inicial vacío
+        return {
+          ...estadoInicial,
+          tramiteActual: tramiteId,
+          fechaInicio: new Date().toISOString(),
+          fechaUltimaActualizacion: new Date().toISOString(),
+        };
+      },
+
+      guardarProgresoTramite: (tramiteId: string, progreso: ProgresoUsuario) => {
+        set((state) => ({
+          progresoMultiple: {
+            ...state.progresoMultiple,
+            [tramiteId]: progreso,
+          },
+        }));
+      },
+
+      iniciarTramite: (tramiteId: string, reset: boolean = false) => {
+        set((state) => {
+          // Si reset=true, crear nuevo progreso (primera vez)
+          if (reset) {
+            const nuevoProgreso: ProgresoUsuario = {
+              ...estadoInicial,
+              tramiteActual: tramiteId,
+              fechaInicio: new Date().toISOString(),
+              fechaUltimaActualizacion: new Date().toISOString(),
+            };
+
+            return {
+              progresoActual: nuevoProgreso,
+              progresoMultiple: {
+                ...state.progresoMultiple,
+                [tramiteId]: nuevoProgreso,
+              },
+            };
+          }
+
+          // Si reset=false, recuperar progreso anterior o crear uno nuevo
+          if (state.progresoMultiple[tramiteId]) {
+            return {
+              progresoActual: state.progresoMultiple[tramiteId],
+            };
+          }
+
+          // Si no existe, crear uno nuevo
+          const nuevoProgreso: ProgresoUsuario = {
             ...estadoInicial,
             tramiteActual: tramiteId,
             fechaInicio: new Date().toISOString(),
             fechaUltimaActualizacion: new Date().toISOString(),
-          },
+          };
+
+          return {
+            progresoActual: nuevoProgreso,
+            progresoMultiple: {
+              ...state.progresoMultiple,
+              [tramiteId]: nuevoProgreso,
+            },
+          };
         });
       },
 
@@ -50,14 +112,23 @@ export const useTramiteStore = create<TramiteStore>()(
         set((state) => {
           if (!state.progresoActual) return state;
 
+          const tramiteId = state.progresoActual.tramiteActual;
+          if (!tramiteId) return state;
+
+          const nuevoProgreso = {
+            ...state.progresoActual,
+            prerequisitosCumplidos: {
+              ...state.progresoActual.prerequisitosCumplidos,
+              [prerequisitoId]: cumplido,
+            },
+            fechaUltimaActualizacion: new Date().toISOString(),
+          };
+
           return {
-            progresoActual: {
-              ...state.progresoActual,
-              prerequisitosCumplidos: {
-                ...state.progresoActual.prerequisitosCumplidos,
-                [prerequisitoId]: cumplido,
-              },
-              fechaUltimaActualizacion: new Date().toISOString(),
+            progresoActual: nuevoProgreso,
+            progresoMultiple: {
+              ...state.progresoMultiple,
+              [tramiteId]: nuevoProgreso,
             },
           };
         });
@@ -106,11 +177,20 @@ export const useTramiteStore = create<TramiteStore>()(
         set((state) => {
           if (!state.progresoActual) return state;
 
+          const tramiteId = state.progresoActual.tramiteActual;
+          if (!tramiteId) return state;
+
+          const nuevoProgreso = {
+            ...state.progresoActual,
+            faseActual: nuevaFase,
+            fechaUltimaActualizacion: new Date().toISOString(),
+          };
+
           return {
-            progresoActual: {
-              ...state.progresoActual,
-              faseActual: nuevaFase,
-              fechaUltimaActualizacion: new Date().toISOString(),
+            progresoActual: nuevoProgreso,
+            progresoMultiple: {
+              ...state.progresoMultiple,
+              [tramiteId]: nuevoProgreso,
             },
           };
         });
@@ -173,7 +253,7 @@ export const useTramiteStore = create<TramiteStore>()(
       },
 
       limpiarProgreso: () => {
-        set({ progresoActual: null });
+        set({ progresoActual: null, progresoMultiple: {} });
       },
 
       setSegmentacion: (segmento) => {

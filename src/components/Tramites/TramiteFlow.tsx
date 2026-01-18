@@ -4,23 +4,24 @@ import { tramitesService } from '../../services/tramitesService';
 import { useTramiteFlow } from '../../hooks/useTramiteFlow';
 import { CheckpointTabs } from './CheckpointTabs';
 import { PrerequisitosCheck } from './PrerequisitosCheck';
-import { RamaSecundaria } from './RamaSecundaria';
 import { FaseContenido } from './FaseContenido';
-import { ProgresoIndicator } from './ProgresoIndicator';
+import { FasePago } from './FasePago';
+import { FaseSeguimiento } from './FaseSeguimiento';
 import { Clock, DollarSign, FileText } from 'lucide-react';
 import type { FaseTramite } from '../../types/tramite.types';
 import { SegmentacionPasaporte } from './SegmentacionPasaporte';
-import { AccionesPasaporte } from './AccionesPasaporte';
 
 interface Props {
   tramiteId: string;
   esRama?: boolean;
   onCompletarRama?: () => void;
+  onAbrirRamaEnPestaña?: (tramiteId: string, nombreTramite: string, prerequisitoId: string) => void;
+  tabsAbiertos?: string[];
 }
 
-export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Props) {
+export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbrirRamaEnPestaña, tabsAbiertos = [] }: Props) {
   const tramite = tramitesService.getPorId(tramiteId);
-  const { iniciarTramite, progresoActual } = useTramiteStore();
+  const { iniciarTramite, progresoActual, progresoMultiple } = useTramiteStore();
   
   const {
     faseActual,
@@ -38,9 +39,17 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
 
   useEffect(() => {
     if (!esRama) {
-      iniciarTramite(tramiteId);
+      // Si el tramite ya existe en progresoMultiple, recuperar su estado
+      // Si no existe, crear uno nuevo (reset=true)
+      const esNuevaApertura = !progresoMultiple[tramiteId];
+      iniciarTramite(tramiteId, esNuevaApertura);
+    } else {
+      // Si es rama, comenzar directamente en requisitos
+      iniciarTramite(tramiteId, false);
+      // Cambiar fase en siguiente ciclo para evitar loop infinito
+      setTimeout(() => cambiarFase('requisitos'), 0);
     }
-  }, [tramiteId, esRama, iniciarTramite]);
+  }, [tramiteId, esRama, progresoMultiple]);
 
   if (!tramite) {
     return (
@@ -53,11 +62,9 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
   const handleValidacionCompleta = (cumplidos: Record<string, boolean>) => {
     actualizarPrerequisitos(cumplidos);
     
-    // Si todos están cumplidos, avanzar a la siguiente fase
-    const todosCumplidos = Object.values(cumplidos).every(v => v === true);
-    if (todosCumplidos) {
-      cambiarFase('documentacion');
-    }
+    // Avanzar a la fase de PAGO después de completar requisitos
+    setTimeout(() => cambiarFase('pago'), 300);
+    console.log('✅ Requisitos completados:', cumplidos);
   };
 
   const handleIniciarRama = (tramiteRelacionadoId: string, prerequisitoId: string) => {
@@ -103,42 +110,16 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
         </div>
       )}
 
-      {/* Tabs de navegación */}
-      {!esRama && (
-        <>
-          <CheckpointTabs
-            faseActual={faseActual}
-            onCambiarFase={cambiarFase}
-            fasesCompletadas={fasesCompletadas}
-          />
-          <ProgresoIndicator
-            faseActual={faseActual}
-            fasesCompletadas={fasesCompletadas}
-          />
-        </>
-      )}
+      {/* Tabs de navegación - SIEMPRE visible */}
+      <CheckpointTabs
+        faseActual={faseActual}
+        onCambiarFase={cambiarFase}
+        fasesCompletadas={fasesCompletadas}
+      />
 
       {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto bg-gray-50">
-        {/* Ramas secundarias activas */}
-        {ramasActivas.length > 0 && (
-          <div className="px-6 pt-6">
-            {ramasActivas.map((rama) => {
-              const tramiteRama = tramitesService.getPorId(rama.tramiteId);
-              if (!tramiteRama) return null;
-
-              return (
-                <RamaSecundaria
-                  key={rama.id}
-                  rama={rama}
-                  tramite={tramiteRama}
-                  onCompletar={() => cerrarRama(rama.id, rama.prerequisitoAsociado)}
-                  onCancelar={() => cerrarRama(rama.id, rama.prerequisitoAsociado, true)}
-                />
-              );
-            })}
-          </div>
-        )}
+        {/* Ramas secundarias - REMOVIDAS - ahora se abren como pestañas */}
 
         {/* Contenido de la fase actual */}
         {faseActual === 'requisitos' && (
@@ -146,7 +127,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
             prerequisitos={prerequisitosDinamicos}
             prerequisitosCumplidos={prerequisitosCumplidos}
             onValidacionCompleta={handleValidacionCompleta}
-            onIniciarRama={handleIniciarRama}
+            onAbrirRamaEnPestaña={onAbrirRamaEnPestaña}
           />
         )}
 
@@ -155,24 +136,40 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
           <SegmentacionPasaporte />
         )}
 
-        {faseActual !== 'requisitos' && pasoActual && (
-          <FaseContenido
-            paso={pasoActual}
-            estaCompletado={false}
+        {/* Fase de Pago */}
+        {faseActual === 'pago' && (
+          <FasePago
+            tramite={tramite}
+            tabsIds={tabsAbiertos}
             onCompletar={() => {
-              completarPaso(pasoActual.id);
+              completarPaso('paso_pago');
               
-              // Si es la última fase y es una rama, notificar
-              if (esRama && faseActual === 'seguimiento' && onCompletarRama) {
+              // Si es rama, notificar
+              if (esRama && onCompletarRama) {
                 setTimeout(() => onCompletarRama(), 500);
               }
             }}
           />
         )}
 
-        {/* Acciones específicas de pasaporte en Pago y Seguimiento */}
-        {tramite.id === 'obtener_pasaporte' && (faseActual === 'pago' || faseActual === 'seguimiento') && (
-          <AccionesPasaporte tramiteId={tramite.id} />
+        {/* Fase de Seguimiento */}
+        {faseActual === 'seguimiento' && (
+          <FaseSeguimiento 
+            tramite={tramite}
+            tabsAbiertos={tabsAbiertos}
+            prerequisitosCumplidos={prerequisitosCumplidos}
+          />
+        )}
+
+        {/* Fases genéricas (Información) */}
+        {faseActual === 'informacion' && pasoActual && (
+          <FaseContenido
+            paso={pasoActual}
+            estaCompletado={false}
+            onCompletar={() => {
+              completarPaso(pasoActual.id);
+            }}
+          />
         )}
       </div>
     </div>

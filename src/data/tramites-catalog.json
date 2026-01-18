@@ -5,8 +5,8 @@
       "nombre": "Renovación de Cédula",
       "descripcion": "Renueva tu cédula de identidad ecuatoriana",
       "categoria": "identidad",
-      "estimadoDias": 7,
-      "costo": 8.50,
+      "estimadoDias": 3,
+      "costo": 3.00,
       "prerequisitos": [
         {
           "id": "foto_actualizada",
@@ -74,7 +74,7 @@
       "descripcion": "Solicita tu pasaporte ecuatoriano",
       "categoria": "internacional",
       "estimadoDias": 15,
-      "costo": 95.00,
+      "costo": 60.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_pasaporte",

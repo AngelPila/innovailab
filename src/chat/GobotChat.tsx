@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Tabs from "./Tabs";
 import Welcome from "./Welcome";
@@ -10,6 +10,7 @@ import type { Connections, HistoryItem, Message } from "./types";
 import { TramiteFlow } from "../components/Tramites";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
+import { useTramiteStore } from "../store/tramiteStore";
 
 const historyMock: HistoryItem[] = [
   { id: 1, title: "Renovación de cédula", date: "Hace 2 horas", status: "completed" },
@@ -18,8 +19,21 @@ const historyMock: HistoryItem[] = [
 ];
 
 export default function GobotChat() {
-  const { tabs, activeTabId, currentMessages, addNewTab, closeTab, switchTab, setTabMessages, pushMessages } =
-    useChatTabs();
+  const { 
+    tabs, 
+    activeTabId, 
+    currentMessages, 
+    currentTramite,
+    addNewTab, 
+    closeTab, 
+    switchTab, 
+    setTabMessages, 
+    pushMessages,
+    setTabTramite,
+    updateTabTitle,
+  } = useChatTabs();
+
+  const { limpiarProgreso } = useTramiteStore();
 
   const [inputValue, setInputValue] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -33,13 +47,26 @@ export default function GobotChat() {
   const endRef = useRef<HTMLDivElement>(null);
   useAutoScroll(endRef, [currentMessages.length, activeTabId]);
 
-  const showWelcome = currentMessages.length === 0;
+  // Limpiar progreso cuando se carga la app inicialmente y no hay trámites activos
+  useEffect(() => {
+    if (!currentTramite && !tramiteActivo) {
+      limpiarProgreso();
+    }
+  }, []); // Solo al montar el componente
+
+  // showWelcome solo si no hay mensajes Y no hay un trámite activo en esta pestaña
+  const showWelcome = currentMessages.length === 0 && !currentTramite;
 
   const toggleConnection = (service: keyof Connections) => {
     setConnections((prev) => ({ ...prev, [service]: !prev[service] }));
   };
 
   const onToggleRecording = () => setIsRecording((v) => !v);
+
+  const handleAbrirRamaEnPestaña = (tramiteId: string, nombreTramite: string, prerequisitoId: string) => {
+    // Crear nueva pestaña
+    addNewTab(tramiteId);
+  };
 
   const onGenerateRoute = () => {
     const routeMessage: Message = {
@@ -80,6 +107,7 @@ export default function GobotChat() {
         
         // Activar el flujo de trámite INMEDIATAMENTE
         console.log('🎯 Activando trámite:', tramiteDetectado);
+        setTabTramite(activeTabId, tramiteDetectado);
         setTramiteActivo(tramiteDetectado);
       } else {
         // Respuesta normal del chatbot
@@ -108,6 +136,7 @@ export default function GobotChat() {
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
         // Activar flujo INMEDIATAMENTE
+        setTabTramite(activeTabId, tramiteDetectado.id);
         setTramiteActivo(tramiteDetectado.id);
       } else {
         const assistantMessage: Message = {
@@ -132,11 +161,11 @@ export default function GobotChat() {
       <Sidebar connections={connections} toggleConnection={toggleConnection} history={historyMock} />
 
       <div className="flex-1 flex flex-col">
-        {/* Encabezado amarillo continuo */}
+        {/* Encabezado amarillo - Pestañas de chat */}
         <div className="bg-yellow-400">
           {showWelcome && <div className="h-[140px]" />}
 
-          {!showWelcome && !tramiteActivo && (
+          {!showWelcome && (
             <Tabs
               tabs={tabs}
               activeTabId={activeTabId}
@@ -149,8 +178,18 @@ export default function GobotChat() {
 
         {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
-          {tramiteActivo ? (
-            <TramiteFlow tramiteId={tramiteActivo} />
+          {currentTramite ? (
+            <TramiteFlow 
+              tramiteId={currentTramite}
+              onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
+              tabsAbiertos={tabs.map(t => t.title)}
+            />
+          ) : tramiteActivo ? (
+            <TramiteFlow 
+              tramiteId={tramiteActivo}
+              onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
+              tabsAbiertos={tabs.map(t => t.title)}
+            />
           ) : showWelcome ? (
             <Welcome
               inputValue={inputValue}
