@@ -10,17 +10,13 @@ type Props = {
 export default function Sidebar({ connections, toggleConnection, history }: Props) {
   return (
     <div className="w-[30%] bg-white border-r border-gray-200 flex flex-col">
-      <div className="bg-yellow-400">
-        <div className="px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">Govly</h1>
-        </div>
-
-        <div className="px-4 pb-4">
-          <button className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-900 hover:bg-yellow-500 rounded-lg transition-colors">
-            <Settings className="w-5 h-5" />
-            <span className="font-medium">Configuración</span>
-          </button>
-        </div>
+      <div className="bg-yellow-400 px-6 py-4">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Govly</h1>
+        
+        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-gray-900 hover:bg-yellow-500 rounded-lg transition-colors">
+          <Settings className="w-5 h-5" />
+          <span className="font-medium">Perfil</span>
+        </button>
       </div>
 
       <div className="px-4 py-3 border-b border-gray-200">

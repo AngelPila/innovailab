@@ -1,6 +1,6 @@
-import { Map, Mic, Send } from "lucide-react";
+import { Map, Send } from "lucide-react";
 import type { KeyboardEvent } from "react";
-
+import { VoiceButton } from "../components/Voice";
 
 type Props = {
   inputValue: string;
@@ -21,6 +21,12 @@ export default function ChatInput({
   isRecording,
   onGenerateRoute,
 }: Props) {
+  // Handler para cuando el reconocimiento de voz termina
+  const handleVoiceResult = (text: string) => {
+    // Insertar el texto reconocido en el input
+    setInputValue(text);
+  };
+
   return (
     <div className="p-6 bg-white">
       <div className="max-w-4xl mx-auto flex items-center gap-3">
@@ -38,19 +44,11 @@ export default function ChatInput({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Escribe tu mensaje"
-            className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-500"
+            placeholder="Escribe tu mensaje o usa el micrófono"
+            className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-500 text-base"
           />
 
-          <button
-            onClick={onToggleRecording}
-            className={`p-2 rounded-full transition-colors ${
-              isRecording ? "bg-red-500 text-white" : "hover:bg-gray-100 text-gray-600"
-            }`}
-            aria-label="Grabar"
-          >
-            <Mic className="w-4 h-4" />
-          </button>
+          <VoiceButton onResult={handleVoiceResult} />
 
           <button
             onClick={onSend}
