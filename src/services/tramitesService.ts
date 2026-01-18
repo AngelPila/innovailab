@@ -80,6 +80,43 @@ class TramitesService {
 
     return tramitesRelacionados;
   }
+
+  // Obtener prerequisitos dinámicos según segmentación
+  getPrerequisitosCondicionales(tramiteId: string, segmento?: any): any[] {
+    const tramite = this.getPorId(tramiteId);
+    if (!tramite) return [];
+
+    // Filtrar prerequisitos según condiciones
+    const prerequisitosFiltrados = tramite.prerequisitos.filter((pre) => {
+      // Si no tiene condición, siempre se incluye
+      if (!pre.condicional) return true;
+
+      // Verificar tipo de trámite
+      if (pre.condicional.tipoTramite && segmento?.tipoTramite) {
+        if (!pre.condicional.tipoTramite.includes(segmento.tipoTramite)) {
+          return false;
+        }
+      }
+
+      // Verificar categoría
+      if (pre.condicional.categoria && segmento?.categoria) {
+        if (!pre.condicional.categoria.includes(segmento.categoria)) {
+          return false;
+        }
+      }
+
+      // Verificar naturalización
+      if (pre.condicional.esNaturalizado !== undefined && segmento?.esNaturalizado !== undefined) {
+        if (pre.condicional.esNaturalizado !== segmento.esNaturalizado) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+
+    return prerequisitosFiltrados;
+  }
 }
 
 // Exportar instancia única (singleton)

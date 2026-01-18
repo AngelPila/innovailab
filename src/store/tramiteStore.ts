@@ -16,6 +16,7 @@ interface TramiteStore {
   subirDocumento: (documentoId: string) => void;
   limpiarProgreso: () => void;
   actualizarProgresoRama: (ramaId: string, completado: boolean) => void;
+  setSegmentacion: (segmento: ProgresoUsuario['segmento']) => void;
 }
 
 const estadoInicial: ProgresoUsuario = {
@@ -173,6 +174,19 @@ export const useTramiteStore = create<TramiteStore>()(
 
       limpiarProgreso: () => {
         set({ progresoActual: null });
+      },
+
+      setSegmentacion: (segmento) => {
+        set((state) => {
+          if (!state.progresoActual) return state;
+          return {
+            progresoActual: {
+              ...state.progresoActual,
+              segmento: segmento || undefined,
+              fechaUltimaActualizacion: new Date().toISOString(),
+            },
+          };
+        });
       },
     }),
     {

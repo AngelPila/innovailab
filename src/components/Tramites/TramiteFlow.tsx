@@ -9,6 +9,8 @@ import { FaseContenido } from './FaseContenido';
 import { ProgresoIndicator } from './ProgresoIndicator';
 import { Clock, DollarSign, FileText } from 'lucide-react';
 import type { FaseTramite } from '../../types/tramite.types';
+import { SegmentacionPasaporte } from './SegmentacionPasaporte';
+import { AccionesPasaporte } from './AccionesPasaporte';
 
 interface Props {
   tramiteId: string;
@@ -18,13 +20,14 @@ interface Props {
 
 export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Props) {
   const tramite = tramitesService.getPorId(tramiteId);
-  const { iniciarTramite } = useTramiteStore();
+  const { iniciarTramite, progresoActual } = useTramiteStore();
   
   const {
     faseActual,
     pasoActual,
     fasesCompletadas,
     prerequisitosCumplidos,
+    prerequisitosDinamicos,
     ramasActivas,
     cambiarFase,
     completarPaso,
@@ -89,6 +92,13 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
                 <span className="font-medium">{tramite.prerequisitos.length} requisitos</span>
               </div>
             </div>
+
+            {tramite.id === 'obtener_pasaporte' && (
+              <p className="mt-2 text-sm text-gray-800">
+                <strong>Nota:</strong> Los requisitos se ajustan según tu caso. {progresoActual?.segmento?.categoria === 'adulto-mayor' && 'Tendrás atención prioritaria.'}
+                {progresoActual?.segmento?.tieneDiscapacidad && ' Atención preferente disponible.'}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -133,11 +143,16 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
         {/* Contenido de la fase actual */}
         {faseActual === 'requisitos' && (
           <PrerequisitosCheck
-            prerequisitos={tramite.prerequisitos}
+            prerequisitos={prerequisitosDinamicos}
             prerequisitosCumplidos={prerequisitosCumplidos}
             onValidacionCompleta={handleValidacionCompleta}
             onIniciarRama={handleIniciarRama}
           />
+        )}
+
+        {/* Segmentación para pasaporte dentro de Información */}
+        {tramite.id === 'obtener_pasaporte' && faseActual === 'informacion' && (
+          <SegmentacionPasaporte />
         )}
 
         {faseActual !== 'requisitos' && pasoActual && (
@@ -153,6 +168,11 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama }: Prop
               }
             }}
           />
+        )}
+
+        {/* Acciones específicas de pasaporte en Pago y Seguimiento */}
+        {tramite.id === 'obtener_pasaporte' && (faseActual === 'pago' || faseActual === 'seguimiento') && (
+          <AccionesPasaporte tramiteId={tramite.id} />
         )}
       </div>
     </div>

@@ -78,10 +78,9 @@ export default function GobotChat() {
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
-        // Activar el flujo de trámite después de un momento
-        setTimeout(() => {
-          setTramiteActivo(tramiteDetectado);
-        }, 1000);
+        // Activar el flujo de trámite INMEDIATAMENTE
+        console.log('🎯 Activando trámite:', tramiteDetectado);
+        setTramiteActivo(tramiteDetectado);
       } else {
         // Respuesta normal del chatbot
         const assistantMessage: Message = {
@@ -98,6 +97,17 @@ export default function GobotChat() {
       const tramiteDetectado = tramitesService.detectarIntencion(inputValue);
       
       if (tramiteDetectado) {
+        console.log('🎯 Fallback: Activando trámite:', tramiteDetectado.id);
+        
+        // Mostrar mensaje de confirmación
+        const assistantMessage: Message = {
+          id: Date.now() + 1,
+          role: "assistant",
+          content: `¡Perfecto! Te ayudaré con ${tramiteDetectado.nombre.toLowerCase()}.\n\nTiempo estimado: ~${tramiteDetectado.estimadoDias} días\nCosto: $${tramiteDetectado.costo?.toFixed(2)}\n\n¿Comenzamos?`,
+        };
+        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        
+        // Activar flujo INMEDIATAMENTE
         setTramiteActivo(tramiteDetectado.id);
       } else {
         const assistantMessage: Message = {

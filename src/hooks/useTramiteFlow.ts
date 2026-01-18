@@ -22,6 +22,13 @@ export function useTramiteFlow(tramiteId: string) {
     return store.progresoActual?.prerequisitosCumplidos || {};
   }, [store.progresoActual]);
 
+  // Obtener prerequisitos dinámicos según segmentación
+  const prerequisitosDinamicos = useMemo(() => {
+    if (!tramite) return [];
+    const segmento = store.progresoActual?.segmento;
+    return tramitesService.getPrerequisitosCondicionales(tramiteId, segmento);
+  }, [tramiteId, tramite, store.progresoActual?.segmento]);
+
   // Obtener ramas activas
   const ramasActivas = useMemo(() => {
     return (
@@ -99,6 +106,7 @@ export function useTramiteFlow(tramiteId: string) {
     fasesCompletadas,
     pasoActual,
     prerequisitosCumplidos,
+    prerequisitosDinamicos,
     ramasActivas,
     cambiarFase,
     completarPaso,

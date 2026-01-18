@@ -100,6 +100,61 @@
           "esOpcional": false,
           "preguntaValidacion": "¿Tienes una foto tipo pasaporte reciente?",
           "descripcion": "Fondo blanco, 3x4 cm, sin lentes"
+        },
+        {
+          "id": "pasaporte_anterior",
+          "nombre": "Pasaporte anterior",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu pasaporte anterior en buen estado?",
+          "descripcion": "Necesario para renovación",
+          "condicional": {
+            "tipoTramite": ["renovacion"]
+          }
+        },
+        {
+          "id": "denuncia_perdida",
+          "nombre": "Denuncia policial por pérdida o robo",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la denuncia de pérdida o robo de tu pasaporte?",
+          "descripcion": "Debe ser reciente y emitida por autoridad competente",
+          "condicional": {
+            "tipoTramite": ["perdida-robo"]
+          }
+        },
+        {
+          "id": "autorizacion_padres",
+          "nombre": "Autorización notariada de padres o tutores",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la autorización notariada de tus padres o tutores?",
+          "descripcion": "Ambos padres deben firmar ante notario con cédulas vigentes",
+          "condicional": {
+            "categoria": ["menor-edad"]
+          }
+        },
+        {
+          "id": "acta_nacimiento_menor",
+          "nombre": "Acta de nacimiento del menor",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes el acta de nacimiento actualizada?",
+          "descripcion": "Emitida recientemente por el Registro Civil",
+          "condicional": {
+            "categoria": ["menor-edad"]
+          }
+        },
+        {
+          "id": "carta_naturalizacion",
+          "nombre": "Carta de naturalización",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu carta de naturalización ecuatoriana?",
+          "descripcion": "Documento oficial que acredita tu nacionalidad ecuatoriana por naturalización",
+          "condicional": {
+            "esNaturalizado": true
+          }
         }
       ],
       "pasos": [

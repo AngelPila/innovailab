@@ -26,6 +26,11 @@ export interface Prerequisito {
   esOpcional: boolean;
   preguntaValidacion: string; // "¿Tienes tu cédula vigente?"
   descripcion?: string;
+  condicional?: {
+    tipoTramite?: TipoTramitePasaporte[];
+    categoria?: CategoriaSolicitante[];
+    esNaturalizado?: boolean;
+  };
 }
 
 export interface PasoTramite {
@@ -46,8 +51,33 @@ export interface ProgresoUsuario {
   pasosCompletados: string[];
   ramasAbiertas: RamaSecundaria[];
   documentosSubidos: Record<string, boolean>;
+  segmento?: SegmentoUsuario;
   fechaInicio?: string;
   fechaUltimaActualizacion?: string;
+}
+
+export type Nacionalidad = 'ecuatoriano' | 'extranjero';
+export type EstatusLegal = 'residente-legal' | 'irregular' | 'turistico';
+export type TipoTramitePasaporte = 'primera-vez' | 'renovacion' | 'perdida-robo' | 'duplicado';
+export type CategoriaSolicitante = 'adulto' | 'menor-edad' | 'adulto-mayor';
+
+export interface SegmentoUsuario {
+  // Identidad
+  nacionalidad?: Nacionalidad;
+  esNaturalizado?: boolean; // ecuatoriano por naturalización
+  estatusLegal?: EstatusLegal; // si es extranjero
+  
+  // Tipo de trámite
+  tipoTramite?: TipoTramitePasaporte;
+  tienePasaporteAnterior?: boolean;
+  
+  // Características personales
+  categoria?: CategoriaSolicitante;
+  edadAproximada?: number;
+  tieneDiscapacidad?: boolean;
+  
+  // Casos especiales
+  esTramiteUrgente?: boolean;
 }
 
 export interface RamaSecundaria {
