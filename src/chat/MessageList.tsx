@@ -13,7 +13,12 @@ export default function MessageList({ messages, onGenerateRoute, endRef }: Props
     <div className="px-6 py-6">
       <div className="max-w-4xl mx-auto space-y-4">
         {messages.map((message) => (
-          <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+          <div 
+            key={message.id} 
+            className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} ${
+              message.role === "user" ? "chat-message-enter-user" : "chat-message-enter-assistant"
+            }`}
+          >
             <div
               className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                 message.role === "user"

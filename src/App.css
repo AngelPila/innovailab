@@ -1,5 +1,101 @@
 /* Estilos específicos de la aplicación Govly */
 
+/* ============================================
+   ESCENARIO 1: ANIMACIÓN ESCALONADA (STAGGERED)
+   Para elementos del dashboard/página principal
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Clase base para animación de entrada */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0; /* Estado inicial invisible */
+}
+
+/* Clases de delay para efecto escalonado */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.3s; }
+.delay-7 { animation-delay: 0.35s; }
+.delay-8 { animation-delay: 0.4s; }
+
+/* Versión con CSS custom properties para delays dinámicos */
+.stagger-item {
+  animation: fadeInUp 0.5s ease-out forwards;
+  animation-delay: calc(var(--stagger-index, 0) * 0.08s);
+  opacity: 0;
+}
+
+/* ============================================
+   ESCENARIO 2: ANIMACIÓN DE MENSAJES DE CHAT
+   Se activa automáticamente al renderizar
+   ============================================ */
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Clase para mensajes nuevos - se dispara al renderizar */
+.chat-message-enter {
+  animation: messageSlideIn 0.4s ease-out forwards;
+}
+
+/* Variante para mensajes del usuario (desde la derecha) */
+.chat-message-enter-user {
+  animation: messageSlideInRight 0.4s ease-out forwards;
+}
+
+@keyframes messageSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Variante para mensajes del asistente (desde la izquierda) */
+.chat-message-enter-assistant {
+  animation: messageSlideInLeft 0.4s ease-out forwards;
+}
+
+@keyframes messageSlideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================
+   ESTILOS EXISTENTES
+   ============================================ */
+
 .chat-container {
   height: 100vh;
   display: flex;

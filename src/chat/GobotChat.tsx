@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import Sidebar from "./Sidebar";
+import { Settings } from "lucide-react";
+import SidebarContent from "./SidebarContent";
 import Tabs from "./Tabs";
 import Welcome from "./Welcome";
 import MessageList from "./MessageList";
@@ -128,14 +129,20 @@ export default function GobotChat() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <Sidebar connections={connections} toggleConnection={toggleConnection} history={historyMock} />
-
-      <div className="flex-1 flex flex-col">
-        {/* Encabezado amarillo continuo */}
-        <div className="bg-yellow-400">
-          {showWelcome && <div className="h-[140px]" />}
-
+    <div className="flex flex-col h-screen bg-gray-50">
+      {/* Header amarillo UNIFICADO */}
+      <div className="bg-yellow-400 flex">
+        {/* Sección izquierda del header (sidebar) */}
+        <div className="w-[30%] px-6 py-4">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Govly</h1>
+          <button className="w-full flex items-center gap-3 px-4 py-2.5 bg-white text-gray-900 hover:bg-yellow-50 rounded-lg transition-colors">
+            <Settings className="w-5 h-5" />
+            <span className="font-medium">Perfil</span>
+          </button>
+        </div>
+        
+        {/* Sección derecha del header (tabs) */}
+        <div className="flex-1 flex items-end">
           {!showWelcome && !tramiteActivo && (
             <Tabs
               tabs={tabs}
@@ -146,13 +153,35 @@ export default function GobotChat() {
             />
           )}
         </div>
+      </div>
 
-        {/* Área de contenido */}
-        <div className="flex-1 overflow-y-auto bg-gray-50">
-          {tramiteActivo ? (
-            <TramiteFlow tramiteId={tramiteActivo} />
-          ) : showWelcome ? (
-            <Welcome
+      {/* Contenido principal */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar (sin header, solo contenido) */}
+        <SidebarContent connections={connections} toggleConnection={toggleConnection} history={historyMock} />
+
+        {/* Área de chat */}
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 overflow-y-auto bg-gray-50">
+            {tramiteActivo ? (
+              <TramiteFlow tramiteId={tramiteActivo} />
+            ) : showWelcome ? (
+              <Welcome
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                onKeyDown={onKeyDown}
+                onSend={onSend}
+                onToggleRecording={onToggleRecording}
+                isRecording={isRecording}
+                onGenerateRoute={onGenerateRoute}
+              />
+            ) : (
+              <MessageList messages={currentMessages} onGenerateRoute={onGenerateRoute} endRef={endRef} />
+            )}
+          </div>
+
+          {!showWelcome && !tramiteActivo && (
+            <ChatInput
               inputValue={inputValue}
               setInputValue={setInputValue}
               onKeyDown={onKeyDown}
@@ -161,22 +190,8 @@ export default function GobotChat() {
               isRecording={isRecording}
               onGenerateRoute={onGenerateRoute}
             />
-          ) : (
-            <MessageList messages={currentMessages} onGenerateRoute={onGenerateRoute} endRef={endRef} />
           )}
         </div>
-
-        {!showWelcome && !tramiteActivo && (
-          <ChatInput
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            onKeyDown={onKeyDown}
-            onSend={onSend}
-            onToggleRecording={onToggleRecording}
-            isRecording={isRecording}
-            onGenerateRoute={onGenerateRoute}
-          />
-        )}
       </div>
     </div>
   );
