@@ -9,7 +9,21 @@ export function useTramiteFlow(tramiteId: string) {
 
   // Usar directamente progresoActual del store, que ya está sincronizado por TramiteFlow.iniciarTramite
   const faseActual = store.progresoActual?.faseActual || 'informacion';
-  const fasesCompletadas = store.progresoActual?.pasosCompletados || [];
+  
+  // Convertir pasosCompletados (string[]) a fasesCompletadas (FaseTramite[])
+  const fasesCompletadas: FaseTramite[] = useMemo(() => {
+    const pasos = store.progresoActual?.pasosCompletados || [];
+    // Mapear los pasos completados a sus fases correspondientes
+    const fasesSet = new Set<FaseTramite>();
+    if (tramite) {
+      tramite.pasos.forEach(paso => {
+        if (pasos.includes(paso.id)) {
+          fasesSet.add(paso.fase);
+        }
+      });
+    }
+    return Array.from(fasesSet);
+  }, [store.progresoActual?.pasosCompletados, tramite]);
 
   // Obtener prerequisitos cumplidos del store para este tramite
   const prerequisitosCumplidos = useMemo(() => {
