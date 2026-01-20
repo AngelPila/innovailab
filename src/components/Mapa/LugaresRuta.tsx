@@ -188,11 +188,11 @@ export function LugaresRuta({ tramiteId, nombreTramite }: Props) {
           {/* Botón para ver mapa */}
           <button
             onClick={() => setMostrarMapa(true)}
-            className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl"
+            className="mt-6 w-full flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-lg transition-all shadow-lg hover:shadow-xl"
           >
-            <Navigation className="w-6 h-6" />
-            Ver ruta en el mapa
-            <ChevronRight className="w-5 h-5" />
+            <Navigation className="w-6 h-6 text-white" />
+            <span className="text-white">Ver ruta en el mapa</span>
+            <ChevronRight className="w-5 h-5 text-white" />
           </button>
         </div>
       </div>

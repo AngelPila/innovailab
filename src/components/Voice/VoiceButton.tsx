@@ -39,7 +39,7 @@ export const VoiceButton = ({ onResult, className = '' }: VoiceButtonProps) => {
     return (
       <button
         disabled
-        className={`p-2 rounded-full bg-gray-200 text-gray-400 cursor-not-allowed ${className}`}
+        className={`p-2 rounded-full bg-gray-100 text-gray-500 cursor-not-allowed ${className}`}
         title="Tu navegador no soporta reconocimiento de voz"
         aria-label="Reconocimiento de voz no disponible"
       >

@@ -6,7 +6,7 @@
       "descripcion": "Renueva tu cédula de identidad ecuatoriana",
       "categoria": "identidad",
       "estimadoDias": 3,
-      "costo": 3.00,
+      "costo": 16.00,
       "prerequisitos": [
         {
           "id": "foto_actualizada",
@@ -32,7 +32,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "La renovación de cédula es necesaria cada 10 años o cuando cambia tu información personal.",
-          "contenido": "Tiempo estimado: 7 días\nCosto: $8.50\nLugares de atención: Registro Civil"
+          "contenido": "Tiempo estimado: 7 días\nCosto: $16.00\nLugares de atención: Registro Civil"
         },
         {
           "id": "req_cedula",
@@ -74,7 +74,7 @@
       "descripcion": "Solicita tu pasaporte ecuatoriano",
       "categoria": "internacional",
       "estimadoDias": 15,
-      "costo": 60.00,
+      "costo": 90.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_pasaporte",
@@ -163,8 +163,8 @@
           "orden": 1,
           "fase": "informacion",
           "titulo": "Información General",
-          "descripcion": "El pasaporte ecuatoriano tiene validez de 10 años",
-          "contenido": "Tiempo estimado: 15 días\nCosto: $95.00\nVigencia: 10 años"
+          "descripcion": "Vigencia según tu edad: 10 años si tienes más de 30, o 5 años si tienes menos de 30",
+          "contenido": "Tiempo estimado: 15 días\nCosto: $90.00\nVigencia: según edad"
         },
         {
           "id": "req_pasaporte",

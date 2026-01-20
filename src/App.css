@@ -1,4 +1,417 @@
 /* Estilos específicos de la aplicación Govly */
+/* Design System Moderno 2026 */
+
+/* ============================================
+   VARIABLES CSS MODERNAS
+   ============================================ */
+:root {
+  --primary: #FACC15;
+  --primary-dark: #EAB308;
+  --accent: #3B82F6;
+  --accent-dark: #2563EB;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --shadow-soft: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 40px rgba(250, 204, 21, 0.3);
+  --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================
+   ESCENARIO 1: Animación de Entrada Escalonada (Staggered Entrance)
+   Duración extendida para efecto más dramático
+   ============================================ */
+
+/* Keyframes base para fade-in + slide-up - MÁS DRAMÁTICO */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Clase base para elementos animados - DURACIÓN EXTENDIDA */
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s var(--transition-smooth) forwards;
+  opacity: 0;
+}
+
+/* Clases con delays incrementales para efecto cascada - MÁS ESPACIADOS */
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 120ms; }
+.stagger-3 { animation-delay: 240ms; }
+.stagger-4 { animation-delay: 360ms; }
+.stagger-5 { animation-delay: 480ms; }
+.stagger-6 { animation-delay: 600ms; }
+.stagger-7 { animation-delay: 720ms; }
+.stagger-8 { animation-delay: 840ms; }
+.stagger-9 { animation-delay: 960ms; }
+.stagger-10 { animation-delay: 1080ms; }
+
+/* Variante más rápida */
+.animate-fadeInUp-fast {
+  animation: fadeInUp 0.5s var(--transition-smooth) forwards;
+  opacity: 0;
+}
+
+/* Variante más lenta y dramática */
+@keyframes fadeInUpSlow {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-fadeInUp-slow {
+  animation: fadeInUpSlow 1.2s var(--transition-smooth) forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   ESCENARIO 2: Animación de Mensajes de Chat
+   ============================================ */
+
+@keyframes messageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.message-enter {
+  animation: messageSlideIn 0.5s var(--transition-bounce) forwards;
+}
+
+/* Variante para mensajes del usuario (desde la derecha) */
+@keyframes messageSlideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px) translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
+.message-enter-user {
+  animation: messageSlideInRight 0.5s var(--transition-bounce) forwards;
+}
+
+/* Variante para mensajes del asistente (desde la izquierda) */
+@keyframes messageSlideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px) translateY(10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
+.message-enter-assistant {
+  animation: messageSlideInLeft 0.5s var(--transition-bounce) forwards;
+}
+
+/* ============================================
+   ESTILOS GLASSMORPHISM MODERNOS
+   ============================================ */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.glass-dark {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   BOTONES MODERNOS
+   ============================================ */
+
+.btn-modern {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--transition-smooth);
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.6s var(--transition-smooth);
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.btn-modern:active {
+  transform: translateY(0);
+}
+
+/* Botón primario con glow */
+.btn-glow {
+  transition: all 0.3s var(--transition-smooth);
+}
+
+.btn-glow:hover {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   TARJETAS MODERNAS
+   ============================================ */
+
+.card-modern {
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s var(--transition-smooth);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-modern:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+}
+
+.card-interactive {
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+}
+
+.card-interactive:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-medium);
+}
+
+.card-interactive:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   GRADIENTES MODERNOS
+   ============================================ */
+
+.gradient-primary {
+  background: linear-gradient(135deg, #FACC15 0%, #F59E0B 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, #F97316 0%, #EF4444 100%);
+}
+
+.gradient-mesh {
+  background: 
+    radial-gradient(at 40% 20%, rgba(250, 204, 21, 0.3) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(59, 130, 246, 0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(139, 92, 246, 0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(249, 115, 22, 0.2) 0px, transparent 50%);
+}
+
+/* ============================================
+   INPUTS MODERNOS
+   ============================================ */
+
+.input-modern {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 14px 20px;
+  transition: all 0.3s var(--transition-smooth);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.input-modern:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(250, 204, 21, 0.2);
+  background: white;
+}
+
+.input-modern::placeholder {
+  color: #9CA3AF;
+}
+
+/* ============================================
+   ANIMACIONES ADICIONALES
+   ============================================ */
+
+/* Fade in simple */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s var(--transition-smooth) forwards;
+}
+
+/* Scale in (para modales y popups) */
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.4s var(--transition-bounce) forwards;
+}
+
+/* Pulse suave (para indicadores) */
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Slide down (para dropdowns) */
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.4s var(--transition-bounce) forwards;
+}
+
+/* Shimmer loading effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* Float animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================
+   SCROLLBAR MODERNA
+   ============================================ */
+
+.scrollbar-modern::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d1d5db, #9ca3af);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #9ca3af, #6b7280);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ============================================
+   ESTILOS ORIGINALES
+   ============================================ */
 
 .chat-container {
   height: 100vh;

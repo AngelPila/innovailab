@@ -1,4 +1,4 @@
-import { Map, Send } from "lucide-react";
+import { Map, Send, Sparkles } from "lucide-react";
 import type { KeyboardEvent } from "react";
 import { VoiceButton } from "../components/Voice";
 
@@ -28,32 +28,45 @@ export default function ChatInput({
   };
 
   return (
-    <div className="p-6 bg-white">
+    <div className="p-4 bg-transparent">
       <div className="max-w-4xl mx-auto flex items-center gap-3">
+        {/* Botón de mapa con estilo moderno */}
         <button
           onClick={onGenerateRoute}
-          className="p-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-colors flex-shrink-0"
+          className="p-3.5 bg-white/80 backdrop-blur-sm hover:bg-white text-gray-600 hover:text-blue-600 
+                     rounded-2xl transition-all duration-300 flex-shrink-0 shadow-md hover:shadow-lg 
+                     hover:-translate-y-0.5 border border-gray-100"
           title="Generar ruta óptima"
         >
           <Map className="w-5 h-5" />
         </button>
 
-        <div className="flex-1 flex items-center gap-3 bg-white border border-gray-300 rounded-full px-5 py-3 shadow-sm">
+        {/* Input container con estilo glass moderno */}
+        <div className="flex-1 flex items-center gap-3 bg-white/90 backdrop-blur-sm border border-gray-200 
+                        rounded-2xl px-5 py-3.5 shadow-lg hover:shadow-xl transition-all duration-300
+                        focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-100">
+          <Sparkles className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+          
           <input
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Escribe tu mensaje o usa el micrófono"
-            className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-500 text-base"
+            placeholder="Escribe tu mensaje o usa el micrófono..."
+            className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 text-base font-medium"
           />
 
           <VoiceButton onResult={handleVoiceResult} />
 
+          {/* Botón enviar con gradiente y glow */}
           <button
             onClick={onSend}
             disabled={!inputValue.trim()}
-            className="p-2 bg-yellow-400 text-gray-900 rounded-full hover:bg-yellow-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2.5 bg-gradient-to-r from-yellow-400 to-amber-500 text-gray-900 rounded-xl 
+                       hover:from-yellow-500 hover:to-amber-600 transition-all duration-300 
+                       disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:from-yellow-400 
+                       disabled:hover:to-amber-500 shadow-md hover:shadow-lg hover:shadow-yellow-300/50
+                       hover:-translate-y-0.5 active:translate-y-0"
             aria-label="Enviar"
           >
             <Send className="w-4 h-4" />

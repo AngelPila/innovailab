@@ -75,19 +75,41 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
     }
   };
 
+  // Mapeo de iconos por trámite
+  const getTramiteIcon = (tramiteId: string) => {
+    const iconMap: Record<string, string> = {
+      'obtener_pasaporte': '🛂',
+      'renovacion_cedula': '🆔',
+      'visa_americana': '🇺🇸',
+      'licencia_conducir': '🚗',
+      'registro_propiedad': '🏠',
+      'matrimonio_civil': '💒',
+      'partida_nacimiento': '👶',
+      'antecedentes_penales': '📋',
+    };
+    return iconMap[tramiteId] || '📄';
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Contenido principal scrolleable - incluye header */}
       <div className="flex-1 overflow-y-auto">
         {/* Encabezado del trámite - ahora dentro del scroll */}
         {!esRama && (
-          <div className="bg-yellow-400 px-6 py-6">
-            <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-yellow-400 via-yellow-400 to-amber-500 px-6 py-8 relative overflow-hidden">
+            {/* Elementos decorativos */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+            <div className="absolute top-1/2 right-10 w-20 h-20 bg-white/5 rounded-full" />
+            
+            <div className="max-w-4xl mx-auto relative">
               {/* Botón volver al chat */}
               {onVolverAlChat && (
                 <button
                   onClick={onVolverAlChat}
-                  className="flex items-center gap-2 mb-4 px-4 py-2 bg-white/80 hover:bg-white text-gray-800 rounded-lg transition-colors text-sm font-medium"
+                  className="flex items-center gap-2 mb-5 px-4 py-2.5 bg-white/90 hover:bg-white text-gray-800 
+                             rounded-xl transition-all duration-300 text-sm font-semibold shadow-md hover:shadow-lg
+                             hover:-translate-y-0.5 backdrop-blur-sm"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <MessageCircle className="w-4 h-4" />
@@ -95,31 +117,38 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
                 </button>
               )}
               
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{tramite.nombre}</h1>
-              <p className="text-lg text-gray-700 mb-4">{tramite.descripcion}</p>
+              {/* Título con icono */}
+              <div className="flex items-center gap-4 mb-3">
+                <span className="text-5xl drop-shadow-md">{getTramiteIcon(tramite.id)}</span>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{tramite.nombre}</h1>
+              </div>
+              <p className="text-lg text-gray-800/90 mb-5 max-w-2xl">{tramite.descripcion}</p>
               
-              <div className="flex gap-6 text-sm">
-                <div className="flex items-center gap-2 text-gray-800">
-                  <Clock className="w-5 h-5" />
-                  <span className="font-medium">{tramite.estimadoDias} días</span>
+              {/* Badges de información */}
+              <div className="flex flex-wrap gap-3 text-sm">
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
+                  <Clock className="w-5 h-5 text-gray-700" />
+                  <span className="font-semibold text-gray-800">{tramite.estimadoDias} días</span>
                 </div>
                 {tramite.costo && (
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <DollarSign className="w-5 h-5" />
-                    <span className="font-medium">${tramite.costo.toFixed(2)}</span>
+                  <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
+                    <DollarSign className="w-5 h-5 text-green-600" />
+                    <span className="font-semibold text-gray-800">${tramite.costo.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex items-center gap-2 text-gray-800">
-                  <FileText className="w-5 h-5" />
-                  <span className="font-medium">{tramite.prerequisitos.length} requisitos</span>
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <span className="font-semibold text-gray-800">{tramite.prerequisitos.length} requisitos</span>
                 </div>
               </div>
 
               {tramite.id === 'obtener_pasaporte' && (
-                <p className="mt-2 text-sm text-gray-800">
-                  <strong>Nota:</strong> Los requisitos se ajustan según tu caso. {progresoActual?.segmento?.categoria === 'adulto-mayor' && 'Tendrás atención prioritaria.'}
-                  {progresoActual?.segmento?.tieneDiscapacidad && ' Atención preferente disponible.'}
-                </p>
+                <div className="mt-4 p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
+                  <p className="text-sm text-gray-800">
+                    <strong>💡 Nota:</strong> Los requisitos se ajustan según tu caso. {progresoActual?.segmento?.categoria === 'adulto-mayor' && '👴 Tendrás atención prioritaria.'}
+                    {progresoActual?.segmento?.tieneDiscapacidad && ' ♿ Atención preferente disponible.'}
+                  </p>
+                </div>
               )}
             </div>
           </div>

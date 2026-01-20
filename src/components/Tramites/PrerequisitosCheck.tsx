@@ -26,10 +26,8 @@ export function PrerequisitosCheck({
     };
     setRespuestas(nuevasRespuestas);
     
-    // Si marca que NO tiene, automáticamente actualizar el estado global
-    if (!tieneDocumento) {
-      onValidacionCompleta(nuevasRespuestas);
-    }
+    // NO llamar onValidacionCompleta automáticamente
+    // Solo actualizamos el estado local, el usuario debe presionar "Continuar" explícitamente
   };
 
   const handleOmitir = (prerequisitoId: string) => {
@@ -145,7 +143,7 @@ export function PrerequisitosCheck({
                 
                 <button
                   disabled
-                  className="w-full px-6 py-4 bg-gray-300 text-gray-500 rounded-lg font-semibold text-lg cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full px-6 py-4 bg-gray-200 text-gray-600 rounded-lg font-semibold text-lg cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Lock className="w-5 h-5" />
                   Completa o omite los requisitos faltantes

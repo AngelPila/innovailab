@@ -116,9 +116,9 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
         <div className="pt-4 border-t border-gray-200">
           <button
             onClick={onCompletar}
-            className="w-full px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-bold text-lg transition-all shadow-lg"
+            className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold text-lg transition-all shadow-lg"
           >
-            → Continuar a Seguimiento
+            <span className="text-white">→ Continuar a Seguimiento</span>
           </button>
         </div>
       </div>
