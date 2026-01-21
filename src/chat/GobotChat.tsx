@@ -59,8 +59,15 @@ export default function GobotChat() {
     }
   }, []); // Solo al montar el componente
 
+  // Cuando cambia de pestaña y la nueva no tiene trámite, limpiar tramiteActivo
+  useEffect(() => {
+    if (!currentTramite) {
+      setTramiteActivo(null);
+    }
+  }, [currentTramite, activeTabId]);
+
   // showWelcome solo si no hay mensajes Y no hay un trámite activo en esta pestaña
-  const showWelcome = currentMessages.length === 0 && !currentTramite;
+  const showWelcome = currentMessages.length === 0 && !currentTramite && !tramiteActivo;
 
   const toggleConnection = (service: keyof Connections) => {
     setConnections((prev) => ({ ...prev, [service]: !prev[service] }));
