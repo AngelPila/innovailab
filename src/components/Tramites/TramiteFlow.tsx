@@ -103,53 +103,37 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
             <div className="absolute top-1/2 right-10 w-20 h-20 bg-white/5 rounded-full" />
             
             <div className="max-w-4xl mx-auto relative">
-              {/* Botón volver al chat */}
-              {onVolverAlChat && (
-                <button
-                  onClick={onVolverAlChat}
-                  className="flex items-center gap-2 mb-5 px-4 py-2.5 bg-white/90 hover:bg-white text-gray-800 
-                             rounded-xl transition-all duration-300 text-sm font-semibold shadow-md hover:shadow-lg
-                             hover:-translate-y-0.5 backdrop-blur-sm"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <MessageCircle className="w-4 h-4" />
-                  Volver al Chat
-                </button>
-              )}
-              
-              {/* Título con icono */}
-              <div className="flex items-center gap-4 mb-3">
-                <span className="text-5xl drop-shadow-md">{getTramiteIcon(tramite.id)}</span>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{tramite.nombre}</h1>
-              </div>
-              <p className="text-lg text-gray-800/90 mb-5 max-w-2xl">{tramite.descripcion}</p>
-              
-              {/* Badges de información */}
-              <div className="flex flex-wrap gap-3 text-sm">
-                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
-                  <Clock className="w-5 h-5 text-gray-700" />
-                  <span className="font-semibold text-gray-800">{tramite.estimadoDias} días</span>
+              {/* Título con icono y botón de volver */}
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div className="flex items-center gap-4">
+                  <span className="text-5xl drop-shadow-md">{getTramiteIcon(tramite.id)}</span>
+                  <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{tramite.nombre}</h1>
                 </div>
-                {tramite.costo && (
-                  <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
-                    <DollarSign className="w-5 h-5 text-green-600" />
-                    <span className="font-semibold text-gray-800">${tramite.costo.toFixed(2)}</span>
-                  </div>
+                
+                {/* Botón volver al chat o trámite principal - derecha */}
+                {onVolverAlChat && (
+                  <button
+                    onClick={onVolverAlChat}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 hover:bg-white text-gray-800 
+                               rounded-lg transition-all duration-300 text-xs font-semibold shadow-sm hover:shadow-md
+                               hover:-translate-y-0.5 backdrop-blur-sm flex-shrink-0 mt-1"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    {esRama ? (
+                      <>
+                        <FileText className="w-3.5 h-3.5" />
+                        Volver
+                      </>
+                    ) : (
+                      <>
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        Volver
+                      </>
+                    )}
+                  </button>
                 )}
-                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm">
-                  <FileText className="w-5 h-5 text-blue-600" />
-                  <span className="font-semibold text-gray-800">{tramite.prerequisitos.length} requisitos</span>
-                </div>
               </div>
-
-              {tramite.id === 'obtener_pasaporte' && (
-                <div className="mt-4 p-3 bg-white/60 backdrop-blur-sm rounded-xl border border-white/50">
-                  <p className="text-sm text-gray-800">
-                    <strong>💡 Nota:</strong> Los requisitos se ajustan según tu caso. {progresoActual?.segmento?.categoria === 'adulto-mayor' && '👴 Tendrás atención prioritaria.'}
-                    {progresoActual?.segmento?.tieneDiscapacidad && ' ♿ Atención preferente disponible.'}
-                  </p>
-                </div>
-              )}
+              <p className="text-lg text-gray-800/90 mb-6 max-w-2xl">{tramite.descripcion}</p>
             </div>
           </div>
         )}

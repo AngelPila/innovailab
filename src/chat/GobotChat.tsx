@@ -25,6 +25,7 @@ export default function GobotChat() {
     activeTabId, 
     currentMessages, 
     currentTramite,
+    esRamaActual,
     addNewTab, 
     closeTab, 
     switchTab, 
@@ -76,8 +77,8 @@ export default function GobotChat() {
   const onToggleRecording = () => setIsRecording((v) => !v);
 
   const handleAbrirRamaEnPestaña = (tramiteId: string, nombreTramite: string, prerequisitoId: string) => {
-    // Crear nueva pestaña
-    addNewTab(tramiteId);
+    // Crear nueva pestaña al lado del trámite principal
+    addNewTab(tramiteId, true);
   };
 
   const handleVolverAlChat = () => {
@@ -108,9 +109,10 @@ export default function GobotChat() {
   };
 
   const handleIrAlTramite = (tramiteId: string, tramiteName: string) => {
-    // Activar el flujo de trámite
+    // Activar el flujo de trámite y actualizar el título de la pestaña
     setTabTramite(activeTabId, tramiteId);
     setTramiteActivo(tramiteId);
+    updateTabTitle(activeTabId, tramiteName);
   };
 
   const handleSeleccionarTramiteMapa = (tramiteId: string, nombreTramite: string) => {
@@ -139,23 +141,42 @@ export default function GobotChat() {
       const tramiteDetectado = aiService.detectarTramiteEnRespuesta(respuestaIA);
       
       if (tramiteDetectado) {
-        // Limpiar la respuesta del marcador y mostrarla
-        const respuestaLimpia = aiService.limpiarRespuesta(respuestaIA);
         const tramiteInfo = tramitesService.getPorId(tramiteDetectado);
-        
+
+        // Construir mensaje breve + tarjetas de info
+        const saludo = tramiteInfo
+          ? `¡Excelente! Te ayudaré con ${tramiteInfo.nombre.toLowerCase()}.`
+          : '¡Excelente! Te ayudaré con tu trámite.';
+        const prompt = 'Antes de empezar, necesito hacerte unas preguntas rápidas sobre tu situación. Vamos paso a paso. ¿Estás listo?';
+
+        const quickInfo = {
+          tiempo: tramiteInfo?.estimadoDias ? `~${tramiteInfo.estimadoDias} días hábiles` : undefined,
+          costo: tramiteInfo?.costo !== undefined ? `$${tramiteInfo.costo.toFixed(2)}` : undefined,
+          vigencia:
+            tramiteDetectado === 'obtener_pasaporte'
+              ? '10 años'
+              : tramiteDetectado === 'licencia_conducir'
+                ? '5 años'
+                : undefined,
+        };
+
         const assistantMessage: Message = {
           id: Date.now() + 1,
           role: "assistant",
-          content: respuestaLimpia,
+          content: `${saludo}\n\n${prompt}`,
           tramiteId: tramiteDetectado,
           tramiteName: tramiteInfo?.nombre,
+          quickInfo,
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
-        // Activar el flujo de trámite INMEDIATAMENTE
+        // Activar el flujo de trámite INMEDIATAMENTE y actualizar título
         console.log('🎯 Activando trámite:', tramiteDetectado);
         setTabTramite(activeTabId, tramiteDetectado);
         setTramiteActivo(tramiteDetectado);
+        if (tramiteInfo?.nombre) {
+          updateTabTitle(activeTabId, tramiteInfo.nombre);
+        }
       } else {
         // Respuesta normal del chatbot
         const assistantMessage: Message = {
@@ -184,9 +205,10 @@ export default function GobotChat() {
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
-        // Activar flujo INMEDIATAMENTE
+        // Activar flujo INMEDIATAMENTE y actualizar título
         setTabTramite(activeTabId, tramiteDetectado.id);
         setTramiteActivo(tramiteDetectado.id);
+        updateTabTitle(activeTabId, tramiteDetectado.nombre);
       } else {
         const assistantMessage: Message = {
           id: Date.now() + 1,
@@ -231,6 +253,7 @@ export default function GobotChat() {
           {currentTramite ? (
             <TramiteFlow 
               tramiteId={currentTramite}
+              esRama={esRamaActual}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
               tabsAbiertos={tabs.map(t => t.title)}
               onVolverAlChat={handleVolverAlChat}
@@ -238,6 +261,7 @@ export default function GobotChat() {
           ) : tramiteActivo ? (
             <TramiteFlow 
               tramiteId={tramiteActivo}
+              esRama={esRamaActual}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
               tabsAbiertos={tabs.map(t => t.title)}
               onVolverAlChat={handleVolverAlChat}

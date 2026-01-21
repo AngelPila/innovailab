@@ -1,5 +1,5 @@
 import React from "react";
-import { Map, Bot, User, ArrowRight, FileText } from "lucide-react";
+import { Map, Bot, User, ArrowRight, FileText, Clock, DollarSign, Calendar } from "lucide-react";
 import type { Message } from "./types";
 
 type Props = {
@@ -35,7 +35,48 @@ export default function MessageList({ messages, onGenerateRoute, onIrAlTramite, 
                   : "bg-white/90 backdrop-blur-sm text-gray-800 border border-gray-100"
               }`}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
+
+              {message.quickInfo && (
+                <div className="mt-4 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+                  <p className="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wide">Información rápida</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {message.quickInfo.tiempo && (
+                      <div className="flex items-center gap-3 rounded-xl border border-yellow-200 bg-yellow-50/70 px-4 py-3 shadow-sm">
+                        <span className="p-2 rounded-lg bg-yellow-100">
+                          <Clock className="w-5 h-5 text-yellow-700" />
+                        </span>
+                        <div>
+                          <p className="text-2xs font-semibold text-yellow-800">Tiempo</p>
+                          <p className="text-base font-bold text-gray-900">{message.quickInfo.tiempo}</p>
+                        </div>
+                      </div>
+                    )}
+                    {message.quickInfo.costo && (
+                      <div className="flex items-center gap-3 rounded-xl border border-green-200 bg-green-50/70 px-4 py-3 shadow-sm">
+                        <span className="p-2 rounded-lg bg-green-100">
+                          <DollarSign className="w-5 h-5 text-green-700" />
+                        </span>
+                        <div>
+                          <p className="text-2xs font-semibold text-green-800">Costo</p>
+                          <p className="text-base font-bold text-gray-900">{message.quickInfo.costo}</p>
+                        </div>
+                      </div>
+                    )}
+                    {message.quickInfo.vigencia && (
+                      <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/70 px-4 py-3 shadow-sm">
+                        <span className="p-2 rounded-lg bg-blue-100">
+                          <Calendar className="w-5 h-5 text-blue-700" />
+                        </span>
+                        <div>
+                          <p className="text-2xs font-semibold text-blue-800">Vigencia</p>
+                          <p className="text-base font-bold text-gray-900">{message.quickInfo.vigencia}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Botón de redireccionamiento a trámite */}
               {message.tramiteId && message.tramiteName && message.role === "assistant" && (

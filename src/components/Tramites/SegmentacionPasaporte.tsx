@@ -287,19 +287,125 @@ export function SegmentacionPasaporte({ onConfirm }: Props) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
-              onClick={() => { setTieneDiscapacidad(true); handleContinuar(); }}
+              onClick={() => { setTieneDiscapacidad(true); setPaso(7); }}
               className="p-6 border-2 border-gray-200 rounded-xl hover:border-blue-400 hover:bg-blue-50 transition-all"
             >
               <span className="text-lg font-semibold text-gray-900">Sí, tengo carnet</span>
             </button>
 
             <button
-              onClick={() => { setTieneDiscapacidad(false); handleContinuar(); }}
+              onClick={() => { setTieneDiscapacidad(false); setPaso(7); }}
               className="p-6 border-2 border-gray-200 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all"
             >
               <span className="text-lg font-semibold text-gray-900">No</span>
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Paso 7: Confirmación y personalización
+  if (paso === 7) {
+    const mensajesPersonalizados = [];
+    
+    if (tieneDiscapacidad) {
+      mensajesPersonalizados.push('✓ Atención preferente por discapacidad');
+    }
+    
+    if (categoria === 'adulto-mayor') {
+      mensajesPersonalizados.push('✓ Atención prioritaria para adultos mayores');
+    }
+    
+    if (categoria === 'menor-edad') {
+      mensajesPersonalizados.push('✓ Requisitos especiales para menores de edad');
+    }
+    
+    if (esNaturalizado) {
+      mensajesPersonalizados.push('✓ Requisitos adicionales para naturalizados');
+    }
+
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 rounded-lg bg-green-100">
+              <CheckCircle2 className="w-7 h-7 text-green-700" />
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">¡Listo! Tu experiencia está personalizada</h2>
+              <p className="text-gray-600 mt-1">Hemos ajustado los requisitos según tu perfil</p>
+            </div>
+          </div>
+
+          {/* Resumen de personalización */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-6 border-2 border-blue-200">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Tu perfil:</h3>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🇪🇨</span>
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    {nacionalidad === 'ecuatoriano' ? 'Ciudadano ecuatoriano' : 'Extranjero'}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {esNaturalizado === false && 'Por nacimiento'}
+                    {esNaturalizado === true && 'Por naturalización'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">📋</span>
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    {tipoTramite === 'primera-vez' && 'Primera vez'}
+                    {tipoTramite === 'renovacion' && 'Renovación'}
+                    {tipoTramite === 'perdida-robo' && 'Por pérdida o robo'}
+                    {tipoTramite === 'duplicado' && 'Duplicado'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">
+                  {categoria === 'adulto-mayor' ? '👴' : categoria === 'menor-edad' ? '👶' : '👤'}
+                </span>
+                <div>
+                  <p className="font-semibold text-gray-900">
+                    {categoria === 'adulto' && 'Adulto (18-64 años)'}
+                    {categoria === 'menor-edad' && 'Menor de edad'}
+                    {categoria === 'adulto-mayor' && 'Adulto mayor (65+)'}
+                  </p>
+                </div>
+              </div>
+
+              {tieneDiscapacidad && (
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">♿</span>
+                  <div>
+                    <p className="font-semibold text-gray-900">Con carnet de discapacidad</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Beneficios personalizados */}
+          {mensajesPersonalizados.length > 0 && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-5 mb-6">
+              <p className="font-semibold text-green-900 mb-3">Beneficios aplicables:</p>
+              <div className="space-y-2">
+                {mensajesPersonalizados.map((mensaje, idx) => (
+                  <p key={idx} className="text-sm text-green-800 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                    {mensaje}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     );

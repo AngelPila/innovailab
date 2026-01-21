@@ -8,6 +8,11 @@ export type Message = {
   isRoute?: boolean;
   tramiteId?: string;
   tramiteName?: string;
+  quickInfo?: {
+    tiempo?: string;
+    costo?: string;
+    vigencia?: string;
+  };
 };
 
 export type Connections = {

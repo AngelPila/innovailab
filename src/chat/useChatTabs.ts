@@ -6,6 +6,7 @@ export function useChatTabs() {
   const [activeTabId, setActiveTabId] = useState<number>(1);
   const [messagesByTab, setMessagesByTab] = useState<Record<number, Message[]>>({ 1: [] });
   const [tramitesByTab, setTramitesByTab] = useState<Record<number, string | null>>({ 1: null });
+  const [esRamaByTab, setEsRamaByTab] = useState<Record<number, boolean>>({ 1: false });
 
   const currentMessages = useMemo(
     () => messagesByTab[activeTabId] || [],
@@ -17,7 +18,12 @@ export function useChatTabs() {
     [tramitesByTab, activeTabId]
   );
 
-  const addNewTab = (tramiteId?: string) => {
+  const esRamaActual = useMemo(
+    () => esRamaByTab[activeTabId] || false,
+    [esRamaByTab, activeTabId]
+  );
+
+  const addNewTab = (tramiteId?: string, insertAfterCurrentTab: boolean = false) => {
     const newId = Math.max(...tabs.map((t) => t.id), 0) + 1;
     
     // Mapeo de IDs a nombres amigables
@@ -31,9 +37,21 @@ export function useChatTabs() {
     // Si no se proporciona tramiteId, crear un chat vacío
     let titulo = tramiteId ? (nombresTramites[tramiteId] || `↳ ${tramiteId}`) : `Chat ${newId}`;
     
-    setTabs((prev) => [...prev, { id: newId, title: titulo }]);
+    // Si insertAfterCurrentTab es true, insertar después de la pestaña actual
+    if (insertAfterCurrentTab) {
+      const currentIndex = tabs.findIndex(t => t.id === activeTabId);
+      setTabs((prev) => {
+        const newTabs = [...prev];
+        newTabs.splice(currentIndex + 1, 0, { id: newId, title: titulo });
+        return newTabs;
+      });
+    } else {
+      setTabs((prev) => [...prev, { id: newId, title: titulo }]);
+    }
+    
     setMessagesByTab((prev) => ({ ...prev, [newId]: [] }));
     setTramitesByTab((prev) => ({ ...prev, [newId]: tramiteId || null }));
+    setEsRamaByTab((prev) => ({ ...prev, [newId]: insertAfterCurrentTab }));
     setActiveTabId(newId);
   };
 
@@ -45,6 +63,7 @@ export function useChatTabs() {
       setTabs([{ id: 1, title: "Consulta Principal" }]);
       setMessagesByTab({ 1: [] });
       setTramitesByTab({ 1: null });
+      setEsRamaByTab({ 1: false });
       setActiveTabId(1);
       return;
     }
@@ -59,6 +78,12 @@ export function useChatTabs() {
     });
 
     setTramitesByTab((prev) => {
+      const next = { ...prev };
+      delete next[tabId];
+      return next;
+    });
+
+    setEsRamaByTab((prev) => {
       const next = { ...prev };
       delete next[tabId];
       return next;
@@ -91,6 +116,7 @@ export function useChatTabs() {
     activeTabId,
     currentMessages,
     currentTramite,
+    esRamaActual,
     addNewTab,
     closeTab,
     switchTab,
