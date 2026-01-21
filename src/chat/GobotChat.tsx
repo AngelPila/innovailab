@@ -6,30 +6,29 @@ import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import { useChatTabs } from "./useChatTabs";
 import { useAutoScroll } from "./useAutoScroll";
-import type { Connections, HistoryItem, Message } from "./types";
+import type { Connections, ActiveGuide, Message } from "./types";
 import { TramiteFlow } from "../components/Tramites";
 import { SelectorTramiteMapa, ModalLugaresMapa } from "../components/Mapa";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
 import { useTramiteStore } from "../store/tramiteStore";
 
-const historyMock: HistoryItem[] = [
-  { id: 1, title: "Renovación de cédula", date: "Hace 2 horas", status: "completed" },
-  { id: 2, title: "Visa americana", date: "Ayer", status: "in-progress" },
-  { id: 3, title: "Licencia de conducir", date: "Hace 3 días", status: "completed" },
+const activeGuidesMock: ActiveGuide[] = [
+  { id: 1, tramiteId: "pasaporte", title: "Pasaporte", progress: 60, lastUpdated: "Hace 2 horas", status: "active" },
+  { id: 2, tramiteId: "visa-americana", title: "Visa Americana", progress: 35, lastUpdated: "Ayer", status: "active" },
 ];
 
 export default function GobotChat() {
-  const { 
-    tabs, 
-    activeTabId, 
-    currentMessages, 
+  const {
+    tabs,
+    activeTabId,
+    currentMessages,
     currentTramite,
     esRamaActual,
-    addNewTab, 
-    closeTab, 
-    switchTab, 
-    setTabMessages, 
+    addNewTab,
+    closeTab,
+    switchTab,
+    setTabMessages,
     pushMessages,
     setTabTramite,
     updateTabTitle,
@@ -45,7 +44,7 @@ export default function GobotChat() {
     calendar: false,
     gmail: false,
   });
-  
+
   // Estados para el mapa
   const [mostrarSelectorMapa, setMostrarSelectorMapa] = useState(false);
   const [mapaConTramite, setMapaConTramite] = useState<{ id: string; nombre: string } | null>(null);
@@ -92,7 +91,7 @@ export default function GobotChat() {
   const onGenerateRoute = () => {
     // Verificar si hay un trámite activo en la conversación actual
     const tramiteEnConversacion = currentTramite || tramiteActivo;
-    
+
     if (tramiteEnConversacion) {
       // Si hay trámite, obtener su nombre y mostrar directamente el mapa
       const tramiteInfo = tramitesService.getPorId(tramiteEnConversacion);
@@ -113,6 +112,16 @@ export default function GobotChat() {
     setTabTramite(activeTabId, tramiteId);
     setTramiteActivo(tramiteId);
     updateTabTitle(activeTabId, tramiteName);
+  };
+
+  const handleSelectGuide = (tramiteId: string) => {
+    // Activar el trámite seleccionado desde el sidebar
+    const tramiteInfo = tramitesService.getPorId(tramiteId);
+    if (tramiteInfo) {
+      setTabTramite(activeTabId, tramiteId);
+      setTramiteActivo(tramiteId);
+      updateTabTitle(activeTabId, tramiteInfo.nombre);
+    }
   };
 
   const handleSeleccionarTramiteMapa = (tramiteId: string, nombreTramite: string) => {
@@ -136,10 +145,10 @@ export default function GobotChat() {
     // Obtener respuesta de la IA
     try {
       const respuestaIA = await aiService.sendMessage(inputValue);
-      
+
       // Verificar si la IA detectó un trámite
       const tramiteDetectado = aiService.detectarTramiteEnRespuesta(respuestaIA);
-      
+
       if (tramiteDetectado) {
         const tramiteInfo = tramitesService.getPorId(tramiteDetectado);
 
@@ -169,7 +178,7 @@ export default function GobotChat() {
           quickInfo,
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
-        
+
         // Activar el flujo de trámite INMEDIATAMENTE y actualizar título
         console.log('🎯 Activando trámite:', tramiteDetectado);
         setTabTramite(activeTabId, tramiteDetectado);
@@ -188,13 +197,13 @@ export default function GobotChat() {
       }
     } catch (error) {
       console.error('Error al obtener respuesta de IA:', error);
-      
+
       // Fallback a detección simple
       const tramiteDetectado = tramitesService.detectarIntencion(inputValue);
-      
+
       if (tramiteDetectado) {
         console.log('🎯 Fallback: Activando trámite:', tramiteDetectado.id);
-        
+
         // Mostrar mensaje de confirmación con redireccionamiento
         const assistantMessage: Message = {
           id: Date.now() + 1,
@@ -204,7 +213,7 @@ export default function GobotChat() {
           tramiteName: tramiteDetectado.nombre,
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
-        
+
         // Activar flujo INMEDIATAMENTE y actualizar título
         setTabTramite(activeTabId, tramiteDetectado.id);
         setTramiteActivo(tramiteDetectado.id);
@@ -229,7 +238,12 @@ export default function GobotChat() {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar connections={connections} toggleConnection={toggleConnection} history={historyMock} />
+      <Sidebar
+        connections={connections}
+        toggleConnection={toggleConnection}
+        activeGuides={activeGuidesMock}
+        onSelectGuide={handleSelectGuide}
+      />
 
       <div className="flex-1 flex flex-col">
         {/* Encabezado amarillo - Pestañas de chat */}
@@ -251,7 +265,7 @@ export default function GobotChat() {
         {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
           {currentTramite ? (
-            <TramiteFlow 
+            <TramiteFlow
               tramiteId={currentTramite}
               esRama={esRamaActual}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
@@ -259,7 +273,7 @@ export default function GobotChat() {
               onVolverAlChat={handleVolverAlChat}
             />
           ) : tramiteActivo ? (
-            <TramiteFlow 
+            <TramiteFlow
               tramiteId={tramiteActivo}
               esRama={esRamaActual}
               onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
@@ -277,11 +291,11 @@ export default function GobotChat() {
               onGenerateRoute={onGenerateRoute}
             />
           ) : (
-            <MessageList 
-              messages={currentMessages} 
-              onGenerateRoute={onGenerateRoute} 
+            <MessageList
+              messages={currentMessages}
+              onGenerateRoute={onGenerateRoute}
               onIrAlTramite={handleIrAlTramite}
-              endRef={endRef} 
+              endRef={endRef}
             />
           )}
         </div>

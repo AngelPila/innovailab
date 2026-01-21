@@ -73,7 +73,7 @@ Verificaremos tus requisitos. ¿Comenzamos?`,
     
     if (tramiteDetectado) {
       const respuesta = this.getResponseForTramite(tramiteDetectado.id);
-      console.log('✅ Trámite detectado:', tramiteDetectado.nombre);
+      console.log('✅ Trámite detectado:', tramiteDetectado.nombre);  
       console.log('💬 RESPUESTA:', respuesta);
       
       // Guardar en historial

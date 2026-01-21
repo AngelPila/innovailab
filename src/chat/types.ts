@@ -21,9 +21,11 @@ export type Connections = {
   gmail: boolean;
 };
 
-export type HistoryItem = {
+export type ActiveGuide = {
   id: number;
+  tramiteId: string;
   title: string;
-  date: string;
-  status: "completed" | "in-progress";
+  progress: number; // 0-100
+  lastUpdated: string;
+  status: "active" | "completed";
 };
