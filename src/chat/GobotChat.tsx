@@ -100,6 +100,12 @@ export default function GobotChat() {
     }
   };
 
+  const handleIrAlTramite = (tramiteId: string, tramiteName: string) => {
+    // Activar el flujo de trámite
+    setTabTramite(activeTabId, tramiteId);
+    setTramiteActivo(tramiteId);
+  };
+
   const handleSeleccionarTramiteMapa = (tramiteId: string, nombreTramite: string) => {
     setMostrarSelectorMapa(false);
     setMapaConTramite({ id: tramiteId, nombre: nombreTramite });
@@ -128,11 +134,14 @@ export default function GobotChat() {
       if (tramiteDetectado) {
         // Limpiar la respuesta del marcador y mostrarla
         const respuestaLimpia = aiService.limpiarRespuesta(respuestaIA);
+        const tramiteInfo = tramitesService.getPorId(tramiteDetectado);
         
         const assistantMessage: Message = {
           id: Date.now() + 1,
           role: "assistant",
           content: respuestaLimpia,
+          tramiteId: tramiteDetectado,
+          tramiteName: tramiteInfo?.nombre,
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
@@ -158,11 +167,13 @@ export default function GobotChat() {
       if (tramiteDetectado) {
         console.log('🎯 Fallback: Activando trámite:', tramiteDetectado.id);
         
-        // Mostrar mensaje de confirmación
+        // Mostrar mensaje de confirmación con redireccionamiento
         const assistantMessage: Message = {
           id: Date.now() + 1,
           role: "assistant",
           content: `¡Perfecto! Te ayudaré con ${tramiteDetectado.nombre.toLowerCase()}.\n\nTiempo estimado: ~${tramiteDetectado.estimadoDias} días\nCosto: $${tramiteDetectado.costo?.toFixed(2)}\n\n¿Comenzamos?`,
+          tramiteId: tramiteDetectado.id,
+          tramiteName: tramiteDetectado.nombre,
         };
         setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
         
@@ -235,7 +246,12 @@ export default function GobotChat() {
               onGenerateRoute={onGenerateRoute}
             />
           ) : (
-            <MessageList messages={currentMessages} onGenerateRoute={onGenerateRoute} endRef={endRef} />
+            <MessageList 
+              messages={currentMessages} 
+              onGenerateRoute={onGenerateRoute} 
+              onIrAlTramite={handleIrAlTramite}
+              endRef={endRef} 
+            />
           )}
         </div>
 

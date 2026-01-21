@@ -6,6 +6,8 @@ export type Message = {
   content: string;
   showRouteButton?: boolean;
   isRoute?: boolean;
+  tramiteId?: string;
+  tramiteName?: string;
 };
 
 export type Connections = {

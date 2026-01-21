@@ -1,14 +1,15 @@
 import React from "react";
-import { Map, Bot, User } from "lucide-react";
+import { Map, Bot, User, ArrowRight, FileText } from "lucide-react";
 import type { Message } from "./types";
 
 type Props = {
   messages: Message[];
   onGenerateRoute: () => void;
+  onIrAlTramite?: (tramiteId: string, tramiteName: string) => void;
   endRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export default function MessageList({ messages, onGenerateRoute, endRef }: Props) {
+export default function MessageList({ messages, onGenerateRoute, onIrAlTramite, endRef }: Props) {
   return (
     <div className="px-6 py-6">
       <div className="max-w-4xl mx-auto space-y-5">
@@ -35,6 +36,20 @@ export default function MessageList({ messages, onGenerateRoute, endRef }: Props
               }`}
             >
               <p className="text-sm leading-relaxed">{message.content}</p>
+
+              {/* Botón de redireccionamiento a trámite */}
+              {message.tramiteId && message.tramiteName && message.role === "assistant" && (
+                <button
+                  onClick={() => onIrAlTramite?.(message.tramiteId!, message.tramiteName!)}
+                  className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 
+                             text-white rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-blue-500/30 
+                             transition-all duration-300 hover:-translate-y-0.5 w-full justify-center"
+                >
+                  <FileText className="w-4 h-4" />
+                  Ir al Trámite: {message.tramiteName}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
 
               {message.showRouteButton && (
                 <button
