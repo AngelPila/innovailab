@@ -3,8 +3,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 // Extensión de Window para incluir SpeechRecognition
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
   }
 }
 
@@ -23,7 +23,7 @@ export const useVoiceRecognition = (): UseVoiceRecognitionReturn => {
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
   
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
   
   // Verificar si el navegador soporta la API
   const isSupported = typeof window !== 'undefined' && 
@@ -46,7 +46,7 @@ export const useVoiceRecognition = (): UseVoiceRecognitionReturn => {
     recognition.maxAlternatives = 1;
 
     // Evento cuando se recibe un resultado
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptResult = event.results[current][0].transcript;
       
@@ -60,7 +60,7 @@ export const useVoiceRecognition = (): UseVoiceRecognitionReturn => {
     };
 
     // Manejo de errores
-    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognition.onerror = (event: any) => {
       console.error('Error en reconocimiento de voz:', event.error);
       setIsListening(false);
       
