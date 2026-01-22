@@ -135,7 +135,12 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
               >
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span className="font-medium">Calendar</span>
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">Google Calendar</span>
+                    <span className="text-xs opacity-75">
+                      {connections.calendar ? "✓ Vinculado" : "No vinculado"}
+                    </span>
+                  </div>
                 </div>
                 {connections.calendar && (
                   <div className="w-2 h-2 bg-blue-500 rounded-full" />

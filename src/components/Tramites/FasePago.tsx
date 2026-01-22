@@ -1,7 +1,9 @@
 import { DollarSign, ExternalLink, MapPin, Phone, Globe, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
 import { useTramiteStore } from '../../store/tramiteStore';
 import { tramitesService } from '../../services/tramitesService';
 import type { Tramite } from '../../types/tramite.types';
+import { OrganizeTramite, FreeSuggestionsBanner } from '../Calendar';
 
 interface Props {
   tramite: Tramite;
@@ -11,17 +13,18 @@ interface Props {
 
 export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
   const { progresoActual } = useTramiteStore();
-  
+  const [showOrganize, setShowOrganize] = useState(false);
+
   // Calcular costo total (tramite principal + trámites secundarios abiertos)
   const costoBase = tramite.costo || 0;
-  
+
   // Identificar los trámites secundarios abiertos basados en tabsIds
   const tramitesSecundarios = tramite.prerequisitos
     ?.filter(p => {
       if (!p.tramiteRelacionado) return false;
       const tramiteRel = tramitesService.getPorId(p.tramiteRelacionado);
       if (!tramiteRel) return false;
-      
+
       return tabsIds.some(tabId => {
         const tabNormalizado = tabId.toLowerCase().replace('↳', '').trim();
         const tramiteNormalizado = tramiteRel.nombre.toLowerCase().trim();
@@ -36,7 +39,7 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
         id: p.tramiteRelacionado!,
       };
     }) || [];
-  
+
   const costoSecundario = tramitesSecundarios.reduce((total, t) => total + t.costo, 0);
   const costoTotal = costoBase + costoSecundario;
 
@@ -125,7 +128,7 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
         ]
       }
     };
-    
+
     return infoMap[tramiteId] || {
       title: 'Información de Pago',
       cost: costoTotal,
@@ -198,18 +201,18 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h4 className="font-bold text-gray-900 mb-3">{location.name}</h4>
-                      
+
                       <div className="space-y-2 text-sm">
                         <div className="flex items-start gap-2">
                           <MapPin className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
                           <span className="text-gray-700">{location.address}</span>
                         </div>
-                        
+
                         <div className="flex items-start gap-2">
                           <Phone className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
                           <span className="text-gray-700">{location.phone}</span>
                         </div>
-                        
+
                         <div className="flex items-start gap-2">
                           <Globe className="w-4 h-4 text-gray-500 flex-shrink-0 mt-0.5" />
                           <span className="text-gray-700">{location.hours}</span>
@@ -246,9 +249,26 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
         {/* Información de contacto */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 mb-6">
           <p className="text-sm text-gray-700">
-            <span className="font-bold text-gray-900">¿Preguntas?</span> Si necesitas más información sobre los pasos de pago, 
+            <span className="font-bold text-gray-900">¿Preguntas?</span> Si necesitas más información sobre los pasos de pago,
             contáctate directamente con la institución competente. Ten a mano tu número de cédula y los datos del trámite.
           </p>
+        </div>
+
+        {/* Banner de sugerencias de horarios libres */}
+        <FreeSuggestionsBanner
+          tramiteId={tramite.id}
+          officialUrl={infoPago.onlineUrl}
+        />
+
+        {/* Sección de organización de trámite */}
+        <div className="mb-6">
+          <OrganizeTramite
+            tramiteId={tramite.id}
+            tramiteName={tramite.nombre}
+            location={infoPago.locations[0]?.address}
+            requirements={tramite.prerequisitos?.map(p => p.nombre)}
+            officialUrl={infoPago.onlineUrl}
+          />
         </div>
 
         {/* Botón de confirmación */}
@@ -257,10 +277,10 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
             onClick={onCompletar}
             className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-bold text-lg text-white transition-all shadow-lg hover:shadow-xl"
           >
-            He completado el pago → Continuar a Seguimiento
+            Continuar a Seguimiento →
           </button>
           <p className="text-xs text-gray-500 text-center mt-3">
-            Presiona el botón una vez hayas realizado el pago en los lugares indicados
+            Puedes organizar tu trámite ahora o más tarde desde el sidebar
           </p>
         </div>
       </div>

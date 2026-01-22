@@ -67,24 +67,24 @@ Verificaremos tus requisitos. ¿Comenzamos?`,
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('📨 MENSAJE DEL USUARIO:', userMessage);
     console.log('🤖 Modo: Detección local (sin IA)');
-    
+
     // Detectar trámite
     const tramiteDetectado = tramitesService.detectarIntencion(userMessage);
-    
+
     if (tramiteDetectado) {
       const respuesta = this.getResponseForTramite(tramiteDetectado.id);
-      console.log('✅ Trámite detectado:', tramiteDetectado.nombre);  
+      console.log('✅ Trámite detectado:', tramiteDetectado.nombre);
       console.log('💬 RESPUESTA:', respuesta);
-      
+
       // Guardar en historial
       this.conversationHistory.push({ role: 'user', parts: userMessage });
       this.conversationHistory.push({ role: 'assistant', parts: respuesta });
-      
+
       // Mantener solo últimos 20 mensajes
       if (this.conversationHistory.length > 20) {
         this.conversationHistory = this.conversationHistory.slice(-20);
       }
-      
+
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
       return respuesta;
     }

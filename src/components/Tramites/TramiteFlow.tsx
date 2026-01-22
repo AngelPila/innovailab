@@ -23,7 +23,7 @@ interface Props {
 export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbrirRamaEnPestaña, tabsAbiertos = [], onVolverAlChat }: Props) {
   const tramite = tramitesService.getPorId(tramiteId);
   const { iniciarTramite, progresoActual, progresoMultiple } = useTramiteStore();
-  
+
   const {
     faseActual,
     pasoActual,
@@ -62,7 +62,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
 
   const handleValidacionCompleta = (cumplidos: Record<string, boolean>) => {
     actualizarPrerequisitos(cumplidos);
-    
+
     // Avanzar a la fase de PAGO después de completar requisitos
     setTimeout(() => cambiarFase('pago'), 300);
     console.log('✅ Requisitos completados:', cumplidos);
@@ -101,7 +101,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-black/5 rounded-full translate-y-1/2 -translate-x-1/2" />
             <div className="absolute top-1/2 right-10 w-20 h-20 bg-white/5 rounded-full" />
-            
+
             <div className="max-w-4xl mx-auto relative">
               {/* Título con icono y botón de volver */}
               <div className="flex items-start justify-between gap-4 mb-3">
@@ -109,7 +109,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
                   <span className="text-5xl drop-shadow-md">{getTramiteIcon(tramite.id)}</span>
                   <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">{tramite.nombre}</h1>
                 </div>
-                
+
                 {/* Botón volver al chat o trámite principal - derecha */}
                 {onVolverAlChat && (
                   <button
@@ -173,34 +173,34 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
               tabsIds={tabsAbiertos}
               onCompletar={() => {
                 completarPaso('paso_pago');
-                
+
                 // Si es rama, notificar
                 if (esRama && onCompletarRama) {
                   setTimeout(() => onCompletarRama(), 500);
                 }
               }}
             />
-        )}
+          )}
 
-        {/* Fase de Seguimiento */}
-        {faseActual === 'seguimiento' && (
-          <FaseSeguimiento 
-            tramite={tramite}
-            tabsAbiertos={tabsAbiertos}
-            prerequisitosCumplidos={prerequisitosCumplidos}
-          />
-        )}
+          {/* Fase de Seguimiento */}
+          {faseActual === 'seguimiento' && (
+            <FaseSeguimiento
+              tramite={tramite}
+              tabsAbiertos={tabsAbiertos}
+              prerequisitosCumplidos={prerequisitosCumplidos}
+            />
+          )}
 
-        {/* Fases genéricas (Información) */}
-        {faseActual === 'informacion' && pasoActual && (
-          <FaseContenido
-            paso={pasoActual}
-            estaCompletado={false}
-            onCompletar={() => {
-              completarPaso(pasoActual.id);
-            }}
-          />
-        )}
+          {/* Fases genéricas (Información) */}
+          {faseActual === 'informacion' && pasoActual && (
+            <FaseContenido
+              paso={pasoActual}
+              estaCompletado={false}
+              onCompletar={() => {
+                completarPaso(pasoActual.id);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

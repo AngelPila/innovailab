@@ -12,6 +12,8 @@ import { SelectorTramiteMapa, ModalLugaresMapa } from "../components/Mapa";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
 import { useTramiteStore } from "../store/tramiteStore";
+import { GoogleCalendarConnectModal } from "../components/Calendar";
+import { calendarService } from "../services/calendarService";
 
 const activeGuidesMock: ActiveGuide[] = [
   { id: 1, tramiteId: "pasaporte", title: "Pasaporte", progress: 60, lastUpdated: "Hace 2 horas", status: "active" },
@@ -69,8 +71,39 @@ export default function GobotChat() {
   // showWelcome solo si no hay mensajes Y no hay un trámite activo en esta pestaña
   const showWelcome = currentMessages.length === 0 && !currentTramite && !tramiteActivo;
 
-  const toggleConnection = (service: keyof Connections) => {
-    setConnections((prev) => ({ ...prev, [service]: !prev[service] }));
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const toggleConnection = async (service: keyof Connections) => {
+    if (service === 'calendar' && !connections.calendar) {
+      // Mostrar modal de conexión
+      setShowCalendarModal(true);
+    } else if (service === 'calendar' && connections.calendar) {
+      // Desconectar
+      calendarService.disconnect();
+      setConnections((prev) => ({ ...prev, calendar: false }));
+    } else {
+      // Otros servicios: toggle simple
+      setConnections((prev) => ({ ...prev, [service]: !prev[service] }));
+    }
+  };
+
+  const handleCalendarConnect = async () => {
+    try {
+      await calendarService.connectOnDemand();
+      setConnections((prev) => ({ ...prev, calendar: true }));
+      setShowCalendarModal(false);
+
+      // Mensaje de confirmación
+      const confirmMessage: Message = {
+        id: Date.now(),
+        role: "assistant",
+        content: "✅ **Google Calendar conectado exitosamente**\n\nAhora puedes:\n• Guardar turnos que ya obtuviste\n• Recibir recordatorios automáticos\n• Ver sugerencias de horarios libres\n\n¿Necesitas ayuda con algún trámite?"
+      };
+      setTabMessages(activeTabId, [...currentMessages, confirmMessage]);
+    } catch (error) {
+      console.error('Error conectando Calendar:', error);
+      alert('Error al conectar con Google Calendar');
+    }
   };
 
   const onToggleRecording = () => setIsRecording((v) => !v);
@@ -327,6 +360,14 @@ export default function GobotChat() {
           tramiteId={mapaConTramite.id}
           nombreTramite={mapaConTramite.nombre}
           onClose={handleCerrarMapa}
+        />
+      )}
+
+      {/* Modal: Google Calendar Connection */}
+      {showCalendarModal && (
+        <GoogleCalendarConnectModal
+          onConnect={handleCalendarConnect}
+          onClose={() => setShowCalendarModal(false)}
         />
       )}
     </div>
