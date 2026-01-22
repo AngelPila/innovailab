@@ -1,6 +1,9 @@
 import { Settings, Calendar, Mail, MessageCircle, Check, Zap, ChevronLeft, ChevronRight, User, FileText, Plane, CreditCard, Car, Home } from "lucide-react";
 import { useState } from "react";
 import type { Connections, ActiveGuide } from "./types";
+import { signInWithGoogle, signOutUser } from "../services/authService";
+import { useAuth } from "../contexts/AuthContext";
+
 
 type Props = {
   connections: Connections;
@@ -27,6 +30,7 @@ const getTramiteIcon = (tramiteId: string) => {
 export default function Sidebar({ connections, toggleConnection, activeGuides, onSelectGuide }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const { user, loading } = useAuth();
 
   const connectedCount = Object.values(connections).filter(Boolean).length;
   const activeGuidesCount = activeGuides.filter(g => g.status === "active").length;
@@ -69,29 +73,86 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
       <div className="px-3 py-3 border-b border-gray-100">
         {!isCollapsed ? (
           <div className="relative">
-            <button
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="w-full flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200 group"
-            >
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <User className="w-4 h-4 text-gray-900" />
-              </div>
-              <div className="flex-1 text-left min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">Mi Perfil</p>
-                <p className="text-xs text-gray-500">Usuario</p>
-              </div>
-              <Settings className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
-            </button>
+            {/* When no user: show a prominent "Iniciar sesión" prompt */}
+            {!loading && !user ? (
+              <div>
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-100 rounded-lg hover:shadow-sm transition-all duration-200"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="text-sm font-semibold text-gray-900">Iniciar sesión</p>
+                    <p className="text-xs text-gray-500">Accede para guardar tu progreso</p>
+                  </div>
+                </button>
 
-            {/* Dropdown menu (opcional) */}
-            {showProfileMenu && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden">
-                <button className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                  Configuración
+                {showProfileMenu && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden px-3 py-3">
+                    <p className="text-sm text-gray-600 mb-2">Inicia sesión con:</p>
+                    <button
+                      onClick={async () => {
+                        try {
+                          await signInWithGoogle();
+                        } catch (e) {
+                          console.error(e);
+                        } finally {
+                          setShowProfileMenu(false);
+                        }
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition-colors"
+                    >
+                      <img src="/google-logo.svg" alt="Google" className="w-5 h-5" />
+                      <span className="text-sm font-medium text-gray-800">Continuar con Google</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              // When user is present (or loading), show profile summary and menu
+              <div>
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="w-full flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-all duration-200 group"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {user?.photoURL ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={user.photoURL} alt="avatar" className="w-8 h-8 object-cover" />
+                    ) : (
+                      <User className="w-4 h-4 text-gray-900" />
+                    )}
+                  </div>
+                  <div className="flex-1 text-left min-w-0">
+                    <p className="text-sm font-semibold text-gray-900 truncate">Perfil</p>
+                    <p className="text-xs text-gray-500 truncate">{user?.displayName ?? user?.email}</p>
+                  </div>
+                  <Settings className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 </button>
-                <button className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
-                  Cerrar sesión
-                </button>
+
+                {showProfileMenu && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden">
+                    <button className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                      Configuración
+                    </button>
+                    <button
+                      className="w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={async () => {
+                        try {
+                          await signOutUser();
+                        } catch (e) {
+                          console.error(e);
+                        } finally {
+                          setShowProfileMenu(false);
+                        }
+                      }}
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
