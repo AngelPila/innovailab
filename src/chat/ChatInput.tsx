@@ -41,10 +41,10 @@ export default function ChatInput({
           <Map className="w-5 h-5" />
         </button>
 
-        {/* Input container con estilo glass moderno */}
+        {/* Input container con estilo glass moderno y focus amarillo */}
         <div className="flex-1 flex items-center gap-3 bg-white/90 backdrop-blur-sm border border-gray-200 
-                        rounded-2xl px-5 py-3.5 shadow-lg hover:shadow-xl transition-all duration-300
-                        focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-100">
+                        rounded-2xl px-5 py-4 shadow-lg hover:shadow-xl transition-all duration-300
+                        focus-within:border-yellow-400 focus-within:ring-4 focus-within:ring-yellow-100/70 focus-within:shadow-yellow-200/30">
           <Sparkles className="w-5 h-5 text-yellow-500 flex-shrink-0" />
           
           <input
@@ -52,7 +52,7 @@ export default function ChatInput({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Escribe tu mensaje o usa el micrófono..."
+            placeholder="Ej: Quiero sacar mi pasaporte por primera vez"
             className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 text-base font-medium"
           />
 

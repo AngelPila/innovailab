@@ -217,7 +217,7 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
                       </div>
 
                       {/* Barra de progreso */}
-                      <div className="mb-1.5">
+                      <div className="mb-2">
                         <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${guide.status === "completed"
@@ -229,12 +229,22 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">{guide.lastUpdated}</span>
-                        <span className={`text-xs font-bold ${guide.status === "completed" ? "text-green-600" : "text-yellow-600"
-                          }`}>
-                          {guide.progress}%
-                        </span>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-gray-500">
+                            {guide.status === "completed" ? "✓ Completado" : `Paso ${Math.ceil(guide.progress / 25)} de 4`}
+                          </span>
+                          <span className={`text-xs font-bold ${guide.status === "completed" ? "text-green-600" : "text-yellow-600"
+                            }`}>
+                            {guide.progress}%
+                          </span>
+                        </div>
+                        
+                        {guide.status !== "completed" && (
+                          <button className="w-full px-3 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-xs rounded-lg transition-all duration-200">
+                            Continuar
+                          </button>
+                        )}
                       </div>
                     </button>
                   );
