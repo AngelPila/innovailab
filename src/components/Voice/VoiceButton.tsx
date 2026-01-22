@@ -53,21 +53,21 @@ export const VoiceButton = ({ onResult, className = '' }: VoiceButtonProps) => {
       <button
         onClick={handleClick}
         className={`
-          p-2 rounded-full transition-all duration-300
+          rounded-full transition-all duration-300 font-bold flex items-center justify-center
           ${isListening 
-            ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-500/50' 
-            : 'hover:bg-gray-100 text-gray-600 hover:shadow-md'
+            ? 'p-4 bg-gradient-to-r from-red-500 to-red-600 text-white shadow-2xl shadow-red-500/50 scale-125 animate-pulse ring-4 ring-red-300' 
+            : 'p-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl hover:scale-110'
           }
           ${className}
         `}
-        title={isListening ? 'Click para detener la grabación' : 'Click para hablar'}
+        title={isListening ? '🎙️ Escuchando... Toca para detener' : '🎙️ Haz clic para hablar'}
         aria-label={isListening ? 'Detener grabación' : 'Iniciar grabación de voz'}
         aria-pressed={isListening}
       >
         {isListening ? (
-          <Mic className="w-4 h-4" />
+          <Mic className="w-6 h-6 animate-pulse" />
         ) : (
-          <Mic className="w-4 h-4" />
+          <Mic className="w-6 h-6" />
         )}
       </button>
       

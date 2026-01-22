@@ -2,14 +2,9 @@ import { useEffect, useState } from 'react';
 import { useTramiteStore } from '../../store/tramiteStore';
 import { tramitesService } from '../../services/tramitesService';
 import { useTramiteFlow } from '../../hooks/useTramiteFlow';
-import { ArrowLeft, MapPin } from 'lucide-react';
-import { SummaryReview } from './SummaryReview';
+import { ArrowLeft, Volume2 } from 'lucide-react';
 import type { FaseTramite } from '../../types/tramite.types';
-import { SegmentacionPasaporte } from './SegmentacionPasaporte';
-import { SegmentacionLicencia } from './SegmentacionLicencia';
 import { PrerequisitosCheckBasic } from './PrerequisitosCheckBasic';
-import { FaseContenido } from './FaseContenido';
-import { FaseContenidoLicencia } from './FaseContenidoLicencia';
 import { FasePagoBasic } from './FasePagoBasic';
 import { FaseSeguimientoBasic } from './FaseSeguimientoBasic';
 
@@ -23,13 +18,12 @@ interface Props {
 }
 
 /**
- * TramiteFlowBasic - Versión simplificada para adultos mayores
- * Características:
- * - Botones más grandes
- * - Menos instrucciones
- * - Resumen antes de finalizar
- * - Pasos claros y directos
- * - Textos más grandes
+ * TramiteFlowBasic - Versión ULTRA SIMPLIFICADA para adultos mayores
+ * - SIN segmentación
+ * - Flujo directo: Requisitos → Pago → Confirmación
+ * - Botones GIGANTES
+ * - Textos ENORMES y claros
+ * - Una pregunta a la vez
  */
 export function TramiteFlowBasic({
   tramiteId,
@@ -44,16 +38,11 @@ export function TramiteFlowBasic({
 
   const {
     faseActual,
-    pasoActual,
-    fasesCompletadas,
     prerequisitosCumplidos,
     prerequisitosDinamicos,
     cambiarFase,
-    completarPaso,
     actualizarPrerequisitos,
   } = useTramiteFlow(tramiteId);
-
-  const [mostrarResumen, setMostrarResumen] = useState(false);
 
   useEffect(() => {
     if (!esRama) {
@@ -62,13 +51,12 @@ export function TramiteFlowBasic({
     }
   }, [tramiteId, esRama, progresoMultiple]);
 
-  // Saltar directamente a requisitos SOLO para pasaporte
-  // Para licencia, mostrar Información primero
+  // SIMPLIFICACIÓN: Ir directo a verificación de documentos (sin información ni segmentación)
   useEffect(() => {
-    if (faseActual === 'informacion' && tramiteId !== 'licencia_conducir') {
-      cambiarFase('requisitos');
+    if (faseActual === 'informacion') {
+      cambiarFase('documentacion');
     }
-  }, []);
+  }, [faseActual]);
 
   if (!tramite) {
     return (
@@ -80,110 +68,45 @@ export function TramiteFlowBasic({
 
   const handleValidacionCompleta = (cumplidos: Record<string, boolean>) => {
     actualizarPrerequisitos(cumplidos);
-    setMostrarResumen(true);
-  };
-
-  const handleConfirmarResumen = () => {
-    setMostrarResumen(false);
     setTimeout(() => cambiarFase('pago'), 300);
   };
 
-  const handleEditarSeccion = (seccion: string) => {
-    setMostrarResumen(false);
-    const faseMap: Record<string, FaseTramite> = {
-      informacion: 'informacion',
-      requisitos: 'requisitos',
-      documentacion: 'documentacion',
-      pago: 'pago',
-      seguimiento: 'seguimiento',
-    };
-    cambiarFase(faseMap[seccion] || 'informacion');
-  };
-
-  // Renderizar resumen si está activo
-  if (mostrarResumen && progresoActual) {
-    return (
-      <SummaryReview
-        tramiteNombre={tramite.nombre}
-        progreso={progresoActual}
-        prerequisitosInfo={prerequisitosDinamicos.map((p) => ({
-          id: p.id,
-          nombre: p.nombre,
-        }))}
-        onConfirm={handleConfirmarResumen}
-        onEdit={handleEditarSeccion}
-      />
-    );
-  }
-
   return (
-    <div className="flex flex-col h-full bg-white">
-      {/* Header minimalista */}
-      <div className="bg-gradient-to-r from-yellow-400 to-amber-500 px-6 py-6 shadow-sm">
+    <div className="flex flex-col h-full bg-gradient-to-b from-yellow-50 to-white">
+      {/* Header GIGANTE y colorido */}
+      <div className="bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400 px-6 py-8 shadow-lg">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
-                {tramite.nombre}
-              </h1>
-              <p className="text-yellow-50 text-sm md:text-base">
-                Seguiremos paso a paso
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <div className="flex items-center gap-4 mb-2">
+                <span className="text-6xl">📋</span>
+                <h1 className="text-4xl md:text-5xl font-black text-white drop-shadow-lg">
+                  {tramite.nombre}
+                </h1>
+              </div>
+              <p className="text-xl md:text-2xl text-white font-bold drop-shadow">
+                Te ayudaremos a completarlo
               </p>
             </div>
             {onVolverAlChat && (
               <button
                 onClick={onVolverAlChat}
-                className="px-6 py-3 bg-white hover:bg-gray-100 text-gray-800 font-bold rounded-lg transition-colors text-sm md:text-base"
+                className="px-8 py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold rounded-2xl transition-all transform hover:scale-105 text-lg flex items-center gap-2 shadow-lg"
               >
-                ← Volver
+                <ArrowLeft className="w-6 h-6" />
+                Volver
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Contenido principal */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-4 md:px-6 py-6 md:py-8">
-          {/* Fase: Información */}
-          {faseActual === 'informacion' && tramiteId === 'licencia_conducir' && (
-            <div>
-              <FaseContenidoLicencia
-                onCompletar={() => {
-                  setTimeout(() => {
-                    cambiarFase('requisitos');
-                  }, 300);
-                }}
-              />
-            </div>
-          )}
-
-          {/* Fase: Requisitos */}
-          {faseActual === 'requisitos' && (
-            <div>
-              {tramiteId === 'licencia_conducir' ? (
-                <SegmentacionLicencia
-                  onConfirm={() => {
-                    setTimeout(() => {
-                      cambiarFase('documentacion');
-                    }, 300);
-                  }}
-                />
-              ) : (
-                <SegmentacionPasaporte
-                  onConfirm={() => {
-                    setTimeout(() => {
-                      cambiarFase('documentacion');
-                    }, 300);
-                  }}
-                />
-              )}
-            </div>
-          )}
-
-          {/* Fase: Documentación */}
+      {/* Contenido principal - Una cosa a la vez */}
+      <div className="flex-1 overflow-y-auto flex items-center justify-center p-4">
+        <div className="w-full max-w-2xl">
+          {/* Fase: Documentación - Verificación simple */}
           {faseActual === 'documentacion' && (
-            <div className="h-full">
+            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
               <PrerequisitosCheckBasic
                 prerequisitos={prerequisitosDinamicos}
                 prerequisitosCumplidos={prerequisitosCumplidos}
@@ -194,7 +117,7 @@ export function TramiteFlowBasic({
 
           {/* Fase: Pago */}
           {faseActual === 'pago' && (
-            <div className="h-full">
+            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
               <FasePagoBasic
                 tramite={tramite}
                 onCompletar={() => cambiarFase('seguimiento')}
@@ -202,12 +125,10 @@ export function TramiteFlowBasic({
             </div>
           )}
 
-          {/* Fase: Seguimiento */}
+          {/* Fase: Confirmación y seguimiento */}
           {faseActual === 'seguimiento' && (
-            <div className="h-full">
-              <FaseSeguimientoBasic
-                tramite={tramite}
-              />
+            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+              <FaseSeguimientoBasic tramite={tramite} />
             </div>
           )}
         </div>
