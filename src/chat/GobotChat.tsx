@@ -6,12 +6,15 @@ import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import { useChatTabs } from "./useChatTabs";
 import { useAutoScroll } from "./useAutoScroll";
+import { useInterfaceStore } from "../store/interfaceStore";
+import { InterfaceSelector } from "../components/Tramites";
 import type { Connections, ActiveGuide, Message } from "./types";
 import { TramiteFlow } from "../components/Tramites";
 import { SelectorTramiteMapa, ModalLugaresMapa } from "../components/Mapa";
 import { tramitesService } from "../services/tramitesService";
 import { aiService } from "../services/aiService";
 import { useTramiteStore } from "../store/tramiteStore";
+import { Menu, X } from "lucide-react";
 
 const activeGuidesMock: ActiveGuide[] = [
   { id: 1, tramiteId: "pasaporte", title: "Pasaporte", progress: 60, lastUpdated: "Hace 2 horas", status: "active" },
@@ -35,6 +38,9 @@ export default function GobotChat() {
   } = useChatTabs();
 
   const { limpiarProgreso } = useTramiteStore();
+  const { selectedVersion, selectVersion, resetVersion } = useInterfaceStore();
+  const [sidebarAbierto, setSidebarAbierto] = useState(false);
+  const [showInterfaceSelector, setShowInterfaceSelector] = useState(true);
 
   const [inputValue, setInputValue] = useState<string>("");
   const [isRecording, setIsRecording] = useState<boolean>(false);
@@ -57,7 +63,21 @@ export default function GobotChat() {
     if (!currentTramite && !tramiteActivo) {
       limpiarProgreso();
     }
+    // Limpiar la versión de interfaz seleccionada al cargar la página
+    // para que SIEMPRE muestre el selector
+    resetVersion();
   }, []); // Solo al montar el componente
+
+  // Actualizar sidebar cuando cambia la versión
+  useEffect(() => {
+    if (selectedVersion === 'advanced') {
+      setSidebarAbierto(true);
+      setShowInterfaceSelector(false);
+    } else if (selectedVersion === 'basic') {
+      setSidebarAbierto(false);
+      setShowInterfaceSelector(false);
+    }
+  }, [selectedVersion]);
 
   // Cuando cambia de pestaña y la nueva no tiene trámite, limpiar tramiteActivo
   useEffect(() => {
@@ -121,6 +141,10 @@ export default function GobotChat() {
       setTabTramite(activeTabId, tramiteId);
       setTramiteActivo(tramiteId);
       updateTabTitle(activeTabId, tramiteInfo.nombre);
+      // Cerrar sidebar en versión básica
+      if (selectedVersion === 'basic') {
+        setSidebarAbierto(false);
+      }
     }
   };
 
@@ -236,16 +260,57 @@ export default function GobotChat() {
     }
   };
 
+  // Si no hay versión seleccionada, mostrar selector
+  if (showInterfaceSelector) {
+    return (
+      <InterfaceSelector
+        onSelectBasic={() => {
+          selectVersion('basic');
+          setShowInterfaceSelector(false);
+        }}
+        onSelectAdvanced={() => {
+          selectVersion('advanced');
+          setShowInterfaceSelector(false);
+        }}
+      />
+    );
+  }
+
+  // Si se debe mostrar el flujo demo de licencia
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar
-        connections={connections}
-        toggleConnection={toggleConnection}
-        activeGuides={activeGuidesMock}
-        onSelectGuide={handleSelectGuide}
-      />
+      {/* Sidebar - Visible en versión avanzada, oculto en básica */}
+      {sidebarAbierto && (
+        <div className="relative">
+          <Sidebar
+            connections={connections}
+            toggleConnection={toggleConnection}
+            activeGuides={activeGuidesMock}
+            onSelectGuide={handleSelectGuide}
+          />
+          {/* Botón cerrar sidebar solo en versión básica */}
+          {selectedVersion === 'basic' && (
+            <button
+              onClick={() => setSidebarAbierto(false)}
+              className="absolute top-4 right-4 p-2 hover:bg-gray-200 rounded-lg"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="flex-1 flex flex-col">
+        {/* Botón hamburguesa - Solo visible en versión básica cuando sidebar está cerrado */}
+        {selectedVersion === 'basic' && !sidebarAbierto && (
+          <button
+            onClick={() => setSidebarAbierto(true)}
+            className="p-4 hover:bg-gray-100 transition-colors"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
+          </button>
+        )}
+
         {/* Encabezado amarillo - Pestañas de chat */}
         <div className="bg-yellow-400">
           {/* Mostrar pestañas solo si hay más de una, O si hay mensajes/trámites */}

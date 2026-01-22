@@ -175,7 +175,7 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
           </h3>
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-5">
             <ul className="space-y-2">
-              {infoPago.instructions.map((instruction, idx) => (
+              {infoPago.instructions.map((instruction: string, idx: number) => (
                 <li key={idx} className="flex gap-3 text-sm text-gray-700">
                   <span className="text-yellow-600 font-bold flex-shrink-0">•</span>
                   <span>{instruction}</span>
@@ -193,7 +193,7 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
               Lugares Autorizados para Pago
             </h3>
             <div className="grid grid-cols-1 gap-4">
-              {infoPago.locations.map((location, idx) => (
+              {infoPago.locations.map((location: any, idx: number) => (
                 <div key={idx} className="border-2 border-gray-200 rounded-lg p-5 hover:border-blue-400 hover:bg-blue-50 transition-all">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
