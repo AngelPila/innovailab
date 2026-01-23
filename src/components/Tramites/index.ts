@@ -19,3 +19,5 @@ export { InterfaceSelector } from './InterfaceSelector';
 export { ProgressBar } from './ProgressBar';
 export { SummaryReview } from './SummaryReview';
 export { DocumentoConPreview } from './DocumentoConPreview';
+export { StepNavigator } from './StepNavigator';
+export { FlowCompletion } from './FlowCompletion';

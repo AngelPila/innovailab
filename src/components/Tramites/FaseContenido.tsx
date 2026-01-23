@@ -26,7 +26,7 @@ const COLOR_FASE: Record<string, string> = {
 // Parsear contenido para extraer información de badges
 function parseContenido(contenido: string | undefined) {
   if (!contenido) return { tiempo: null, costo: null, vigencia: null, otroContenido: '' };
-  
+
   const lineas = contenido.split('\n');
   let tiempo: string | null = null;
   let costo: string | null = null;
@@ -149,7 +149,7 @@ export function FaseContenido({ paso, estaCompletado, onCompletar }: Props) {
             onClick={onCompletar}
             className="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-gray-900 rounded-lg font-bold text-lg transition-colors"
           >
-            Marcar como completado
+            Listo
           </button>
         )}
       </div>

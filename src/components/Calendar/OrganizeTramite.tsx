@@ -34,10 +34,17 @@ export default function OrganizeTramite({
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
+    const [enableCalendar, setEnableCalendar] = useState(true);
     const [enableWhatsApp, setEnableWhatsApp] = useState(false);
     const [saved, setSaved] = useState(false);
 
     const handleSaveAppointment = () => {
+        // Si no quiere usar Calendar, solo cerrar
+        if (!enableCalendar) {
+            alert('Debes habilitar Google Calendar para guardar tu cita');
+            return;
+        }
+
         // Verificar si Calendar está conectado
         if (!calendarService.isCalendarConnected()) {
             setShowConnectModal(true);
@@ -202,8 +209,8 @@ export default function OrganizeTramite({
                             <input
                                 type="checkbox"
                                 id="enable-calendar"
-                                checked={true}
-                                readOnly
+                                checked={enableCalendar}
+                                onChange={(e) => setEnableCalendar(e.target.checked)}
                                 className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5 cursor-pointer"
                             />
                             <label htmlFor="enable-calendar" className="flex-1 cursor-pointer">
@@ -212,6 +219,7 @@ export default function OrganizeTramite({
                                     <span className="font-semibold text-gray-900">
                                         Guardar en Google Calendar
                                     </span>
+                                    <span className="text-xs text-gray-500">(opcional)</span>
                                 </div>
                                 <p className="text-sm text-gray-600">
                                     Agrega la cita a tu calendario con recordatorios

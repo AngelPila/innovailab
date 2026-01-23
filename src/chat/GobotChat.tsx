@@ -17,6 +17,7 @@ import { useTramiteStore } from "../store/tramiteStore";
 import { GoogleCalendarConnectModal } from "../components/Calendar";
 import { calendarService } from "../services/calendarService";
 import { Menu, X } from "lucide-react";
+import { Toast } from "../components/Toast";
 
 const activeGuidesMock: ActiveGuide[] = [
   { id: 1, tramiteId: "pasaporte", title: "Pasaporte", progress: 60, lastUpdated: "Hace 2 horas", status: "active" },
@@ -93,6 +94,7 @@ export default function GobotChat() {
   const showWelcome = currentMessages.length === 0 && !currentTramite && !tramiteActivo;
 
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [showCalendarToast, setShowCalendarToast] = useState(false);
 
   const toggleConnection = async (service: keyof Connections) => {
     if (service === 'calendar' && !connections.calendar) {
@@ -114,13 +116,8 @@ export default function GobotChat() {
       setConnections((prev) => ({ ...prev, calendar: true }));
       setShowCalendarModal(false);
 
-      // Mensaje de confirmación
-      const confirmMessage: Message = {
-        id: Date.now(),
-        role: "assistant",
-        content: "✅ **Google Calendar conectado exitosamente**\n\nAhora puedes:\n• Guardar turnos que ya obtuviste\n• Recibir recordatorios automáticos\n• Ver sugerencias de horarios libres\n\n¿Necesitas ayuda con algún trámite?"
-      };
-      setTabMessages(activeTabId, [...currentMessages, confirmMessage]);
+      // Mostrar toast de confirmación en lugar de mensaje en el chat
+      setShowCalendarToast(true);
     } catch (error) {
       console.error('Error conectando Calendar:', error);
       alert('Error al conectar con Google Calendar');
@@ -315,7 +312,7 @@ export default function GobotChat() {
     <div className="flex h-screen bg-gray-50 relative">
       {/* Overlay para móviles cuando el sidebar está abierto - SOLO EN VERSIÓN AVANZADA */}
       {selectedVersion === 'advanced' && sidebarAbierto && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setSidebarAbierto(false)}
         />
@@ -451,6 +448,14 @@ export default function GobotChat() {
         <GoogleCalendarConnectModal
           onConnect={handleCalendarConnect}
           onClose={() => setShowCalendarModal(false)}
+        />
+      )}
+
+      {/* Toast: Google Calendar conectado */}
+      {showCalendarToast && (
+        <Toast
+          message="Google Calendar conectado exitosamente"
+          onClose={() => setShowCalendarToast(false)}
         />
       )}
     </div>

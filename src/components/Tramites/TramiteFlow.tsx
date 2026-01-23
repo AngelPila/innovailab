@@ -29,9 +29,9 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
   const { iniciarTramite, progresoActual, progresoMultiple } = useTramiteStore();
   const { selectedVersion, selectVersion } = useInterfaceStore();
   const [showSelector, setShowSelector] = useState(!selectedVersion && !esRama);
-  
+
   console.log('🟣 TramiteFlow - Render:', { tramiteId, selectedVersion, showSelector, tramiteNombre: tramite?.nombre });
-  
+
   const {
     faseActual,
     pasoActual,
@@ -95,6 +95,10 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
         onAbrirRamaEnPestaña={onAbrirRamaEnPestaña}
         tabsAbiertos={tabsAbiertos}
         onVolverAlChat={onVolverAlChat}
+        onCambiarInterfaz={() => {
+          selectVersion('advanced');
+          setShowSelector(false);
+        }}
       />
     );
   }
