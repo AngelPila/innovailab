@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTramiteStore } from '../../store/tramiteStore';
 import { tramitesService } from '../../services/tramitesService';
 import { useTramiteFlow } from '../../hooks/useTramiteFlow';
-import { ArrowLeft, Volume2 } from 'lucide-react';
+import { ArrowLeft, Volume2, Settings } from 'lucide-react';
 import type { FaseTramite } from '../../types/tramite.types';
 import { PrerequisitosCheckBasic } from './PrerequisitosCheckBasic';
 import { FasePagoBasic } from './FasePagoBasic';
@@ -15,6 +15,7 @@ interface Props {
   onAbrirRamaEnPestaña?: (tramiteId: string, nombreTramite: string, prerequisitoId: string) => void;
   tabsAbiertos?: string[];
   onVolverAlChat?: () => void;
+  onCambiarInterfaz?: () => void;
 }
 
 /**
@@ -32,6 +33,7 @@ export function TramiteFlowBasic({
   onAbrirRamaEnPestaña,
   tabsAbiertos = [],
   onVolverAlChat,
+  onCambiarInterfaz,
 }: Props) {
   const tramite = tramitesService.getPorId(tramiteId);
   const { iniciarTramite, progresoActual, progresoMultiple, setSegmentacion } = useTramiteStore();
@@ -49,7 +51,7 @@ export function TramiteFlowBasic({
       const esNuevaApertura = !progresoMultiple[tramiteId];
       console.log('🔵 TramiteFlowBasic - Iniciando:', { tramiteId, esNuevaApertura });
       iniciarTramite(tramiteId, esNuevaApertura);
-      
+
       // En modo básico, establecer un segmento por defecto para que los prerequisitos se carguen correctamente
       // Segmento genérico: primera vez obteniendo el documento
       if (esNuevaApertura || !progresoActual?.segmento) {
@@ -117,15 +119,27 @@ export function TramiteFlowBasic({
                 Te ayudaremos a completarlo
               </p>
             </div>
-            {onVolverAlChat && (
-              <button
-                onClick={onVolverAlChat}
-                className="px-4 md:px-8 py-3 md:py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold rounded-xl md:rounded-2xl transition-all transform hover:scale-105 text-sm md:text-lg flex items-center gap-2 shadow-lg flex-shrink-0"
-              >
-                <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
-                <span className="hidden sm:inline">Volver</span>
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {onCambiarInterfaz && (
+                <button
+                  onClick={onCambiarInterfaz}
+                  className="px-3 md:px-6 py-3 md:py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl md:rounded-2xl transition-all transform hover:scale-105 text-xs md:text-base flex items-center gap-2 shadow-lg"
+                  title="Cambiar a interfaz avanzada"
+                >
+                  <Settings className="w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">Interfaz avanzada</span>
+                </button>
+              )}
+              {onVolverAlChat && (
+                <button
+                  onClick={onVolverAlChat}
+                  className="px-4 md:px-8 py-3 md:py-4 bg-white hover:bg-gray-100 text-gray-900 font-bold rounded-xl md:rounded-2xl transition-all transform hover:scale-105 text-sm md:text-lg flex items-center gap-2 shadow-lg"
+                >
+                  <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+                  <span className="hidden sm:inline">Volver</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

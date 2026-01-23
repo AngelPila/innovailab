@@ -30,7 +30,7 @@ export default function Welcome(props: Props) {
     <div className="h-full flex flex-col items-center justify-center px-6 pb-20 relative overflow-hidden">
       {/* Fondo con gradiente mesh */}
       <div className="absolute inset-0 gradient-mesh opacity-50 -z-10" />
-      
+
       {/* Elementos decorativos flotantes */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300/20 rounded-full blur-2xl animate-float" />
       <div className="absolute bottom-32 right-16 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
@@ -39,26 +39,26 @@ export default function Welcome(props: Props) {
       {/* Mensaje de bienvenida del chatbot */}
       <p className="text-sm text-gray-600 mb-6 animate-fadeInUp stagger-1 flex items-center gap-2 bg-blue-50/60 backdrop-blur-sm px-4 py-2 rounded-full border border-blue-100/50">
         <span>👋</span>
-        <span className="font-medium">Hola, soy Gobly. Te guío en tus trámites.</span>
+        <span className="font-medium">Hola, soy Govly. Te guío en tus trámites.</span>
       </p>
 
       {/* Título con jerarquía visual mejorada */}
       <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center animate-fadeInUp stagger-2 tracking-tight">
         ¿Qué trámite quieres{' '}
         <span className="text-yellow-500">
-          solucionar
+          gestionar
         </span>{' '}
         hoy?
       </h2>
-      
-      {/* Subtítulo con estructura más escaneable */}
-      <div className="text-gray-600 text-center max-w-2xl mb-10 animate-fadeInUp stagger-3 space-y-2">
-        <p className="text-sm font-medium text-gray-700">Puedes:</p>
-        <div className="flex flex-col gap-1 text-sm">
-          <span>• Escribir el nombre del trámite</span>
-          <span>• Describir tu situación</span>
-          <span>• Preguntarme qué necesitas</span>
-        </div>
+
+      {/* Subtítulo mejorado con mejor jerarquía y legibilidad */}
+      <div className="text-center max-w-2xl mb-10 animate-fadeInUp stagger-3">
+        <p className="text-base font-semibold text-gray-800 mb-1">
+          Puedes escribir el nombre del trámite o describir tu situación
+        </p>
+        <p className="text-sm text-gray-600">
+          Te ayudaremos a encontrar la información que necesitas
+        </p>
       </div>
 
       {/* Botones de acciones rápidas con jerarquía visual */}
@@ -87,7 +87,7 @@ export default function Welcome(props: Props) {
           <span className="text-lg mr-2">🆔</span>
           <span>Renovar cédula</span>
         </button>
-        
+
         <button
           onClick={() => handleQuickAction("Necesito licencia de conducir")}
           className="px-6 py-4 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-2xl text-sm font-medium text-gray-700 
@@ -111,7 +111,7 @@ export default function Welcome(props: Props) {
           <span>Tu información es privada y segura</span>
         </p>
       </div>
-      
+
       {/* Indicador y branding */}
       <p className="mt-8 text-gray-500 text-xs animate-fadeInUp stagger-8 font-medium">
         <span className="inline-block mr-1">✨</span>

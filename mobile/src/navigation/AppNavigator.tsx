@@ -4,11 +4,20 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { InterfaceSelectionScreen } from '../screens/InterfaceSelectionScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { TramiteFlowScreen } from '../screens/TramiteFlowScreen';
+// New Govly Screens
+import { HomeScreen } from '../screens/Home/HomeScreen';
+import { ChatScreenNew } from '../screens/ChatScreenNew';
+import { TramiteFlowScreenNew } from '../screens/TramiteFlowScreenNew';
 
 export type RootStackParamList = {
+  // Legacy screens
   InterfaceSelection: undefined;
   Chat: { version: 'basic' | 'advanced' };
   TramiteFlow: { tramiteId: string; version: 'basic' | 'advanced' };
+  // New Govly screens
+  Home: undefined;
+  ChatNew: { version: 'basic' | 'advanced' };
+  TramiteFlowNew: { tramiteId: string; version: 'basic' | 'advanced' };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -17,11 +26,27 @@ export function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="InterfaceSelection"
+        initialRouteName="Home"
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}
       >
+        {/* New Govly Screens (Primary) */}
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+        />
+        <Stack.Screen
+          name="ChatNew"
+          component={ChatScreenNew}
+        />
+        <Stack.Screen
+          name="TramiteFlowNew"
+          component={TramiteFlowScreenNew}
+        />
+        
+        {/* Legacy Screens (kept for compatibility) */}
         <Stack.Screen
           name="InterfaceSelection"
           component={InterfaceSelectionScreen}
