@@ -1,0 +1,367 @@
+{
+  "tramites": [
+    {
+      "id": "renovacion_cedula",
+      "nombre": "Renovación de Cédula",
+      "descripcion": "Renueva tu cédula de identidad ecuatoriana",
+      "categoria": "identidad",
+      "estimadoDias": 3,
+      "costo": 16.00,
+      "prerequisitos": [
+        {
+          "id": "foto_actualizada",
+          "nombre": "Foto tipo carnet actualizada",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una foto tipo carnet reciente (últimos 6 meses)?",
+          "descripcion": "Fondo blanco, sin lentes, medida 3x4 cm"
+        },
+        {
+          "id": "cedula_anterior",
+          "nombre": "Cédula anterior",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes tu cédula anterior física?",
+          "descripcion": "Si la perdiste, necesitarás una denuncia"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_cedula",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "La renovación de cédula es necesaria cada 10 años o cuando cambia tu información personal.",
+          "contenido": "Tiempo estimado: 7 días\nCosto: $16.00\nLugares de atención: Registro Civil"
+        },
+        {
+          "id": "req_cedula",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Documentos Necesarios",
+          "descripcion": "Verifica que tengas todos los documentos requeridos",
+          "validaciones": ["foto_actualizada", "cedula_anterior"]
+        },
+        {
+          "id": "doc_cedula",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Subir Documentos",
+          "descripcion": "Sube la foto tipo carnet en formato digital",
+          "contenido": "Formatos aceptados: JPG, PNG\nTamaño máximo: 2MB"
+        },
+        {
+          "id": "pago_cedula",
+          "orden": 4,
+          "fase": "pago",
+          "titulo": "Realizar Pago",
+          "descripcion": "Paga $8.50 en cualquier banco autorizado",
+          "contenido": "Código de pago: Se generará automáticamente"
+        },
+        {
+          "id": "seguimiento_cedula",
+          "orden": 5,
+          "fase": "seguimiento",
+          "titulo": "Seguimiento del Trámite",
+          "descripcion": "Revisa el estado de tu solicitud",
+          "contenido": "Puedes retirar tu cédula en 7 días hábiles"
+        }
+      ]
+    },
+    {
+      "id": "obtener_pasaporte",
+      "nombre": "Obtener Pasaporte",
+      "descripcion": "Solicita tu pasaporte ecuatoriano",
+      "categoria": "internacional",
+      "estimadoDias": 15,
+      "costo": 90.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_pasaporte",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "tramiteRelacionado": "renovacion_cedula",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula de identidad vigente?",
+          "descripcion": "Tu cédula debe estar vigente y en buen estado"
+        },
+        {
+          "id": "certificado_votacion",
+          "nombre": "Certificado de votación",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu certificado de votación actualizado?",
+          "descripcion": "Último proceso electoral"
+        },
+        {
+          "id": "foto_pasaporte",
+          "nombre": "Foto tipo pasaporte",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una foto tipo pasaporte reciente?",
+          "descripcion": "Fondo blanco, 3x4 cm, sin lentes"
+        },
+        {
+          "id": "pasaporte_anterior",
+          "nombre": "Pasaporte anterior",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu pasaporte anterior en buen estado?",
+          "descripcion": "Necesario para renovación",
+          "condicional": {
+            "tipoTramite": ["renovacion"]
+          }
+        },
+        {
+          "id": "denuncia_perdida",
+          "nombre": "Denuncia policial por pérdida o robo",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la denuncia de pérdida o robo de tu pasaporte?",
+          "descripcion": "Debe ser reciente y emitida por autoridad competente",
+          "condicional": {
+            "tipoTramite": ["perdida-robo"]
+          }
+        },
+        {
+          "id": "autorizacion_padres",
+          "nombre": "Autorización notariada de padres o tutores",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la autorización notariada de tus padres o tutores?",
+          "descripcion": "Ambos padres deben firmar ante notario con cédulas vigentes",
+          "condicional": {
+            "categoria": ["menor-edad"]
+          }
+        },
+        {
+          "id": "acta_nacimiento_menor",
+          "nombre": "Acta de nacimiento del menor",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes el acta de nacimiento actualizada?",
+          "descripcion": "Emitida recientemente por el Registro Civil",
+          "condicional": {
+            "categoria": ["menor-edad"]
+          }
+        },
+        {
+          "id": "carta_naturalizacion",
+          "nombre": "Carta de naturalización",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu carta de naturalización ecuatoriana?",
+          "descripcion": "Documento oficial que acredita tu nacionalidad ecuatoriana por naturalización",
+          "condicional": {
+            "esNaturalizado": true
+          }
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_pasaporte",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Vigencia según tu edad: 10 años si tienes más de 30, o 5 años si tienes menos de 30",
+          "contenido": "Tiempo estimado: 15 días\nCosto: $90.00\nVigencia: según edad"
+        },
+        {
+          "id": "req_pasaporte",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Documentos Necesarios",
+          "descripcion": "Asegúrate de tener todos los requisitos",
+          "validaciones": ["cedula_vigente_pasaporte", "certificado_votacion", "foto_pasaporte"]
+        },
+        {
+          "id": "doc_pasaporte",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Subir Documentos",
+          "descripcion": "Sube todos los documentos requeridos",
+          "contenido": "Cédula escaneada, certificado de votación, foto"
+        },
+        {
+          "id": "pago_pasaporte",
+          "orden": 4,
+          "fase": "pago",
+          "titulo": "Realizar Pago",
+          "descripcion": "Paga $95.00 en línea o en ventanilla",
+          "contenido": "Aceptamos tarjetas de crédito/débito"
+        },
+        {
+          "id": "seguimiento_pasaporte",
+          "orden": 5,
+          "fase": "seguimiento",
+          "titulo": "Seguimiento del Trámite",
+          "descripcion": "Rastrea tu solicitud en línea",
+          "contenido": "Retiro en 15 días hábiles"
+        }
+      ]
+    },
+    {
+      "id": "visa_americana",
+      "nombre": "Visa Americana",
+      "descripcion": "Solicitud de visa de turista para Estados Unidos",
+      "categoria": "internacional",
+      "estimadoDias": 30,
+      "costo": 160.00,
+      "prerequisitos": [
+        {
+          "id": "pasaporte_vigente_visa",
+          "nombre": "Pasaporte vigente",
+          "tipo": "documento",
+          "tramiteRelacionado": "obtener_pasaporte",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu pasaporte vigente con al menos 6 meses de validez?",
+          "descripcion": "Debe tener mínimo 6 meses de vigencia"
+        },
+        {
+          "id": "cedula_vigente_visa",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "tramiteRelacionado": "renovacion_cedula",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula de identidad vigente?",
+          "descripcion": "Documento de identidad ecuatoriano"
+        },
+        {
+          "id": "foto_visa",
+          "nombre": "Foto tamaño visa",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una foto tamaño visa (5x5 cm, fondo blanco)?",
+          "descripcion": "Especificaciones: 5x5 cm, fondo blanco, sin lentes"
+        },
+        {
+          "id": "comprobante_economico",
+          "nombre": "Comprobantes económicos",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes estados de cuenta bancarios de los últimos 3 meses?",
+          "descripcion": "Para demostrar solvencia económica"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_visa",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Visa de turista B1/B2 para Estados Unidos",
+          "contenido": "Tiempo estimado: 30 días\nCosto: $160 USD\nVigencia: hasta 10 años"
+        },
+        {
+          "id": "req_visa",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Documentos Necesarios",
+          "descripcion": "Revisa todos los requisitos para la visa",
+          "validaciones": ["pasaporte_vigente_visa", "cedula_vigente_visa", "foto_visa", "comprobante_economico"]
+        },
+        {
+          "id": "doc_visa",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Completar Formulario DS-160",
+          "descripcion": "Llena el formulario en línea",
+          "contenido": "Necesitarás: pasaporte, cédula, datos laborales, foto digital"
+        },
+        {
+          "id": "pago_visa",
+          "orden": 4,
+          "fase": "pago",
+          "titulo": "Pagar la Tarifa",
+          "descripcion": "Paga $160 USD por el trámite",
+          "contenido": "Se puede pagar en bancos autorizados o en línea"
+        },
+        {
+          "id": "seguimiento_visa",
+          "orden": 5,
+          "fase": "seguimiento",
+          "titulo": "Agendar Cita en Embajada",
+          "descripcion": "Agenda tu entrevista en la embajada de EE.UU.",
+          "contenido": "Después de pagar, agenda tu cita en línea"
+        }
+      ]
+    },
+    {
+      "id": "licencia_conducir",
+      "nombre": "Licencia de Conducir",
+      "descripcion": "Obtén tu licencia de conducir tipo B",
+      "categoria": "vehicular",
+      "estimadoDias": 30,
+      "costo": 35.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_licencia",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "tramiteRelacionado": "renovacion_cedula",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula de identidad vigente?",
+          "descripcion": "Documento de identidad ecuatoriano"
+        },
+        {
+          "id": "tipo_sangre",
+          "nombre": "Certificado de tipo de sangre",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Conoces tu tipo de sangre y tienes un certificado?",
+          "descripcion": "Emitido por laboratorio o centro de salud"
+        },
+        {
+          "id": "curso_conduccion",
+          "nombre": "Aprobación del curso de conducción",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Has completado el curso de conducción en una escuela autorizada?",
+          "descripcion": "Curso de 40 horas en escuela autorizada por ANT"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_licencia",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Licencia tipo B para vehículos livianos",
+          "contenido": "Tiempo estimado: 30 días\nCosto: $35.00\nVigencia: 5 años"
+        },
+        {
+          "id": "req_licencia",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos Previos",
+          "descripcion": "Completa todos los requisitos",
+          "validaciones": ["cedula_vigente_licencia", "tipo_sangre", "curso_conduccion"]
+        },
+        {
+          "id": "doc_licencia",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Exámenes Médicos",
+          "descripcion": "Realiza los exámenes psicosensométricos",
+          "contenido": "Agendamiento en centros autorizados por ANT"
+        },
+        {
+          "id": "pago_licencia",
+          "orden": 4,
+          "fase": "pago",
+          "titulo": "Realizar Pago",
+          "descripcion": "Paga $35.00 por el trámite",
+          "contenido": "Pago en ventanillas de ANT o bancos autorizados"
+        },
+        {
+          "id": "seguimiento_licencia",
+          "orden": 5,
+          "fase": "seguimiento",
+          "titulo": "Examen Práctico",
+          "descripcion": "Agenda y rinde tu examen de conducción",
+          "contenido": "Aprobación: 80% o más. Retiro de licencia en 5 días hábiles"
+        }
+      ]
+    }
+  ]
+}
