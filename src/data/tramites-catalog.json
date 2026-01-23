@@ -1014,6 +1014,402 @@
           "contenido": "Define duración y facultades del poder"
         }
       ]
+    },
+    {
+      "id": "inscripcion_ruc_persona_natural",
+      "nombre": "Inscripción en el RUC - Persona Natural",
+      "descripcion": "Registro obligatorio para realizar actividades económicas",
+      "categoria": "tributario",
+      "estimadoDias": 1,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_ruc",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula de identidad vigente?",
+          "descripcion": "Documento de identificación"
+        },
+        {
+          "id": "certificado_votacion_ruc",
+          "nombre": "Certificado de votación",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes tu certificado de votación actualizado?",
+          "descripcion": "Del último proceso electoral"
+        },
+        {
+          "id": "documento_domicilio",
+          "nombre": "Documento que acredite domicilio",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una planilla de servicios o contrato a tu nombre?",
+          "descripcion": "Planilla de luz, agua, teléfono o contrato de arriendo"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_ruc",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "El RUC es necesario para trabajar, arrendar bienes, emitir facturas o recibir ingresos",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea o presencial"
+        },
+        {
+          "id": "req_ruc",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma tus documentos de identidad y domicilio",
+          "validaciones": ["cedula_vigente_ruc", "certificado_votacion_ruc", "documento_domicilio"]
+        },
+        {
+          "id": "doc_ruc",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Registro en línea",
+          "descripcion": "Completa el formulario en SRI en Línea",
+          "contenido": "Necesitarás cédula, correo electrónico y número de celular"
+        },
+        {
+          "id": "seguimiento_ruc",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Activación",
+          "descripcion": "Recibirás tu número de RUC de inmediato",
+          "contenido": "Guarda tu certificado digital del RUC"
+        }
+      ]
+    },
+    {
+      "id": "actualizacion_ruc",
+      "nombre": "Actualización del RUC",
+      "descripcion": "Cambiar dirección, actividad económica o datos de contacto",
+      "categoria": "tributario",
+      "estimadoDias": 1,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_act_ruc",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para validar identidad"
+        },
+        {
+          "id": "documento_respaldo_cambio",
+          "nombre": "Documento que respalde el cambio",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes el documento que justifica el cambio?",
+          "descripcion": "Nueva planilla, contrato, certificado, etc."
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_act_ruc",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Actualiza tu RUC cuando cambies domicilio, actividad o estado civil",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea"
+        },
+        {
+          "id": "req_act_ruc",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y documento de respaldo",
+          "validaciones": ["cedula_vigente_act_ruc", "documento_respaldo_cambio"]
+        },
+        {
+          "id": "seguimiento_act_ruc",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Confirmación",
+          "descripcion": "Descarga tu nuevo certificado actualizado",
+          "contenido": "Cambios efectivos de inmediato"
+        }
+      ]
+    },
+    {
+      "id": "clave_sri_en_linea",
+      "nombre": "Obtención de Clave SRI en Línea",
+      "descripcion": "Clave para acceder a todos los servicios digitales del SRI",
+      "categoria": "tributario",
+      "estimadoDias": 1,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_clave_sri",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para registro"
+        },
+        {
+          "id": "correo_celular",
+          "nombre": "Correo electrónico y número de celular",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes un correo y celular activos?",
+          "descripcion": "Para recibir la clave y notificaciones"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_clave_sri",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Con tu clave SRI podrás hacer trámites, consultas y declaraciones en línea",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nNota: Un familiar puede ayudar"
+        },
+        {
+          "id": "req_clave_sri",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y contactos",
+          "validaciones": ["cedula_vigente_clave_sri", "correo_celular"]
+        },
+        {
+          "id": "seguimiento_clave_sri",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Activación",
+          "descripcion": "Recibirás tu clave por correo o SMS",
+          "contenido": "Guarda tu clave en un lugar seguro"
+        }
+      ]
+    },
+    {
+      "id": "certificado_cumplimiento_tributario",
+      "nombre": "Certificado de Cumplimiento Tributario",
+      "descripcion": "Documento que indica si tienes o no deudas tributarias",
+      "categoria": "tributario",
+      "estimadoDias": 1,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "clave_sri_certificado",
+          "nombre": "Clave SRI en Línea",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu clave del SRI?",
+          "descripcion": "Para descargar el certificado"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_cert_cumplimiento",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Muy solicitado para trámites bancarios y legales",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea"
+        },
+        {
+          "id": "req_cert_cumplimiento",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisito",
+          "descripcion": "Solo necesitas tu clave SRI",
+          "validaciones": ["clave_sri_certificado"]
+        },
+        {
+          "id": "seguimiento_cert_cumplimiento",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Descarga",
+          "descripcion": "Descarga tu certificado en formato PDF",
+          "contenido": "Válido por 3 meses"
+        }
+      ]
+    },
+    {
+      "id": "declaracion_impuesto_renta",
+      "nombre": "Declaración del Impuesto a la Renta",
+      "descripcion": "Declaración anual de ingresos gravados",
+      "categoria": "tributario",
+      "estimadoDias": 5,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "clave_sri_declaracion",
+          "nombre": "Clave SRI en Línea",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu clave del SRI?",
+          "descripcion": "Para realizar la declaración"
+        },
+        {
+          "id": "comprobantes_ingresos",
+          "nombre": "Comprobantes de ingresos y gastos",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tus comprobantes del año fiscal?",
+          "descripcion": "Facturas, recibos, certificados laborales"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_declaracion_renta",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Aplica si tienes ingresos gravados (pensiones altas, arriendos, actividades económicas)",
+          "contenido": "Tiempo estimado: 5 días\nCosto: $0\nPeríodo: Marzo-abril"
+        },
+        {
+          "id": "req_declaracion_renta",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma clave y comprobantes",
+          "validaciones": ["clave_sri_declaracion", "comprobantes_ingresos"]
+        },
+        {
+          "id": "doc_declaracion_renta",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Llenar formulario",
+          "descripcion": "Completa el formulario 102A o 102 según corresponda",
+          "contenido": "Ingresa tus ingresos, gastos y retenciones"
+        },
+        {
+          "id": "seguimiento_declaracion_renta",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Confirmación",
+          "descripcion": "Recibe comprobante de declaración",
+          "contenido": "Guarda el comprobante como respaldo"
+        }
+      ]
+    },
+    {
+      "id": "convenio_pago_sri",
+      "nombre": "Convenio de Pago con el SRI",
+      "descripcion": "Fraccionar deudas tributarias para evitar coactivas",
+      "categoria": "tributario",
+      "estimadoDias": 3,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_convenio",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para identificación"
+        },
+        {
+          "id": "estado_obligaciones",
+          "nombre": "Estado de obligaciones tributarias",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Conoces el monto de tu deuda?",
+          "descripcion": "Puedes consultarlo en SRI en Línea"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_convenio",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Evita embargos y coactivas fraccionando tu deuda",
+          "contenido": "Tiempo estimado: 3 días\nCosto: $0\nPlazos: Según monto"
+        },
+        {
+          "id": "req_convenio",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y estado de deuda",
+          "validaciones": ["cedula_vigente_convenio", "estado_obligaciones"]
+        },
+        {
+          "id": "seguimiento_convenio",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Aprobación",
+          "descripcion": "Recibe plan de pagos y fechas",
+          "contenido": "Cumple con las cuotas para evitar reversión"
+        }
+      ]
+    },
+    {
+      "id": "reclamo_administrativo_sri",
+      "nombre": "Reclamo Administrativo ante el SRI",
+      "descripcion": "Impugnar valores, multas o decisiones del SRI",
+      "categoria": "tributario",
+      "estimadoDias": 30,
+      "costo": 0,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_reclamo",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para identificación"
+        },
+        {
+          "id": "notificacion_sri",
+          "nombre": "Notificación o resolución del SRI",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la notificación que quieres impugnar?",
+          "descripcion": "Multa, liquidación o resolución"
+        },
+        {
+          "id": "pruebas_reclamo",
+          "nombre": "Pruebas y argumentos",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes documentos que respalden tu reclamo?",
+          "descripcion": "Facturas, contratos, certificados, etc."
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_reclamo",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Primera instancia para impugnar decisiones del SRI",
+          "contenido": "Tiempo estimado: 30 días\nCosto: $0\nPlazo: 20 días desde notificación"
+        },
+        {
+          "id": "req_reclamo",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula, notificación y pruebas",
+          "validaciones": ["cedula_vigente_reclamo", "notificacion_sri", "pruebas_reclamo"]
+        },
+        {
+          "id": "doc_reclamo",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Presentar reclamo",
+          "descripcion": "Redacta y presenta tu solicitud fundamentada",
+          "contenido": "Puedes hacerlo en línea o presencial"
+        },
+        {
+          "id": "seguimiento_reclamo",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Resolución",
+          "descripcion": "Espera la resolución del SRI",
+          "contenido": "Si no estás de acuerdo, puedes apelar"
+        }
+      ]
     }
   ]
 }

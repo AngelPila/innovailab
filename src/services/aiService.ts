@@ -178,6 +178,83 @@ Te ayudo a otorgar un poder notarial.
 • Uso: Delegar trámites a un familiar o apoderado
 
 Revisemos cédulas (tuya y del apoderado) y, si aplica, el certificado médico. ¿Empezamos?`,
+
+  inscripcion_ruc_persona_natural: `TRAMITE_DETECTADO: inscripcion_ruc_persona_natural
+
+Te ayudo a inscribirte en el RUC como persona natural.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Modalidad: En línea o presencial en oficinas SRI
+
+Necesario para: trabajar, arrendar bienes, emitir facturas o recibir ingresos. Revisemos cédula, certificado de votación y documento de domicilio. ¿Comenzamos?`,
+
+  actualizacion_ruc: `TRAMITE_DETECTADO: actualizacion_ruc
+
+Vamos a actualizar tu RUC (dirección, actividad, estado civil o contacto).
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Modalidad: En línea
+
+Confirmemos tu cédula y el documento que respalde el cambio. ¿Listo?`,
+
+  clave_sri_en_linea: `TRAMITE_DETECTADO: clave_sri_en_linea
+
+Te guío para obtener o recuperar tu clave del SRI en Línea.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Uso: Acceso a todos los servicios digitales del SRI
+
+Con esta clave podrás hacer trámites, consultas y declaraciones en línea. Un familiar puede ayudarte. Validemos cédula, correo y celular. ¿Continuamos?`,
+
+  certificado_cumplimiento_tributario: `TRAMITE_DETECTADO: certificado_cumplimiento_tributario
+
+Descarga tu certificado de cumplimiento tributario (para verificar si tienes deudas).
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Uso: Trámites bancarios, legales, contratos
+
+Muy solicitado para créditos y escrituras. Solo necesitas tu clave SRI. ¿Tienes tu clave?`,
+
+  declaracion_impuesto_renta: `TRAMITE_DETECTADO: declaracion_impuesto_renta
+
+Te ayudo con la declaración anual del Impuesto a la Renta.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Período: Marzo-abril de cada año
+
+Aplica si tienes ingresos gravados (pensiones altas, arriendos, actividades económicas). Revisemos clave SRI y comprobantes de ingresos/gastos. ¿Comenzamos?`,
+
+  convenio_pago_sri: `TRAMITE_DETECTADO: convenio_pago_sri
+
+Gestionemos un convenio de pago para fraccionar tu deuda tributaria.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Beneficio: Evita embargos y coactivas
+
+Podrás pagar en cuotas según el monto. Confirmemos tu cédula y estado de obligaciones. ¿Listo?`,
+
+  reclamo_administrativo_sri: `TRAMITE_DETECTADO: reclamo_administrativo_sri
+
+Te asisto para presentar un reclamo administrativo ante el SRI.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Plazo: 20 días desde la notificación
+
+Primera instancia para impugnar multas, liquidaciones o resoluciones. Validemos cédula, notificación y pruebas. ¿Avanzamos?`,
     };
 
     return responses[tramiteId] || '';

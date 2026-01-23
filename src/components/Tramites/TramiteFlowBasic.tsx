@@ -91,6 +91,15 @@ export function TramiteFlowBasic({
     setTimeout(() => cambiarFase('pago'), 300);
   };
 
+  const handleIrAlTramite = (tramiteId: string, nombreTramite: string) => {
+    // Abrir como subtramite (rama) en la misma aplicación
+    console.log('🔵 TramiteFlowBasic - Abriendo subtramite:', tramiteId, nombreTramite);
+    if (onAbrirRamaEnPestaña) {
+      // Usar la función callback para abrir como rama en pestaña
+      onAbrirRamaEnPestaña(tramiteId, nombreTramite, tramiteId);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-yellow-50 to-white overflow-hidden">
       {/* Header GIGANTE y colorido */}
@@ -122,15 +131,16 @@ export function TramiteFlowBasic({
       </div>
 
       {/* Contenido principal - Una cosa a la vez */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden flex items-start md:items-center justify-center p-2 md:p-4">
-        <div className="w-full max-w-2xl">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden flex items-start justify-start p-4 md:p-6 lg:p-8">
+        <div className="w-full max-w-2xl lg:max-w-none space-y-5 md:space-y-7 lg:space-y-9">
           {/* Fase: Documentación - Verificación simple */}
           {faseActual === 'documentacion' && (
-            <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12 shadow-2xl">
+            <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12 shadow-2xl h-full lg:min-h-[calc(100vh-300px)]">
               <PrerequisitosCheckBasic
                 prerequisitos={prerequisitosDinamicos}
                 prerequisitosCumplidos={prerequisitosCumplidos}
                 onValidacionCompleta={handleValidacionCompleta}
+                onAbrirTramiteRelacionado={handleIrAlTramite}
               />
             </div>
           )}

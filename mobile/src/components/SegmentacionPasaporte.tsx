@@ -155,7 +155,7 @@ export function SegmentacionPasaporte({ onConfirm }: Props) {
 
             <TouchableOpacity
               style={styles.optionButton}
-              onPress={() => { setEstatusLegal('refugiado'); setPaso(4); }}
+              onPress={() => { setEstatusLegal('irregular'); setPaso(4); }}
             >
               <View style={styles.optionContentColumn}>
                 <Text style={styles.optionTextBold}>🛡️ Soy refugiado o solicitante de asilo</Text>
@@ -204,7 +204,7 @@ export function SegmentacionPasaporte({ onConfirm }: Props) {
 
             <TouchableOpacity
               style={styles.optionButton}
-              onPress={() => { setTipoTramite('perdida'); setPaso(5); }}
+              onPress={() => { setTipoTramite('perdida-robo'); setPaso(5); }}
             >
               <View style={styles.optionContentColumn}>
                 <Text style={styles.optionTextBold}>Pérdida o robo</Text>
