@@ -30,6 +30,8 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
   const { selectedVersion, selectVersion } = useInterfaceStore();
   const [showSelector, setShowSelector] = useState(!selectedVersion && !esRama);
   
+  console.log('🟣 TramiteFlow - Render:', { tramiteId, selectedVersion, showSelector, tramiteNombre: tramite?.nombre });
+  
   const {
     faseActual,
     pasoActual,
@@ -84,6 +86,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
 
   // Renderizar la versión seleccionada
   if (selectedVersion === 'basic' || !selectedVersion) {
+    console.log('🟣 TramiteFlow - Renderizando TramiteFlowBasic');
     return (
       <TramiteFlowBasic
         tramiteId={tramiteId}
@@ -97,6 +100,7 @@ export function TramiteFlow({ tramiteId, esRama = false, onCompletarRama, onAbri
   }
 
   if (selectedVersion === 'advanced') {
+    console.log('🟣 TramiteFlow - Renderizando TramiteFlowAdvanced');
     return (
       <TramiteFlowAdvanced
         tramiteId={tramiteId}

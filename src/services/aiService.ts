@@ -118,8 +118,10 @@ Verificaremos tus requisitos. ¿Comenzamos?`,
   detectarTramiteEnRespuesta(respuestaIA: string): string | null {
     const match = respuestaIA.match(/TRAMITE_DETECTADO:\s*(\w+)/);
     if (match) {
+      console.log('🤖 AI detectó trámite:', match[1]);
       return match[1];
     }
+    console.log('🤖 AI no detectó ningún trámite');
     return null;
   }
 

@@ -76,6 +76,7 @@ export default function GobotChat() {
       setSidebarAbierto(true);
       setShowInterfaceSelector(false);
     } else if (selectedVersion === 'basic') {
+      // En versión básica, NO mostrar el sidebar nunca
       setSidebarAbierto(false);
       setShowInterfaceSelector(false);
     }
@@ -174,8 +175,8 @@ export default function GobotChat() {
       setTabTramite(activeTabId, tramiteId);
       setTramiteActivo(tramiteId);
       updateTabTitle(activeTabId, tramiteInfo.nombre);
-      // Cerrar sidebar en versión básica
-      if (selectedVersion === 'basic') {
+      // Cerrar sidebar en móviles (solo relevante para versión avanzada)
+      if (window.innerWidth < 768) {
         setSidebarAbierto(false);
       }
     }
@@ -311,37 +312,48 @@ export default function GobotChat() {
 
   // Si se debe mostrar el flujo demo de licencia
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar - Visible en versión avanzada, oculto en básica */}
-      {sidebarAbierto && (
-        <div className="relative">
+    <div className="flex h-screen bg-gray-50 relative">
+      {/* Overlay para móviles cuando el sidebar está abierto - SOLO EN VERSIÓN AVANZADA */}
+      {selectedVersion === 'advanced' && sidebarAbierto && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarAbierto(false)}
+        />
+      )}
+
+      {/* Sidebar - SOLO VISIBLE EN VERSIÓN AVANZADA */}
+      {selectedVersion === 'advanced' && sidebarAbierto && (
+        <div className="fixed md:relative z-40 h-full">
           <Sidebar
             connections={connections}
             toggleConnection={toggleConnection}
             activeGuides={activeGuidesMock}
             onSelectGuide={handleSelectGuide}
           />
-          {/* Botón cerrar sidebar solo en versión básica */}
-          {selectedVersion === 'basic' && (
-            <button
-              onClick={() => setSidebarAbierto(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-gray-200 rounded-lg"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
+          {/* Botón cerrar sidebar - visible en móviles */}
+          <button
+            onClick={() => setSidebarAbierto(false)}
+            className="absolute top-4 right-4 p-2 hover:bg-gray-200 rounded-lg transition-colors z-50 bg-white shadow-md md:hidden"
+            title="Cerrar menú"
+          >
+            <X className="w-5 h-5 text-gray-700" />
+          </button>
         </div>
       )}
 
-      <div className="flex-1 flex flex-col">
-        {/* Botón hamburguesa - Solo visible en versión básica cuando sidebar está cerrado */}
-        {selectedVersion === 'basic' && !sidebarAbierto && (
-          <button
-            onClick={() => setSidebarAbierto(true)}
-            className="p-4 hover:bg-gray-100 transition-colors"
-          >
-            <Menu className="w-6 h-6 text-gray-700" />
-          </button>
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Botón hamburguesa - SOLO EN VERSIÓN AVANZADA cuando sidebar está cerrado */}
+        {selectedVersion === 'advanced' && !sidebarAbierto && (
+          <div className="bg-white border-b border-gray-200">
+            <button
+              onClick={() => setSidebarAbierto(true)}
+              className="p-4 hover:bg-gray-100 transition-colors flex items-center gap-2"
+              title="Abrir menú"
+            >
+              <Menu className="w-6 h-6 text-gray-700" />
+              <span className="text-sm font-medium text-gray-700">Menú</span>
+            </button>
+          </div>
         )}
 
         {/* Encabezado amarillo - Pestañas de chat */}
@@ -363,21 +375,27 @@ export default function GobotChat() {
         {/* Área de contenido */}
         <div className="flex-1 overflow-y-auto bg-gray-50">
           {currentTramite ? (
-            <TramiteFlow
-              tramiteId={currentTramite}
-              esRama={esRamaActual}
-              onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
-              tabsAbiertos={tabs.map(t => t.title)}
-              onVolverAlChat={handleVolverAlChat}
-            />
+            <>
+              {console.log('🟢 GobotChat - Renderizando TramiteFlow con currentTramite:', currentTramite)}
+              <TramiteFlow
+                tramiteId={currentTramite}
+                esRama={esRamaActual}
+                onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
+                tabsAbiertos={tabs.map(t => t.title)}
+                onVolverAlChat={handleVolverAlChat}
+              />
+            </>
           ) : tramiteActivo ? (
-            <TramiteFlow
-              tramiteId={tramiteActivo}
-              esRama={esRamaActual}
-              onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
-              tabsAbiertos={tabs.map(t => t.title)}
-              onVolverAlChat={handleVolverAlChat}
-            />
+            <>
+              {console.log('🟡 GobotChat - Renderizando TramiteFlow con tramiteActivo:', tramiteActivo)}
+              <TramiteFlow
+                tramiteId={tramiteActivo}
+                esRama={esRamaActual}
+                onAbrirRamaEnPestaña={handleAbrirRamaEnPestaña}
+                tabsAbiertos={tabs.map(t => t.title)}
+                onVolverAlChat={handleVolverAlChat}
+              />
+            </>
           ) : showWelcome ? (
             <Welcome
               inputValue={inputValue}
