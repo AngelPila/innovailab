@@ -56,7 +56,7 @@ export default function ChatInput({
             className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400 text-base font-medium"
           />
 
-          <VoiceButton onResult={handleVoiceResult} />
+          <VoiceButton onResult={handleVoiceResult} className="w-14 h-14" />
 
           {/* Botón enviar con gradiente y glow */}
           <button
