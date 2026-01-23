@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { CheckCircle2, XCircle, AlertCircle, ArrowRight, RotateCcw, HelpCircle, X } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertCircle, ArrowRight, RotateCcw, HelpCircle, X, ExternalLink } from 'lucide-react';
 import type { Prerequisito } from '../../types/tramite.types';
 import { tramitesService } from '../../services/tramitesService';
+import { prerequisiteLinksService } from '../../services/prerequisiteLinksService';
 
 interface Props {
   prerequisitos: Prerequisito[];
@@ -86,6 +87,10 @@ export function PrerequisitosCheckBasic({
         onAbrirTramiteRelacionado(tramite.id, tramite.nombre);
       }
     }
+  };
+
+  const handleIrAEnlaceGobierno = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const requisitosCumplidos = prerequisitos.filter((p) => respuestas[p.id] === true).length;
@@ -215,6 +220,28 @@ export function PrerequisitosCheckBasic({
               <span>Obtener {tramiteRelacionado.nombre}</span>
               <ArrowRight className="w-6 h-6 md:w-8 md:h-8" />
             </button>
+          )}
+
+          {/* Si no hay trámite relacionado, mostrar enlace a gobierno */}
+          {!tramiteRelacionado && (
+            <>
+              {(() => {
+                const enlace = prerequisiteLinksService.getPrerequisiteLink(prerequisitoFaltante.id);
+                return enlace ? (
+                  <button
+                    onClick={() => {
+                      if (enlace.url) {
+                        handleIrAEnlaceGobierno(enlace.url);
+                      }
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-black py-6 md:py-10 px-6 md:px-8 rounded-2xl md:rounded-3xl transition-all transform hover:scale-105 active:scale-95 shadow-2xl text-xl md:text-2xl flex items-center justify-center gap-4"
+                  >
+                    <span>{enlace.nombre}</span>
+                    <ExternalLink className="w-6 h-6 md:w-8 md:h-8" />
+                  </button>
+                ) : null;
+              })()}
+            </>
           )}
 
           {/* ¿Cómo conseguir? - Botón para mostrar instrucciones */}

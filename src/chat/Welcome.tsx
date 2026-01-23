@@ -63,40 +63,40 @@ export default function Welcome(props: Props) {
 
       {/* Botones de acciones rápidas con jerarquía visual */}
       <div className="w-full max-w-3xl mb-10 flex flex-wrap gap-3 justify-center">
-        {/* Botón destacado: Obtener pasaporte */}
+        {/* Botón destacado: Identidad y movilidad */}
         <button
-          onClick={() => handleQuickAction("Quiero sacar mi pasaporte")}
+          onClick={() => handleQuickAction("Quiero trámites de Registro Civil o movilidad")}
           className="px-7 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl text-sm font-bold text-white 
                      hover:from-yellow-500 hover:to-amber-600 hover:shadow-xl hover:-translate-y-1
                      transition-all duration-300 ease-out animate-fadeInUp stagger-4 btn-modern group relative"
-          title="Te guío paso a paso"
+          title="Registro Civil, pasaporte, licencia, transporte"
         >
-          <span className="text-lg mr-2">🛂</span>
-          <span>Obtener pasaporte</span>
+          <span className="text-lg mr-2">🏛️</span>
+          <span>Identidad y movilidad</span>
           <span className="absolute inset-0 rounded-2xl bg-white/0 group-hover:bg-white/10 transition-colors" />
         </button>
 
         {/* Botones secundarios */}
         <button
-          onClick={() => handleQuickAction("Necesito renovar mi cédula")}
+          onClick={() => handleQuickAction("Quiero trámites del IESS o MIES")}
           className="px-6 py-4 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-2xl text-sm font-medium text-gray-700 
                      hover:border-yellow-400 hover:bg-yellow-50/80 hover:shadow-lg hover:-translate-y-1
                      transition-all duration-300 ease-out animate-fadeInUp stagger-5 btn-modern"
-          title="Renueva tu cédula fácilmente"
+          title="Seguridad social y bienestar"
         >
-          <span className="text-lg mr-2">🆔</span>
-          <span>Renovar cédula</span>
+          <span className="text-lg mr-2">🩺</span>
+          <span>Seguridad social y bienestar</span>
         </button>
 
         <button
-          onClick={() => handleQuickAction("Necesito licencia de conducir")}
+          onClick={() => handleQuickAction("Quiero trámites del SRI o notarías")}
           className="px-6 py-4 bg-white/80 backdrop-blur-sm border border-gray-300 rounded-2xl text-sm font-medium text-gray-700 
                      hover:border-blue-400 hover:bg-blue-50/80 hover:shadow-lg hover:-translate-y-1
                      transition-all duration-300 ease-out animate-fadeInUp stagger-6 btn-modern"
-          title="Obtén tu licencia de conducir"
+          title="Fiscal, municipal y legal"
         >
-          <span className="text-lg mr-2">🚗</span>
-          <span>Licencia de conducir</span>
+          <span className="text-lg mr-2">💼</span>
+          <span>Fiscal, municipal y legal</span>
         </button>
       </div>
 

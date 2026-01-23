@@ -104,20 +104,17 @@ export function TramiteFlowBasic({
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-yellow-50 to-white overflow-hidden">
-      {/* Header GIGANTE y colorido */}
-      <div className="bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400 px-4 md:px-6 py-6 md:py-8 shadow-lg flex-shrink-0">
+      {/* Header compacto */}
+      <div className="bg-gradient-to-r from-yellow-400 via-amber-400 to-orange-400 px-4 md:px-6 py-2 md:py-3 shadow-lg flex-shrink-0">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between gap-2 md:gap-4">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 md:gap-4 mb-2">
-                <span className="text-4xl md:text-6xl flex-shrink-0">📋</span>
-                <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white drop-shadow-lg truncate">
+              <div className="flex items-center gap-2 md:gap-3 mb-0">
+                <span className="text-3xl md:text-4xl flex-shrink-0">📋</span>
+                <h1 className="text-lg md:text-2xl lg:text-3xl font-black text-white drop-shadow-lg truncate">
                   {tramite.nombre}
                 </h1>
               </div>
-              <p className="text-base md:text-xl lg:text-2xl text-white font-bold drop-shadow">
-                Te ayudaremos a completarlo
-              </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               {onCambiarInterfaz && (
@@ -145,11 +142,11 @@ export function TramiteFlowBasic({
       </div>
 
       {/* Contenido principal - Una cosa a la vez */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden flex items-start justify-start p-4 md:p-6 lg:p-8">
-        <div className="w-full max-w-2xl lg:max-w-none space-y-5 md:space-y-7 lg:space-y-9">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden flex items-start justify-start p-2 md:p-3 lg:p-4">
+        <div className="w-full max-w-2xl lg:max-w-none space-y-2 md:space-y-3 lg:space-y-4">
           {/* Fase: Documentación - Verificación simple */}
           {faseActual === 'documentacion' && (
-            <div className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 lg:p-12 shadow-2xl h-full lg:min-h-[calc(100vh-300px)]">
+            <div className="bg-white rounded-xl md:rounded-2xl p-3 md:p-4 lg:p-6 shadow-lg h-full lg:min-h-[calc(100vh-200px)]">
               <PrerequisitosCheckBasic
                 prerequisitos={prerequisitosDinamicos}
                 prerequisitosCumplidos={prerequisitosCumplidos}
@@ -161,7 +158,7 @@ export function TramiteFlowBasic({
 
           {/* Fase: Pago */}
           {faseActual === 'pago' && (
-            <div className="bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-lg overflow-hidden">
               <FasePagoBasic
                 tramite={tramite}
                 onCompletar={() => cambiarFase('seguimiento')}
@@ -171,7 +168,7 @@ export function TramiteFlowBasic({
 
           {/* Fase: Confirmación y seguimiento */}
           {faseActual === 'seguimiento' && (
-            <div className="bg-white rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-lg overflow-hidden">
               <FaseSeguimientoBasic tramite={tramite} />
             </div>
           )}

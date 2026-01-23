@@ -13,6 +13,17 @@ export type Message = {
     costo?: string;
     vigencia?: string;
   };
+  grupoSugerido?: {
+    titulo: string;
+    descripcionInstituciones: string;
+    tramites: Array<{
+      id: string;
+      nombre: string;
+      categoria?: string;
+      costo?: number;
+      estimadoDias?: number;
+    }>;
+  };
 };
 
 export type Connections = {

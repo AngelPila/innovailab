@@ -242,13 +242,26 @@ export default function GobotChat() {
           updateTabTitle(activeTabId, tramiteInfo.nombre);
         }
       } else {
-        // Respuesta normal del chatbot
-        const assistantMessage: Message = {
-          id: Date.now() + 1,
-          role: "assistant",
-          content: respuestaIA,
-        };
-        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        // Si no hay trámite, ver si hay grupo de recomendaciones
+        const grupo = aiService.getGrupoRecomendacion(inputValue);
+
+        if (grupo) {
+          const assistantMessage: Message = {
+            id: Date.now() + 1,
+            role: "assistant",
+            content: `Aquí tienes opciones de ${grupo.titulo}:`,
+            grupoSugerido: grupo,
+          };
+          setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        } else {
+          // Respuesta normal del chatbot
+          const assistantMessage: Message = {
+            id: Date.now() + 1,
+            role: "assistant",
+            content: respuestaIA,
+          };
+          setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        }
       }
     } catch (error) {
       console.error('Error al obtener respuesta de IA:', error);
@@ -274,12 +287,25 @@ export default function GobotChat() {
         setTramiteActivo(tramiteDetectado.id);
         updateTabTitle(activeTabId, tramiteDetectado.nombre);
       } else {
-        const assistantMessage: Message = {
-          id: Date.now() + 1,
-          role: "assistant",
-          content: "Lo siento, tuve un problema al procesar tu mensaje. ¿Podrías intentar de nuevo?",
-        };
-        setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        // Fallback: intentar detectar grupo y mostrar tarjetas; si no, error genérico
+        const grupo = aiService.getGrupoRecomendacion(inputValue);
+
+        if (grupo) {
+          const assistantMessage: Message = {
+            id: Date.now() + 1,
+            role: "assistant",
+            content: `Aquí tienes opciones de ${grupo.titulo}:`,
+            grupoSugerido: grupo,
+          };
+          setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        } else {
+          const assistantMessage: Message = {
+            id: Date.now() + 1,
+            role: "assistant",
+            content: "Lo siento, tuve un problema al procesar tu mensaje. ¿Podrías intentar de nuevo?",
+          };
+          setTabMessages(activeTabId, [...nextMessages, assistantMessage]);
+        }
       }
     }
   };

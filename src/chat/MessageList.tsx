@@ -1,5 +1,5 @@
 import React from "react";
-import { Map, Bot, User, ArrowRight, FileText, Clock, DollarSign, Calendar } from "lucide-react";
+import { Map, Bot, User, ArrowRight, FileText, Clock, DollarSign, Calendar, Building2, BadgeCheck } from "lucide-react";
 import type { Message } from "./types";
 
 type Props = {
@@ -36,6 +36,56 @@ export default function MessageList({ messages, onGenerateRoute, onIrAlTramite, 
               }`}
             >
               <p className="text-sm leading-relaxed whitespace-pre-line">{message.content}</p>
+
+              {message.grupoSugerido && (
+                <div className="mt-4 space-y-3">
+                  <div className="flex items-start gap-2 text-xs text-gray-600">
+                    <Building2 className="w-4 h-4 text-gray-500" />
+                    <span>{message.grupoSugerido.descripcionInstituciones}</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {message.grupoSugerido.tramites.map((t) => (
+                      <div
+                        key={t.id}
+                        className="rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-sm p-4 shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900">{t.nombre}</p>
+                            {t.categoria && (
+                              <p className="text-2xs uppercase tracking-wide text-gray-500 mt-0.5">{t.categoria}</p>
+                            )}
+                          </div>
+                          <BadgeCheck className="w-5 h-5 text-emerald-500" />
+                        </div>
+
+                        <div className="mt-2 flex flex-wrap gap-3 text-xs text-gray-600">
+                          {typeof t.estimadoDias === 'number' && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 text-yellow-800 px-2 py-1 border border-yellow-100">
+                              <Clock className="w-3.5 h-3.5" /> ~{t.estimadoDias} días
+                            </span>
+                          )}
+                          {typeof t.costo === 'number' && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-green-50 text-green-800 px-2 py-1 border border-green-100">
+                              <DollarSign className="w-3.5 h-3.5" /> ${t.costo.toFixed(2)}
+                            </span>
+                          )}
+                        </div>
+
+                        {onIrAlTramite && (
+                          <button
+                            onClick={() => onIrAlTramite(t.id, t.nombre)}
+                            className="mt-3 w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold text-blue-700 bg-blue-50 border border-blue-100 rounded-xl hover:bg-blue-100 hover:-translate-y-0.5 transition-all"
+                          >
+                            Ver trámite
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {message.quickInfo && (
                 <div className="mt-4 bg-white rounded-2xl border border-gray-200 shadow-sm p-5">

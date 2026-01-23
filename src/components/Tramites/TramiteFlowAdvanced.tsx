@@ -23,6 +23,7 @@ interface Props {
 }
 
 const PASOS = ['Información', 'Requisitos', 'Pago', 'Seguimiento'];
+const PASOS_KEY: FaseTramite[] = ['informacion', 'requisitos', 'pago', 'seguimiento'];
 
 /**
  * TramiteFlowAdvanced - Versión completa para jóvenes y usuarios regulares
@@ -73,12 +74,17 @@ export function TramiteFlowAdvanced({
   }, []);
 
   // Actualizar el índice del paso actual
+  const faseIndexMap: Record<string, number> = {
+    informacion: 0,
+    requisitos: 1,
+    pago: 2,
+    seguimiento: 3,
+  };
+
   useEffect(() => {
-    const faseIndex = PASOS.findIndex(
-      (p) => p.toLowerCase().replace(' ', '') === faseActual
-    );
-    if (faseIndex !== -1) {
-      setCurrentStepIndex(faseIndex);
+    const idx = faseIndexMap[faseActual?.toLowerCase() || ''];
+    if (idx !== undefined) {
+      setCurrentStepIndex(idx);
     }
   }, [faseActual]);
 
@@ -99,6 +105,14 @@ export function TramiteFlowAdvanced({
     cambiarFase(nuevaFase);
   };
 
+  const handleStepSelect = (stepNumber: number) => {
+    const idx = stepNumber - 1;
+    const faseKey = PASOS_KEY[idx];
+    if (faseKey) {
+      cambiarFase(faseKey);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Progress Bar */}
@@ -106,18 +120,19 @@ export function TramiteFlowAdvanced({
         currentStep={currentStepIndex + 1}
         totalSteps={PASOS.length}
         stepLabels={PASOS}
+        onStepSelect={handleStepSelect}
       />
 
       {/* Header compacto */}
-      <div className="bg-white border-b border-gray-100 px-6 py-4">
+      <div className="bg-white border-b border-gray-100 px-4 md:px-6 py-2 md:py-3">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-              <span className="text-lg font-bold text-yellow-700">📋</span>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+              <span className="text-base font-bold text-yellow-700">📋</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">{tramite.nombre}</h1>
-              <p className="text-sm text-gray-500">Paso {currentStepIndex + 1} de {PASOS.length}</p>
+              <h1 className="text-base md:text-lg font-bold text-gray-900">{tramite.nombre}</h1>
+              <p className="text-xs md:text-sm text-gray-500">Paso {currentStepIndex + 1} de {PASOS.length}</p>
             </div>
           </div>
           {onVolverAlChat && (
@@ -134,7 +149,7 @@ export function TramiteFlowAdvanced({
 
       {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6 py-6">
+        <div className="max-w-4xl mx-auto px-3 md:px-6 py-3 md:py-4">
           {/* Fase: Información */}
           {faseActual === 'informacion' && (
             <>
@@ -150,10 +165,10 @@ export function TramiteFlowAdvanced({
                     onCompletar={() => cambiarFase('requisitos')}
                   />
 
-                  <div className="mt-6 flex gap-3">
+                  <div className="mt-3 md:mt-4 flex gap-2">
                     <button
                       onClick={() => handleNavegación('requisitos')}
-                      className="flex-1 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg"
+                      className="flex-1 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg md:rounded-xl transition-all transform hover:scale-105 shadow-md text-sm md:text-base"
                     >
                       Siguiente
                     </button>
@@ -216,40 +231,7 @@ export function TramiteFlowAdvanced({
       </div>
 
       {/* Footer con navegación compacta */}
-      <div className="bg-white border-t border-gray-100 px-6 py-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <button
-            onClick={() => {
-              if (currentStepIndex > 0) {
-                const fases: FaseTramite[] = ['informacion', 'requisitos', 'pago', 'seguimiento'];
-                cambiarFase(fases[currentStepIndex - 1]);
-              } else if (onVolverAlChat) {
-                onVolverAlChat();
-              }
-            }}
-            className="px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            Anterior
-          </button>
-
-          <span className="text-sm text-gray-500">
-            {currentStepIndex + 1} / {PASOS.length}
-          </span>
-
-          <button
-            onClick={() => {
-              if (currentStepIndex < PASOS.length - 1) {
-                const fases: FaseTramite[] = ['informacion', 'requisitos', 'pago', 'seguimiento'];
-                cambiarFase(fases[currentStepIndex + 1]);
-              }
-            }}
-            disabled={currentStepIndex === PASOS.length - 1}
-            className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors disabled:cursor-not-allowed"
-          >
-            Siguiente
-          </button>
-        </div>
-      </div>
+      
     </div>
   );
 }
