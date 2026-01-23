@@ -8,8 +8,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -35,6 +35,7 @@ export function ChatScreen({ navigation, route }: Props) {
   const [inputValue, setInputValue] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const flatListRef = useRef<FlatList>(null);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     // Mensaje de bienvenida
@@ -142,7 +143,7 @@ export function ChatScreen({ navigation, route }: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { paddingTop: insets.top }]}>
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -173,12 +174,12 @@ export function ChatScreen({ navigation, route }: Props) {
           data={messages}
           renderItem={renderMessage}
           keyExtractor={item => item.id.toString()}
-          contentContainerStyle={styles.messagesList}
+          contentContainerStyle={[styles.messagesList, { paddingBottom: insets.bottom + 80 }]}
           onContentSizeChange={() => flatListRef.current?.scrollToEnd()}
         />
 
         {/* Input */}
-        <View style={styles.inputContainer}>
+        <View style={[styles.inputContainer, { paddingBottom: Math.max(insets.bottom, 8) }]}>
           <TextInput
             style={[
               styles.input,

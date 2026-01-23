@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useInterfaceStore } from '../store/interfaceStore';
@@ -17,6 +17,7 @@ type Props = {
 
 export function InterfaceSelectionScreen({ navigation }: Props) {
   const { selectVersion } = useInterfaceStore();
+  const insets = useSafeAreaInsets();
 
   const handleSelectBasic = () => {
     selectVersion('basic');
@@ -29,7 +30,7 @@ export function InterfaceSelectionScreen({ navigation }: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
       <View style={styles.content}>
         <Text style={styles.title}>Elige tu experiencia</Text>
         <Text style={styles.subtitle}>
