@@ -239,6 +239,158 @@ const UBICACIONES: Ubicacion[] = [
     telefono: '(04) 259-3200'
   },
   
+  // IESS (Seguridad Social)
+  {
+    id: 'iess-quito-norte',
+    nombre: 'IESS - Quito Norte',
+    tipo: 'iess',
+    direccion: 'Av. 10 de Agosto y Colón',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.1950,
+    lng: -78.4920,
+    horario: 'Lun-Vie 8:00-16:00',
+    telefono: '(02) 298-1000'
+  },
+  {
+    id: 'iess-quito-sur',
+    nombre: 'IESS - Quito Sur',
+    tipo: 'iess',
+    direccion: 'Av. Maldonado y Alonso de Angulo',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.2650,
+    lng: -78.5400,
+    horario: 'Lun-Vie 8:00-16:00',
+    telefono: '(02) 298-1001'
+  },
+  {
+    id: 'iess-guayaquil',
+    nombre: 'IESS - Guayaquil Centro',
+    tipo: 'iess',
+    direccion: 'Av. 9 de Octubre y Esmeraldas',
+    ciudad: 'Guayaquil',
+    provincia: 'Guayas',
+    lat: -2.1900,
+    lng: -79.8870,
+    horario: 'Lun-Vie 8:00-16:00',
+    telefono: '(04) 373-2000'
+  },
+  {
+    id: 'iess-cuenca',
+    nombre: 'IESS - Cuenca',
+    tipo: 'iess',
+    direccion: 'Av. 12 de Abril y Guayas',
+    ciudad: 'Cuenca',
+    provincia: 'Azuay',
+    lat: -2.9050,
+    lng: -79.0080,
+    horario: 'Lun-Vie 8:00-16:00',
+    telefono: '(07) 288-5000'
+  },
+  
+  // MIES (Ministerio de Inclusión Económica y Social)
+  {
+    id: 'mies-quito',
+    nombre: 'MIES - Quito',
+    tipo: 'mies',
+    direccion: 'Av. Robles y Pasaje María Angélica',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.1920,
+    lng: -78.4880,
+    horario: 'Lun-Vie 8:00-16:30',
+    telefono: '(02) 398-3600'
+  },
+  {
+    id: 'mies-guayaquil',
+    nombre: 'MIES - Guayaquil',
+    tipo: 'mies',
+    direccion: 'Av. Francisco de Orellana',
+    ciudad: 'Guayaquil',
+    provincia: 'Guayas',
+    lat: -2.1650,
+    lng: -79.9050,
+    horario: 'Lun-Vie 8:00-16:30',
+    telefono: '(04) 373-7000'
+  },
+  
+  // Notarías
+  {
+    id: 'notaria-quito-primera',
+    nombre: 'Primera Notaría - Quito',
+    tipo: 'notaria',
+    direccion: 'Av. 10 de Agosto y Cordero',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.2020,
+    lng: -78.4950,
+    horario: 'Lun-Vie 8:30-16:00',
+    telefono: '(02) 255-1234'
+  },
+  {
+    id: 'notaria-quito-segunda',
+    nombre: 'Segunda Notaría - Quito',
+    tipo: 'notaria',
+    direccion: 'Av. República y Eloy Alfaro',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.1880,
+    lng: -78.4820,
+    horario: 'Lun-Vie 8:30-16:00',
+    telefono: '(02) 255-2345'
+  },
+  {
+    id: 'notaria-guayaquil-primera',
+    nombre: 'Primera Notaría - Guayaquil',
+    tipo: 'notaria',
+    direccion: 'Av. 9 de Octubre entre Boyacá y Chimborazo',
+    ciudad: 'Guayaquil',
+    provincia: 'Guayas',
+    lat: -2.1910,
+    lng: -79.8860,
+    horario: 'Lun-Vie 8:30-16:00',
+    telefono: '(04) 232-4567'
+  },
+  
+  // Municipalidades
+  {
+    id: 'municipio-quito',
+    nombre: 'Municipio de Quito - Centro de Servicios',
+    tipo: 'municipio',
+    direccion: 'Av. Pichincha y García Moreno',
+    ciudad: 'Quito',
+    provincia: 'Pichincha',
+    lat: -0.2200,
+    lng: -78.5100,
+    horario: 'Lun-Vie 8:00-17:00',
+    telefono: '(02) 395-2300'
+  },
+  {
+    id: 'municipio-guayaquil',
+    nombre: 'Municipio de Guayaquil',
+    tipo: 'municipio',
+    direccion: 'Av. 10 de Agosto y Malecón',
+    ciudad: 'Guayaquil',
+    provincia: 'Guayas',
+    lat: -2.1920,
+    lng: -79.8910,
+    horario: 'Lun-Vie 8:00-17:00',
+    telefono: '(04) 259-4800'
+  },
+  {
+    id: 'municipio-cuenca',
+    nombre: 'Municipio de Cuenca',
+    tipo: 'municipio',
+    direccion: 'Calle Bolívar y Benigno Malo',
+    ciudad: 'Cuenca',
+    provincia: 'Azuay',
+    lat: -2.8980,
+    lng: -79.0050,
+    horario: 'Lun-Vie 8:00-17:00',
+    telefono: '(07) 283-1900'
+  },
+  
   // Embajada USA (Visa)
   {
     id: 'embajada-usa-quito',
@@ -268,11 +420,38 @@ const UBICACIONES: Ubicacion[] = [
 
 // Mapeo de tipos de trámite a tipos de ubicación
 const TRAMITE_UBICACIONES: Record<string, string[]> = {
-  'renovacion_cedula': ['registro_civil'],
+  'renovacion_cedula': ['registro_civil', 'banco'],
   'obtener_pasaporte': ['registro_civil', 'mre_pasaportes', 'banco'],
   'visa_americana': ['embajada_usa', 'banco'],
   'licencia_conducir': ['ant', 'banco'],
-  'ruc': ['sri'],
+  
+  // Trámites IESS y seguridad social
+  'jubilacion_vejez_iess': ['iess', 'banco'],
+  'atencion_medica_preferente_iess': ['iess'],
+  'afiliacion_voluntaria_iess': ['iess', 'banco'],
+  
+  // Trámites MIES y bienestar
+  'bono_adulto_mayor_mies': ['mies', 'banco'],
+  
+  // Trámites municipales
+  'exoneracion_predial_adulto_mayor': ['municipio', 'banco'],
+  'exoneracion_servicios_basicos': ['municipio'],
+  'transporte_preferente_adulto_mayor': ['municipio'],
+  
+  // Trámites tributarios
+  'devolucion_iva_adulto_mayor': ['sri', 'banco'],
+  'exoneracion_matricula_vehicular_adulto_mayor': ['sri', 'ant'],
+  'inscripcion_ruc_persona_natural': ['sri'],
+  'actualizacion_ruc': ['sri'],
+  'clave_sri_en_linea': ['sri'],
+  'certificado_cumplimiento_tributario': ['sri'],
+  'declaracion_impuesto_renta': ['sri'],
+  'convenio_pago_sri': ['sri', 'banco'],
+  'reclamo_administrativo_sri': ['sri'],
+  
+  // Trámites legales/notariales
+  'testamento_notarial': ['notaria', 'banco'],
+  'poder_notarial_adulto_mayor': ['notaria', 'banco'],
 };
 
 // Calcular distancia entre dos puntos (fórmula Haversine)
@@ -363,15 +542,31 @@ export const ubicacionesService = {
       },
       ant: {
         nombre: 'Agencia Nacional de Tránsito',
-        descripcion: 'Para trámites de licencia de conducir'
+        descripcion: 'Para trámites de licencia de conducir y matrícula vehicular'
       },
       sri: {
-        nombre: 'Servicio de Rentas Internas',
-        descripcion: 'Para trámites tributarios y RUC'
+        nombre: 'Servicio de Rentas Internas (SRI)',
+        descripcion: 'Para trámites tributarios, RUC, declaraciones y certificados'
       },
       embajada_usa: {
         nombre: 'Embajada/Consulado de EE.UU.',
         descripcion: 'Para entrevista y trámite de visa'
+      },
+      iess: {
+        nombre: 'Instituto Ecuatoriano de Seguridad Social (IESS)',
+        descripcion: 'Para trámites de jubilación, afiliación y atención médica'
+      },
+      mies: {
+        nombre: 'Ministerio de Inclusión Económica y Social (MIES)',
+        descripcion: 'Para trámites de bonos y programas sociales'
+      },
+      notaria: {
+        nombre: 'Notaría',
+        descripcion: 'Para trámites de testamentos, poderes y actos notariales'
+      },
+      municipio: {
+        nombre: 'Municipio',
+        descripcion: 'Para exoneraciones, servicios básicos y trámites municipales'
       },
     };
 

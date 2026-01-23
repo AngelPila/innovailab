@@ -368,8 +368,8 @@
       "nombre": "Jubilación por Vejez (IESS)",
       "descripcion": "Pensión mensual vitalicia para adultos mayores",
       "categoria": "social",
-      "estimadoDias": 30,
-      "costo": 0,
+      "estimadoDias": 45,
+      "costo": 15.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_jubilacion",
@@ -403,7 +403,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "La pensión se calcula con tus aportes y edad (desde 60 años con aportes suficientes, 65 años con menos aportes)",
-          "contenido": "Tiempo estimado: 30 días\nCosto: $0\nVigencia: Vitalicia"
+          "contenido": "Tiempo estimado: 45 días\nCosto: $15.00 (tasas administrativas)\nVigencia: Vitalicia"
         },
         {
           "id": "req_jubilacion",
@@ -436,8 +436,8 @@
       "nombre": "Atención Médica Preferente IESS",
       "descripcion": "Acceso prioritario a salud, medicinas y hospitalización",
       "categoria": "salud",
-      "estimadoDias": 2,
-      "costo": 0,
+      "estimadoDias": 1,
+      "costo": 3.50,
       "prerequisitos": [
         {
           "id": "cedula_vigente_salud",
@@ -463,7 +463,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Consultas, medicinas y hospitalización con prioridad",
-          "contenido": "Tiempo estimado: 2 días\nCosto: $0\nCobertura: Nacional"
+          "contenido": "Tiempo estimado: 1 día\nCosto: $3.50 (emisión de carné)\nCobertura: Nacional"
         },
         {
           "id": "req_salud_preferente",
@@ -488,8 +488,8 @@
       "nombre": "Afiliación Voluntaria IESS",
       "descripcion": "Seguro de salud y pensión sin relación laboral",
       "categoria": "salud",
-      "estimadoDias": 3,
-      "costo": 0,
+      "estimadoDias": 5,
+      "costo": 8.50,
       "prerequisitos": [
         {
           "id": "cedula_vigente_av",
@@ -523,7 +523,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Cobertura médica y aportes mensuales voluntarios",
-          "contenido": "Tiempo estimado: 3 días\nCosto: $0\nPago: Débito mensual"
+          "contenido": "Tiempo estimado: 5 días\nCosto: $8.50 (inscripción)\nPago: Débito mensual"
         },
         {
           "id": "req_afiliacion_voluntaria",
@@ -548,8 +548,8 @@
       "nombre": "Bono para Adultos Mayores (MIES)",
       "descripcion": "Transferencia económica mensual para adultos mayores vulnerables",
       "categoria": "social",
-      "estimadoDias": 20,
-      "costo": 0,
+      "estimadoDias": 30,
+      "costo": 5.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_bono",
@@ -583,7 +583,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Aplica a adultos mayores en pobreza o extrema pobreza",
-          "contenido": "Tiempo estimado: 20 días\nCosto: $0\nPago: Mensual"
+          "contenido": "Tiempo estimado: 30 días\nCosto: $5.00 (validación de datos)\nPago: Mensual"
         },
         {
           "id": "req_bono",
@@ -608,8 +608,8 @@
       "nombre": "Exoneración de Impuesto Predial",
       "descripcion": "Descuento o exoneración del impuesto a la vivienda",
       "categoria": "municipal",
-      "estimadoDias": 7,
-      "costo": 0,
+      "estimadoDias": 10,
+      "costo": 12.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_predial",
@@ -643,7 +643,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Aplica para mayores de 65 años con vivienda propia",
-          "contenido": "Tiempo estimado: 7 días\nCosto: $0\nCobertura: Según ordenanza municipal"
+          "contenido": "Tiempo estimado: 10 días\nCosto: $12.00 (certificaciones)\nCobertura: Según ordenanza municipal"
         },
         {
           "id": "req_predial",
@@ -668,8 +668,8 @@
       "nombre": "Exoneración de Servicios Básicos",
       "descripcion": "Descuento en agua, alcantarillado y recolección de basura",
       "categoria": "municipal",
-      "estimadoDias": 10,
-      "costo": 0,
+      "estimadoDias": 15,
+      "costo": 8.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_servicios",
@@ -703,7 +703,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Descuentos para adultos mayores titulares del servicio",
-          "contenido": "Tiempo estimado: 10 días\nCosto: $0\nCobertura: Agua, alcantarillado, recolección"
+          "contenido": "Tiempo estimado: 15 días\nCosto: $8.00 (trámites y certificaciones)\nCobertura: Agua, alcantarillado, recolección"
         },
         {
           "id": "req_servicios",
@@ -728,8 +728,8 @@
       "nombre": "Transporte Público Preferente",
       "descripcion": "Pasajes gratuitos o con descuento para adultos mayores",
       "categoria": "transporte",
-      "estimadoDias": 1,
-      "costo": 0,
+      "estimadoDias": 3,
+      "costo": 2.50,
       "prerequisitos": [
         {
           "id": "cedula_vigente_transporte",
@@ -747,7 +747,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Descuento o gratuidad en transporte urbano e interprovincial",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nRequisito: Presentar cédula"
+          "contenido": "Tiempo estimado: 3 días\nCosto: $2.50 (credencial)\nRequisito: Presentar cédula"
         },
         {
           "id": "req_transporte",
@@ -772,8 +772,8 @@
       "nombre": "Devolución de IVA Adulto Mayor",
       "descripcion": "Recupera el IVA pagado en compras básicas",
       "categoria": "tributario",
-      "estimadoDias": 15,
-      "costo": 0,
+      "estimadoDias": 20,
+      "costo": 5.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_iva",
@@ -807,7 +807,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Puedes recuperar el IVA de tus consumos básicos",
-          "contenido": "Tiempo estimado: 15 días\nCosto: $0\nPeriodicidad: Mensual"
+          "contenido": "Tiempo estimado: 20 días\nCosto: $5.00 (validación de facturas)\nPeriodicidad: Mensual"
         },
         {
           "id": "req_iva",
@@ -840,8 +840,8 @@
       "nombre": "Exoneración de Matricula Vehicular",
       "descripcion": "Descuento o exoneración en matriculación de vehículo",
       "categoria": "tributario",
-      "estimadoDias": 5,
-      "costo": 0,
+      "estimadoDias": 7,
+      "costo": 10.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_matricula",
@@ -875,7 +875,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Beneficio para vehículos a nombre de adultos mayores",
-          "contenido": "Tiempo estimado: 5 días\nCosto: $0\nCobertura: Tasas municipales y ANT"
+          "contenido": "Tiempo estimado: 7 días\nCosto: $10.00 (certificados)\nCobertura: Tasas municipales y ANT"
         },
         {
           "id": "req_matricula_exoneracion",
@@ -935,7 +935,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Previene conflictos y asegura tu voluntad",
-          "contenido": "Tiempo estimado: 2 días\nCosto: $120 aprox.\nRequiere presencia en notaría"
+          "contenido": "Tiempo estimado: 2 días\nCosto: $120 - $150 (notarial)\nRequiere presencia en notaría"
         },
         {
           "id": "req_testamento",
@@ -960,8 +960,8 @@
       "nombre": "Poder Notarial",
       "descripcion": "Autoriza a un familiar para realizar trámites a tu nombre",
       "categoria": "legal",
-      "estimadoDias": 1,
-      "costo": 60,
+      "estimadoDias": 2,
+      "costo": 75.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_poder",
@@ -995,7 +995,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Permite delegar trámites a un familiar",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $60 aprox.\nRequiere firma en notaría"
+          "contenido": "Tiempo estimado: 2 días\nCosto: $75.00 (tarifa notarial)\nRequiere firma en notaría"
         },
         {
           "id": "req_poder",
@@ -1020,8 +1020,8 @@
       "nombre": "Inscripción en el RUC - Persona Natural",
       "descripcion": "Registro obligatorio para realizar actividades económicas",
       "categoria": "tributario",
-      "estimadoDias": 1,
-      "costo": 0,
+      "estimadoDias": 2,
+      "costo": 4.50,
       "prerequisitos": [
         {
           "id": "cedula_vigente_ruc",
@@ -1055,7 +1055,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "El RUC es necesario para trabajar, arrendar bienes, emitir facturas o recibir ingresos",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea o presencial"
+          "contenido": "Tiempo estimado: 2 días\nCosto: $4.50 (certificaciones)\nModalidad: En línea o presencial"
         },
         {
           "id": "req_ruc",
@@ -1088,8 +1088,8 @@
       "nombre": "Actualización del RUC",
       "descripcion": "Cambiar dirección, actividad económica o datos de contacto",
       "categoria": "tributario",
-      "estimadoDias": 1,
-      "costo": 0,
+      "estimadoDias": 2,
+      "costo": 3.50,
       "prerequisitos": [
         {
           "id": "cedula_vigente_act_ruc",
@@ -1115,7 +1115,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Actualiza tu RUC cuando cambies domicilio, actividad o estado civil",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea"
+          "contenido": "Tiempo estimado: 2 días\nCosto: $3.50 (validación de documentos)\nModalidad: En línea"
         },
         {
           "id": "req_act_ruc",
@@ -1141,7 +1141,7 @@
       "descripcion": "Clave para acceder a todos los servicios digitales del SRI",
       "categoria": "tributario",
       "estimadoDias": 1,
-      "costo": 0,
+      "costo": 2.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_clave_sri",
@@ -1167,7 +1167,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Con tu clave SRI podrás hacer trámites, consultas y declaraciones en línea",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nNota: Un familiar puede ayudar"
+          "contenido": "Tiempo estimado: 1 día\nCosto: $2.00 (activación)\nNota: Un familiar puede ayudar"
         },
         {
           "id": "req_clave_sri",
@@ -1192,8 +1192,8 @@
       "nombre": "Certificado de Cumplimiento Tributario",
       "descripcion": "Documento que indica si tienes o no deudas tributarias",
       "categoria": "tributario",
-      "estimadoDias": 1,
-      "costo": 0,
+      "estimadoDias": 3,
+      "costo": 4.00,
       "prerequisitos": [
         {
           "id": "clave_sri_certificado",
@@ -1211,7 +1211,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Muy solicitado para trámites bancarios y legales",
-          "contenido": "Tiempo estimado: 1 día\nCosto: $0\nModalidad: En línea"
+          "contenido": "Tiempo estimado: 3 días\nCosto: $4.00 (emisión certificado)\nModalidad: En línea"
         },
         {
           "id": "req_cert_cumplimiento",
@@ -1236,8 +1236,8 @@
       "nombre": "Declaración del Impuesto a la Renta",
       "descripcion": "Declaración anual de ingresos gravados",
       "categoria": "tributario",
-      "estimadoDias": 5,
-      "costo": 0,
+      "estimadoDias": 7,
+      "costo": 6.50,
       "prerequisitos": [
         {
           "id": "clave_sri_declaracion",
@@ -1263,7 +1263,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Aplica si tienes ingresos gravados (pensiones altas, arriendos, actividades económicas)",
-          "contenido": "Tiempo estimado: 5 días\nCosto: $0\nPeríodo: Marzo-abril"
+          "contenido": "Tiempo estimado: 7 días\nCosto: $6.50 (asesoría si es necesaria)\nPeríodo: Marzo-abril"
         },
         {
           "id": "req_declaracion_renta",
@@ -1296,8 +1296,8 @@
       "nombre": "Convenio de Pago con el SRI",
       "descripcion": "Fraccionar deudas tributarias para evitar coactivas",
       "categoria": "tributario",
-      "estimadoDias": 3,
-      "costo": 0,
+      "estimadoDias": 5,
+      "costo": 15.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_convenio",
@@ -1323,7 +1323,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Evita embargos y coactivas fraccionando tu deuda",
-          "contenido": "Tiempo estimado: 3 días\nCosto: $0\nPlazos: Según monto"
+          "contenido": "Tiempo estimado: 5 días\nCosto: $15.00 (análisis y certificaciones)\nPlazos: Según monto"
         },
         {
           "id": "req_convenio",
@@ -1348,8 +1348,8 @@
       "nombre": "Reclamo Administrativo ante el SRI",
       "descripcion": "Impugnar valores, multas o decisiones del SRI",
       "categoria": "tributario",
-      "estimadoDias": 30,
-      "costo": 0,
+      "estimadoDias": 45,
+      "costo": 25.00,
       "prerequisitos": [
         {
           "id": "cedula_vigente_reclamo",
@@ -1383,7 +1383,7 @@
           "fase": "informacion",
           "titulo": "Información General",
           "descripcion": "Primera instancia para impugnar decisiones del SRI",
-          "contenido": "Tiempo estimado: 30 días\nCosto: $0\nPlazo: 20 días desde notificación"
+          "contenido": "Tiempo estimado: 45 días\nCosto: $25.00 (documentación y notificaciones)\nPlazo: 20 días desde notificación"
         },
         {
           "id": "req_reclamo",
