@@ -61,16 +61,14 @@ export function TramiteFlowBasic({
           nacionalidad: 'ecuatoriano',
         });
       }
+
+      // SIMPLIFICACIÓN: Ir directo a verificación de documentos (sin información ni segmentación)
+      if (esNuevaApertura || faseActual === 'informacion') {
+        console.log('🔵 TramiteFlowBasic - Cambiando de informacion a documentacion');
+        setTimeout(() => cambiarFase('documentacion'), 100);
+      }
     }
   }, [tramiteId, esRama, progresoMultiple]);
-
-  // SIMPLIFICACIÓN: Ir directo a verificación de documentos (sin información ni segmentación)
-  useEffect(() => {
-    if (faseActual === 'informacion') {
-      console.log('🔵 TramiteFlowBasic - Cambiando de informacion a documentacion');
-      cambiarFase('documentacion');
-    }
-  }, [faseActual]);
 
   // Debug: Ver qué prerequisitos dinámicos tenemos
   useEffect(() => {

@@ -1,6 +1,16 @@
 // Tipos principales para el sistema de trámites
 
-export type TramiteCategoria = 'identidad' | 'vehicular' | 'internacional' | 'educacion' | 'salud';
+export type TramiteCategoria =
+  | 'identidad'
+  | 'vehicular'
+  | 'internacional'
+  | 'educacion'
+  | 'salud'
+  | 'social'
+  | 'tributario'
+  | 'municipal'
+  | 'legal'
+  | 'transporte';
 
 export type FaseTramite = 'informacion' | 'requisitos' | 'documentacion' | 'pago' | 'seguimiento';
 
