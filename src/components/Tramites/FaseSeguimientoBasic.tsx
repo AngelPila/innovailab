@@ -23,10 +23,10 @@ export function FaseSeguimientoBasic({ tramite }: Props) {
       {/* Encabezado */}
       <div className="mb-4 md:mb-6 text-center">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-          ¡Tu solicitud fue enviada!
+          ¡Ya tienes toda la información!
         </h2>
-        <p className="text-base md:text-xl text-green-600 font-bold">
-          Tu {tramite.nombre.toLowerCase()} está en proceso
+        <p className="text-base md:text-xl text-blue-600 font-bold">
+          Ahora puedes realizar tu {tramite.nombre.toLowerCase()}
         </p>
       </div>
 

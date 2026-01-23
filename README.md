@@ -1,3 +1,29 @@
+# INNOVaiLAB - Sistema de Gestión de Trámites
+
+> Aplicación completa para gestionar trámites en Ecuador con interfaz moderna y componentes especializados
+
+**Versión**: 2.0 (Enhanced Frontend)  
+**Estado**: ✅ Listo para Producción  
+**Última actualización**: Enero 23, 2026
+
+## 📱 Proyecto Mobile - Frontend 2.0
+
+El proyecto mobile ha sido completamente transformado con:
+
+### ✨ Nuevos Componentes (4)
+- **EstadoTramite** - Card con categoría, progreso, costo y plazo
+- **ConsejosTips** - Componente flexible para consejos (4 variantes)
+- **TarjetaUbicacion** - Ubicación con teléfono clickeable
+- **TimelineProgreso** - Línea de tiempo visual
+
+### 🎨 Paleta Profesional
+Colores cohesivos: Azul, Verde, Ámbar, Rojo
+
+### 📊 Documentación Completa
+Ver [FRONTEND_SUMMARY.md](./FRONTEND_SUMMARY.md) para detalles completos.
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

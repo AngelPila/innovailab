@@ -19,6 +19,9 @@ import { PrerequisitosCheck } from '../components/PrerequisitosCheck';
 import { FaseContenido } from '../components/FaseContenido';
 import { FasePago } from '../components/FasePago';
 import { FaseSeguimiento } from '../components/FaseSeguimiento';
+import { EstadoTramite } from '../components/EstadoTramite';
+import { ConsejosTips } from '../components/ConsejosTips';
+import { TimelineProgreso } from '../components/TimelineProgreso';
 import type { FaseTramite } from '../types/tramite.types';
 
 type Props = {
@@ -159,9 +162,26 @@ export function TramiteFlowScreen({ navigation, route }: Props) {
           style={styles.mainContent}
           contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
         >
+          {/* Card de Estado del Trámite */}
+          <EstadoTramite
+            tramite={tramite}
+            pasoActual={currentStepIndex + 1}
+            totalPasos={PASOS.length}
+            onPress={() => {}}
+          />
+
           {/* Fase: Información */}
           {faseActual === 'informacion' && pasoActual && (
             <>
+              <ConsejosTips
+                type="info"
+                title="¿Qué necesitas?"
+                consejos={[
+                  'Verifica todos los requisitos antes de continuar',
+                  'Asegúrate de tener los documentos originales',
+                  'Lee cuidadosamente cada instrucción'
+                ]}
+              />
               <FaseContenido
                 paso={pasoActual}
                 estaCompletado={fasesCompletadas.includes('informacion')}
@@ -186,20 +206,59 @@ export function TramiteFlowScreen({ navigation, route }: Props) {
                 prerequisitosCumplidos={prerequisitosCumplidos}
                 onValidacionCompleta={handleValidacionCompleta}
               />
+
+              {prerequisitosCumplidos && Object.values(prerequisitosCumplidos).some(v => v) && (
+                <ConsejosTips
+                  type="success"
+                  title="¡Buen progreso!"
+                  consejos={[
+                    `Ya tienes ${Object.values(prerequisitosCumplidos).filter(v => v).length} requisitos`,
+                    'Continúa con los siguientes pasos',
+                    'Guarda copias de todos tus documentos'
+                  ]}
+                />
+              )}
             </>
           )}
 
           {/* Fase: Pago */}
           {faseActual === 'pago' && (
-            <FasePago
-              tramite={tramite}
-              onCompletar={() => cambiarFase('seguimiento')}
-            />
+            <>
+              <TimelineProgreso
+                pasos={PASOS}
+                pasoActual={currentStepIndex}
+              />
+              <FasePago
+                tramite={tramite}
+                onCompletar={() => cambiarFase('seguimiento')}
+              />
+
+              <ConsejosTips
+                type="warning"
+                title="Antes de continuar"
+                consejos={[
+                  `Costo total: $${tramite.costo?.toFixed(2) || '0.00'}`,
+                  `Tiempo estimado: ${tramite.estimadoDias} días hábiles`,
+                  'Asegúrate de contar con todo antes de proceder'
+                ]}
+              />
+            </>
           )}
 
           {/* Fase: Seguimiento */}
           {faseActual === 'seguimiento' && (
-            <FaseSeguimiento tramite={tramite} />
+            <>
+              <FaseSeguimiento tramite={tramite} />
+              <ConsejosTips
+                type="success"
+                title="Próximos pasos"
+                consejos={[
+                  'Tu solicitud ha sido registrada exitosamente',
+                  'Recibirás actualizaciones por WhatsApp y email',
+                  'Puedes hacer seguimiento en tu historial'
+                ]}
+              />
+            </>
           )}
         </ScrollView>
 

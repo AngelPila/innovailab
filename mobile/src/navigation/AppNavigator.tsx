@@ -8,6 +8,8 @@ import { TramiteFlowScreen } from '../screens/TramiteFlowScreen';
 import { HomeScreen } from '../screens/Home/HomeScreen';
 import { ChatScreenNew } from '../screens/ChatScreenNew';
 import { TramiteFlowScreenNew } from '../screens/TramiteFlowScreenNew';
+// New Tramites Screens
+import { TramitesListScreen, HistorialScreen, TramiteDetalleScreen } from '../screens/Tramites';
 
 export type RootStackParamList = {
   // Legacy screens
@@ -18,6 +20,10 @@ export type RootStackParamList = {
   Home: undefined;
   ChatNew: { version: 'basic' | 'advanced' };
   TramiteFlowNew: { tramiteId: string; version: 'basic' | 'advanced' };
+  // New Tramites screens
+  Tramites: undefined;
+  Historial: undefined;
+  TramiteDetalle: { tramiteId: string };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -58,6 +64,22 @@ export function AppNavigator() {
         <Stack.Screen
           name="TramiteFlow"
           component={TramiteFlowScreen}
+        />
+        {/* New Tramites Screens */}
+        <Stack.Screen
+          name="Tramites"
+          component={TramitesListScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Historial"
+          component={HistorialScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TramiteDetalle"
+          component={TramiteDetalleScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

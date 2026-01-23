@@ -9,20 +9,12 @@
       "costo": 16.00,
       "prerequisitos": [
         {
-          "id": "foto_actualizada",
-          "nombre": "Foto tipo carnet actualizada",
-          "tipo": "archivo",
-          "esOpcional": false,
-          "preguntaValidacion": "¿Tienes una foto tipo carnet reciente (últimos 6 meses)?",
-          "descripcion": "Fondo blanco, sin lentes, medida 3x4 cm"
-        },
-        {
           "id": "cedula_anterior",
           "nombre": "Cédula anterior",
           "tipo": "documento",
           "esOpcional": true,
           "preguntaValidacion": "¿Tienes tu cédula anterior física?",
-          "descripcion": "Si la perdiste, necesitarás una denuncia"
+          "descripcion": "Si la perdiste, necesitarás una denuncia. La foto se toma en el Registro Civil."
         }
       ],
       "pasos": [
@@ -40,7 +32,9 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Verifica que tengas todos los documentos requeridos",
-          "validaciones": ["foto_actualizada", "cedula_anterior"]
+          "validaciones": [
+            "cedula_anterior"
+          ]
         },
         {
           "id": "doc_cedula",
@@ -109,7 +103,9 @@
           "preguntaValidacion": "¿Tienes tu pasaporte anterior en buen estado?",
           "descripcion": "Necesario para renovación",
           "condicional": {
-            "tipoTramite": ["renovacion"]
+            "tipoTramite": [
+              "renovacion"
+            ]
           }
         },
         {
@@ -120,7 +116,9 @@
           "preguntaValidacion": "¿Tienes la denuncia de pérdida o robo de tu pasaporte?",
           "descripcion": "Debe ser reciente y emitida por autoridad competente",
           "condicional": {
-            "tipoTramite": ["perdida-robo"]
+            "tipoTramite": [
+              "perdida-robo"
+            ]
           }
         },
         {
@@ -131,7 +129,9 @@
           "preguntaValidacion": "¿Tienes la autorización notariada de tus padres o tutores?",
           "descripcion": "Ambos padres deben firmar ante notario con cédulas vigentes",
           "condicional": {
-            "categoria": ["menor-edad"]
+            "categoria": [
+              "menor-edad"
+            ]
           }
         },
         {
@@ -142,7 +142,9 @@
           "preguntaValidacion": "¿Tienes el acta de nacimiento actualizada?",
           "descripcion": "Emitida recientemente por el Registro Civil",
           "condicional": {
-            "categoria": ["menor-edad"]
+            "categoria": [
+              "menor-edad"
+            ]
           }
         },
         {
@@ -172,7 +174,11 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Asegúrate de tener todos los requisitos",
-          "validaciones": ["cedula_vigente_pasaporte", "certificado_votacion", "foto_pasaporte"]
+          "validaciones": [
+            "cedula_vigente_pasaporte",
+            "certificado_votacion",
+            "foto_pasaporte"
+          ]
         },
         {
           "id": "doc_pasaporte",
@@ -258,7 +264,12 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Revisa todos los requisitos para la visa",
-          "validaciones": ["pasaporte_vigente_visa", "cedula_vigente_visa", "foto_visa", "comprobante_economico"]
+          "validaciones": [
+            "pasaporte_vigente_visa",
+            "cedula_vigente_visa",
+            "foto_visa",
+            "comprobante_economico"
+          ]
         },
         {
           "id": "doc_visa",
@@ -335,7 +346,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos Previos",
           "descripcion": "Completa todos los requisitos",
-          "validaciones": ["cedula_vigente_licencia", "tipo_sangre", "curso_conduccion"]
+          "validaciones": [
+            "cedula_vigente_licencia",
+            "tipo_sangre",
+            "curso_conduccion"
+          ]
         },
         {
           "id": "doc_licencia",
@@ -411,7 +426,11 @@
           "fase": "requisitos",
           "titulo": "Verifica tus requisitos",
           "descripcion": "Confirma identidad, aportes y cuenta para pago",
-          "validaciones": ["cedula_vigente_jubilacion", "historial_aportes_iess", "cuenta_bancaria_jubilacion"]
+          "validaciones": [
+            "cedula_vigente_jubilacion",
+            "historial_aportes_iess",
+            "cuenta_bancaria_jubilacion"
+          ]
         },
         {
           "id": "doc_jubilacion",
@@ -471,7 +490,10 @@
           "fase": "requisitos",
           "titulo": "Requisitos básicos",
           "descripcion": "Confirma tu identidad y condición de jubilado/afiliado",
-          "validaciones": ["cedula_vigente_salud", "carnet_jubilado_iess"]
+          "validaciones": [
+            "cedula_vigente_salud",
+            "carnet_jubilado_iess"
+          ]
         },
         {
           "id": "seguimiento_salud_preferente",
@@ -531,7 +553,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma identidad, cuenta bancaria y declaración de salud",
-          "validaciones": ["cedula_vigente_av", "cuenta_bancaria_av", "declaracion_salud"]
+          "validaciones": [
+            "cedula_vigente_av",
+            "cuenta_bancaria_av",
+            "declaracion_salud"
+          ]
         },
         {
           "id": "seguimiento_afiliacion_voluntaria",
@@ -591,7 +617,11 @@
           "fase": "requisitos",
           "titulo": "Verifica elegibilidad",
           "descripcion": "Revisa cédula, registro social y cuenta bancaria",
-          "validaciones": ["cedula_vigente_bono", "registro_social", "cuenta_bancaria_bono"]
+          "validaciones": [
+            "cedula_vigente_bono",
+            "registro_social",
+            "cuenta_bancaria_bono"
+          ]
         },
         {
           "id": "seguimiento_bono",
@@ -651,7 +681,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula, propiedad y certificado de ingresos",
-          "validaciones": ["cedula_vigente_predial", "escritura_inmueble", "certificado_pension"]
+          "validaciones": [
+            "cedula_vigente_predial",
+            "escritura_inmueble",
+            "certificado_pension"
+          ]
         },
         {
           "id": "seguimiento_predial",
@@ -711,7 +745,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula, planilla y certificado de ingresos",
-          "validaciones": ["cedula_vigente_servicios", "planilla_servicios", "certificado_pension_servicios"]
+          "validaciones": [
+            "cedula_vigente_servicios",
+            "planilla_servicios",
+            "certificado_pension_servicios"
+          ]
         },
         {
           "id": "seguimiento_servicios",
@@ -755,7 +793,9 @@
           "fase": "requisitos",
           "titulo": "Verifica tu cédula",
           "descripcion": "Solo necesitas la cédula vigente",
-          "validaciones": ["cedula_vigente_transporte"]
+          "validaciones": [
+            "cedula_vigente_transporte"
+          ]
         },
         {
           "id": "seguimiento_transporte",
@@ -815,7 +855,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma facturas y cuenta para devolución",
-          "validaciones": ["cedula_vigente_iva", "facturas_iva", "cuenta_bancaria_iva"]
+          "validaciones": [
+            "cedula_vigente_iva",
+            "facturas_iva",
+            "cuenta_bancaria_iva"
+          ]
         },
         {
           "id": "doc_iva",
@@ -883,7 +927,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula, matrícula y propiedad",
-          "validaciones": ["cedula_vigente_matricula", "matricula_vigente", "certificado_propiedad"]
+          "validaciones": [
+            "cedula_vigente_matricula",
+            "matricula_vigente",
+            "certificado_propiedad"
+          ]
         },
         {
           "id": "seguimiento_matricula_exoneracion",
@@ -943,7 +991,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula y define beneficiarios",
-          "validaciones": ["cedula_vigente_testamento", "lista_bienes", "certificado_medico_testamento"]
+          "validaciones": [
+            "cedula_vigente_testamento",
+            "lista_bienes",
+            "certificado_medico_testamento"
+          ]
         },
         {
           "id": "seguimiento_testamento",
@@ -1003,7 +1055,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma identidades y alcance del poder",
-          "validaciones": ["cedula_vigente_poder", "cedula_apoderado", "certificado_medico_poder"]
+          "validaciones": [
+            "cedula_vigente_poder",
+            "cedula_apoderado",
+            "certificado_medico_poder"
+          ]
         },
         {
           "id": "seguimiento_poder",
@@ -1063,7 +1119,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma tus documentos de identidad y domicilio",
-          "validaciones": ["cedula_vigente_ruc", "certificado_votacion_ruc", "documento_domicilio"]
+          "validaciones": [
+            "cedula_vigente_ruc",
+            "certificado_votacion_ruc",
+            "documento_domicilio"
+          ]
         },
         {
           "id": "doc_ruc",
@@ -1123,7 +1183,10 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula y documento de respaldo",
-          "validaciones": ["cedula_vigente_act_ruc", "documento_respaldo_cambio"]
+          "validaciones": [
+            "cedula_vigente_act_ruc",
+            "documento_respaldo_cambio"
+          ]
         },
         {
           "id": "seguimiento_act_ruc",
@@ -1175,7 +1238,10 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula y contactos",
-          "validaciones": ["cedula_vigente_clave_sri", "correo_celular"]
+          "validaciones": [
+            "cedula_vigente_clave_sri",
+            "correo_celular"
+          ]
         },
         {
           "id": "seguimiento_clave_sri",
@@ -1219,7 +1285,9 @@
           "fase": "requisitos",
           "titulo": "Requisito",
           "descripcion": "Solo necesitas tu clave SRI",
-          "validaciones": ["clave_sri_certificado"]
+          "validaciones": [
+            "clave_sri_certificado"
+          ]
         },
         {
           "id": "seguimiento_cert_cumplimiento",
@@ -1271,7 +1339,10 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma clave y comprobantes",
-          "validaciones": ["clave_sri_declaracion", "comprobantes_ingresos"]
+          "validaciones": [
+            "clave_sri_declaracion",
+            "comprobantes_ingresos"
+          ]
         },
         {
           "id": "doc_declaracion_renta",
@@ -1331,7 +1402,10 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula y estado de deuda",
-          "validaciones": ["cedula_vigente_convenio", "estado_obligaciones"]
+          "validaciones": [
+            "cedula_vigente_convenio",
+            "estado_obligaciones"
+          ]
         },
         {
           "id": "seguimiento_convenio",
@@ -1391,7 +1465,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos",
           "descripcion": "Confirma cédula, notificación y pruebas",
-          "validaciones": ["cedula_vigente_reclamo", "notificacion_sri", "pruebas_reclamo"]
+          "validaciones": [
+            "cedula_vigente_reclamo",
+            "notificacion_sri",
+            "pruebas_reclamo"
+          ]
         },
         {
           "id": "doc_reclamo",

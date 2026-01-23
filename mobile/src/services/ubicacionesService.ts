@@ -648,6 +648,38 @@ export const ubicacionesService = {
 
   // Calcular distancia total de la ruta
   calcularDistanciaTotal(lugares: LugarTramite[]): number {
+    if (lugares.length === 0) return 0;
+    
+    let total = 0;
+    for (let i = 0; i < lugares.length - 1; i++) {
+      if (lugares[i].ubicacionMasCercana && lugares[i + 1].ubicacionMasCercana) {
+        total += calcularDistancia(
+          lugares[i].ubicacionMasCercana.lat,
+          lugares[i].ubicacionMasCercana.lng,
+          lugares[i + 1].ubicacionMasCercana.lat,
+          lugares[i + 1].ubicacionMasCercana.lng
+        );
+      }
+    }
+    
+    return Math.round(total * 10) / 10;
+  },
+
+  // Obtener ubicaciones por trámite (método helper simple)
+  obtenerPorTramite(tramiteId: string): Ubicacion[] {
+    const tiposUbicacion = TRAMITE_UBICACIONES[tramiteId] || [];
+    const ubicaciones: Ubicacion[] = [];
+    
+    for (const tipo of tiposUbicacion) {
+      const ubicacionesTipo = UBICACIONES.filter(u => u.tipo === tipo);
+      ubicaciones.push(...ubicacionesTipo);
+    }
+    
+    return ubicaciones;
+  },
+
+  // Calcular distancia total de la ruta
+  calcularDistanciaTotal(lugares: LugarTramite[]): number {
     return lugares.reduce((total, lugar) => total + (lugar.distancia || 0), 0);
   },
 };
