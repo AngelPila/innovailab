@@ -15,13 +15,13 @@ export function FaseSeguimiento({ tramite, tabsAbiertos = [], prerequisitosCumpl
     if (!p.tramiteRelacionado) return false;
     const tramiteRel = tramitesService.getPorId(p.tramiteRelacionado);
     if (!tramiteRel) return false;
-    
+
     const estaAbiertoEnTab = tabsAbiertos.some(tab => {
       const tabNormalizado = tab.toLowerCase().replace('↳', '').trim();
       const tramiteNormalizado = tramiteRel.nombre.toLowerCase().trim();
       return tabNormalizado.includes(tramiteNormalizado) || tramiteNormalizado.includes(tabNormalizado);
     });
-    
+
     return !prerequisitosCumplidos[p.id] && estaAbiertoEnTab;
   });
 
@@ -45,8 +45,8 @@ export function FaseSeguimiento({ tramite, tabsAbiertos = [], prerequisitosCumpl
             {todosCompletos ? '¡Todo listo!' : 'Trámite en Progreso'}
           </h2>
           <p className="text-lg text-gray-600">
-            {todosCompletos 
-              ? 'Has completado todos los requisitos necesarios' 
+            {todosCompletos
+              ? 'Has completado todos los requisitos necesarios'
               : 'Estos son los trámites que aún necesitas completar'}
           </p>
         </div>
@@ -63,7 +63,7 @@ export function FaseSeguimiento({ tramite, tabsAbiertos = [], prerequisitosCumpl
                 </p>
               </div>
             </div>
-            
+
             <div className="space-y-3 mt-4">
               {requisitosPendientes.map((p, index) => {
                 const tramiteRel = p.tramiteRelacionado ? tramitesService.getPorId(p.tramiteRelacionado) : null;
@@ -101,18 +101,63 @@ export function FaseSeguimiento({ tramite, tabsAbiertos = [], prerequisitosCumpl
 
         {/* Componente de Lugares y Ruta - Solo mostrar cuando todos los requisitos están completos */}
         {todosCompletos && (
-          <div className="mb-6">
-            <LugaresRuta 
-              tramiteId={tramite.id} 
-              nombreTramite={tramite.nombre}
-            />
-          </div>
+          <>
+            <div className="mb-6">
+              <LugaresRuta
+                tramiteId={tramite.id}
+                nombreTramite={tramite.nombre}
+              />
+            </div>
+
+            {/* Sección de rutas alternativas */}
+            <div className="mb-6 bg-white rounded-2xl shadow-lg p-6">
+              <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                <span>🗺️</span>
+                Otras opciones
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Si la ubicación recomendada no te conviene, aquí tienes otras alternativas:
+              </p>
+
+              <div className="space-y-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-1">Registro Civil - Sede Norte</h4>
+                  <p className="text-sm text-gray-600 mb-2">Av. De la Prensa N46-155 y Av. Galo Plaza Lasso</p>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span>⏰ Lun-Vie: 8:00 AM - 4:30 PM</span>
+                    <span>📞 1-800-11-2929</span>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-1">Registro Civil - Sede Sur</h4>
+                  <p className="text-sm text-gray-600 mb-2">Av. Maldonado S21-147 y Carlos María de la Torre</p>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span>⏰ Lun-Vie: 8:00 AM - 4:30 PM</span>
+                    <span>📞 1-800-11-2929</span>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-900 mb-1">Centros Comerciales autorizados</h4>
+                  <p className="text-sm text-gray-600 mb-2">CCI, Quicentro Sur, El Recreo - Módulos del Registro Civil</p>
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <span>⏰ Lun-Dom: 10:00 AM - 8:00 PM</span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-4 text-xs text-gray-500">
+                💡 <strong>Tip:</strong> Los centros comerciales suelen tener menos filas en horarios de almuerzo (12:00-2:00 PM)
+              </p>
+            </div>
+          </>
         )}
 
         {/* Próximos pasos */}
         <div className="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-6">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Próximos pasos:</h3>
-          
+
           <ol className="space-y-4">
             {!todosCompletos ? (
               <>

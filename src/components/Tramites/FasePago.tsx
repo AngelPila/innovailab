@@ -159,7 +159,7 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
               <h3 className="text-4xl font-bold text-blue-900">${costoTotal.toFixed(2)}</h3>
             </div>
             <div className="text-right">
-              <CheckCircle2 className="w-12 h-12 text-green-600 mb-2" />
+              <CheckCircle2 className="w-12 h-12 text-blue-600 mb-2" />
               <p className="text-sm text-blue-700 font-medium">Costo Oficial</p>
             </div>
           </div>
@@ -229,20 +229,20 @@ export function FasePago({ tramite, onCompletar, tabsIds = [] }: Props) {
         {/* Portal oficial */}
         <div className="mb-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Globe className="w-6 h-6 text-green-600" />
+            <Globe className="w-6 h-6 text-blue-600" />
             Portal Oficial
           </h3>
           <a
             href={infoPago.onlineUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between w-full bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-300 rounded-lg p-5 hover:shadow-lg transition-all group"
+            className="flex items-center justify-between w-full bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-300 rounded-lg p-5 hover:shadow-lg transition-all group"
           >
             <div>
-              <p className="font-bold text-green-900 mb-1">Ir al portal oficial del Registro Civil</p>
-              <p className="text-sm text-green-700">Obtén más información y realiza trámites complementarios</p>
+              <p className="font-bold text-blue-900 mb-1">Ir al portal oficial del Registro Civil</p>
+              <p className="text-sm text-blue-700">Obtén más información y realiza trámites complementarios</p>
             </div>
-            <ExternalLink className="w-6 h-6 text-green-600 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+            <ExternalLink className="w-6 h-6 text-blue-600 group-hover:translate-x-1 transition-transform flex-shrink-0" />
           </a>
         </div>
 

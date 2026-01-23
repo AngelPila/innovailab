@@ -10,9 +10,9 @@ interface Props {
   onAbrirRamaEnPestaña?: (tramiteId: string, nombreTramite: string, prerequisitoId: string) => void;
 }
 
-export function PrerequisitosCheck({ 
-  prerequisitos, 
-  prerequisitosCumplidos, 
+export function PrerequisitosCheck({
+  prerequisitos,
+  prerequisitosCumplidos,
   onValidacionCompleta,
   onAbrirRamaEnPestaña
 }: Props) {
@@ -26,7 +26,7 @@ export function PrerequisitosCheck({
       [prerequisitoId]: tieneDocumento,
     };
     setRespuestas(nuevasRespuestas);
-    
+
     // Siempre avanzar automáticamente al siguiente
     if (indiceActual < prerequisitos.length - 1) {
       setTimeout(() => setIndiceActual(indiceActual + 1), 300);
@@ -38,7 +38,7 @@ export function PrerequisitosCheck({
     // Marcar como "cumplido" para propósitos de continuar
     const nuevasRespuestas = { ...respuestas, [prerequisitoId]: true };
     setRespuestas(nuevasRespuestas);
-    
+
     // Avanzar automáticamente al siguiente después de omitir
     if (indiceActual < prerequisitos.length - 1) {
       setTimeout(() => setIndiceActual(indiceActual + 1), 300);
@@ -55,26 +55,26 @@ export function PrerequisitosCheck({
 
   // Calcular cuántos requisitos se han procesado (para mostrar progreso)
   const maxIndiceVisto = indiceActual;
-  
+
   // Separar requisitos en categorías para renderizado
   const requisitoActual = prerequisitos[indiceActual];
   const respuestaActual = respuestas[requisitoActual?.id];
-  
+
   // Requisitos con "No tengo" que se apilan abajo (solo los anteriores al actual)
   const requisitosNoTengo = prerequisitos
     .slice(0, indiceActual)
     .filter((pre) => respuestas[pre.id] === false && !omitidos[pre.id]);
-  
+
   // Requisitos omitidos que también se apilan abajo (solo los anteriores al actual)
   const requisitosOmitidos = prerequisitos
     .slice(0, indiceActual)
     .filter((pre) => omitidos[pre.id]);
-  
+
   const todosRespondidos = prerequisitos.every((pre) => respuestas[pre.id] !== undefined);
   const todosCumplidos = prerequisitos.every((pre) => respuestas[pre.id] === true);
   const faltantes = prerequisitos.filter((pre) => respuestas[pre.id] === false && !omitidos[pre.id]);
   const cantidadOmitidos = Object.keys(omitidos).length;
-  
+
   // Puede continuar si todos están cumplidos O si todos los faltantes han sido omitidos
   const puedeAvanzar = todosCumplidos || (todosRespondidos && faltantes.length === 0);
 
@@ -90,15 +90,32 @@ export function PrerequisitosCheck({
               Antes de continuar, verifica que tengas todos los documentos necesarios. Si te falta alguno, podemos ayudarte a obtenerlo.
             </p>
           </div>
-          {indiceActual > 0 && (
-            <button
-              onClick={handleRetroceder}
-              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span className="font-medium">Anterior</span>
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {/* Selector de pasos para navegación directa */}
+            {prerequisitos.length > 1 && (
+              <select
+                value={indiceActual}
+                onChange={(e) => setIndiceActual(Number(e.target.value))}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                title="Ir a requisito específico"
+              >
+                {prerequisitos.map((pre, idx) => (
+                  <option key={pre.id} value={idx}>
+                    {idx + 1}. {pre.nombre.substring(0, 30)}{pre.nombre.length > 30 ? '...' : ''}
+                  </option>
+                ))}
+              </select>
+            )}
+            {indiceActual > 0 && (
+              <button
+                onClick={handleRetroceder}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                <span className="font-medium">Anterior</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Indicador de progreso */}
@@ -112,7 +129,7 @@ export function PrerequisitosCheck({
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className="bg-blue-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${((indiceActual + 1) / prerequisitos.length) * 100}%` }}
             />
@@ -122,7 +139,7 @@ export function PrerequisitosCheck({
         <div className="space-y-4">
           {/* Requisito actual - siempre arriba */}
           {requisitoActual && (
-            <div 
+            <div
               key={`actual-${requisitoActual.id}`}
               className="animate-slide-in-top"
             >
@@ -191,7 +208,7 @@ export function PrerequisitosCheck({
 
           {/* Requisitos con "No tengo" apilados abajo */}
           {requisitosNoTengo.map((prerequisito) => (
-            <div 
+            <div
               key={`notengo-${prerequisito.id}`}
               className="animate-slide-in-bottom opacity-75 scale-95 transition-all duration-300"
             >
@@ -202,7 +219,7 @@ export function PrerequisitosCheck({
                 respuestaActual={respuestas[prerequisito.id]}
                 deshabilitado={true}
               />
-              
+
               <div className="mt-2">
                 <AlertaFaltante
                   prerequisito={prerequisito}
@@ -223,7 +240,7 @@ export function PrerequisitosCheck({
 
           {/* Requisitos omitidos apilados abajo */}
           {requisitosOmitidos.map((prerequisito) => (
-            <div 
+            <div
               key={`omitido-${prerequisito.id}`}
               className="animate-slide-in-bottom opacity-75 scale-95 transition-all duration-300"
             >
@@ -259,7 +276,7 @@ export function PrerequisitosCheck({
                     </div>
                   </div>
                 )}
-                
+
                 <button
                   onClick={() => onValidacionCompleta(respuestas)}
                   className="w-full px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold text-lg transition-colors"
@@ -280,7 +297,7 @@ export function PrerequisitosCheck({
                     </p>
                   </div>
                 </div>
-                
+
                 <button
                   disabled
                   className="w-full px-6 py-4 bg-gray-200 text-gray-600 rounded-lg font-semibold text-lg cursor-not-allowed flex items-center justify-center gap-2"

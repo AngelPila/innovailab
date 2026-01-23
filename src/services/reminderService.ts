@@ -1,4 +1,5 @@
 import { calendarService } from './calendarService';
+import { whatsappService } from './whatsappService';
 import type {
     UserReminder,
     CreateReminderRequest,
@@ -17,6 +18,7 @@ import type {
  * - Crear recordatorios de caducidad
  * - Bloquear tiempo personal
  * - Generar sugerencias (sin crear eventos automáticos)
+ * - Coordinar con WhatsApp para recordatorios (si está habilitado)
  */
 class ReminderService {
     private reminders: Map<string, UserReminder> = new Map();
@@ -29,6 +31,7 @@ class ReminderService {
      * 2. Usuario indica "Ya tengo mi turno"
      * 3. Usuario ingresa fecha y hora
      * 4. Se guarda en Google Calendar
+     * 5. (Opcional) Se programan recordatorios por WhatsApp
      * 
      * REGLA: La fecha DEBE venir del usuario
      */
@@ -36,7 +39,8 @@ class ReminderService {
         tramiteId: string,
         tramiteName: string,
         userProvidedDate: Date,
-        metadata?: UserReminder['metadata']
+        metadata?: UserReminder['metadata'],
+        enableWhatsApp: boolean = false
     ): Promise<UserReminder> {
         if (!userProvidedDate) {
             throw new Error('La fecha debe ser proporcionada por el usuario');
@@ -67,6 +71,31 @@ class ReminderService {
 
         // Guardar en memoria
         this.reminders.set(reminder.id, reminder);
+
+        // Programar recordatorios por WhatsApp si está habilitado
+        if (enableWhatsApp && whatsappService.isWhatsAppConnected()) {
+            try {
+                await whatsappService.scheduleConfirmationMessage(
+                    tramiteId,
+                    tramiteName,
+                    userProvidedDate,
+                    metadata?.location,
+                    metadata?.requirements
+                );
+
+                await whatsappService.schedule24HourReminder(
+                    tramiteId,
+                    tramiteName,
+                    userProvidedDate,
+                    metadata?.location
+                );
+
+                console.log('✅ Recordatorios de WhatsApp programados');
+            } catch (error) {
+                console.warn('⚠️ Error programando WhatsApp (continuando):', error);
+                // No fallar si WhatsApp falla, Calendar ya está guardado
+            }
+        }
 
         console.log('✅ Turno guardado:', reminder);
         return reminder;
