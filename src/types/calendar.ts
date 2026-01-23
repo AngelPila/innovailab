@@ -108,3 +108,32 @@ export type CalendarConnectionStatus = {
     connectedAt?: Date;
     scopes: string[];
 };
+
+/**
+ * Estado de conexión de WhatsApp
+ * REGLA: Solo para recordatorios, no para chat
+ */
+export type WhatsAppConnectionStatus = {
+    isConnected: boolean;
+    phoneNumber?: string;
+    connectedAt?: Date;
+    messagesScheduled: number;
+};
+
+/**
+ * Tipos de mensajes de WhatsApp permitidos
+ * REGLA: Solo 2 tipos de mensajes
+ */
+export type WhatsAppMessageType = 'confirmation' | '24h_reminder';
+
+/**
+ * Mensaje de WhatsApp programado
+ */
+export type WhatsAppMessage = {
+    id: string;
+    tramiteId: string;
+    type: WhatsAppMessageType;
+    scheduledFor: Date;
+    sent: boolean;
+    content: string;
+};

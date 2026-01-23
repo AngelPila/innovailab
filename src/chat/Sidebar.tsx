@@ -1,6 +1,8 @@
 import { Settings, Calendar, Mail, MessageCircle, Check, Zap, ChevronLeft, ChevronRight, User, FileText, Plane, CreditCard, Car, Home } from "lucide-react";
 import { useState } from "react";
 import type { Connections, ActiveGuide } from "./types";
+import { WhatsAppConnectModal } from "../components/WhatsApp";
+import { whatsappService } from "../services/whatsappService";
 
 type Props = {
   connections: Connections;
@@ -27,9 +29,26 @@ const getTramiteIcon = (tramiteId: string) => {
 export default function Sidebar({ connections, toggleConnection, activeGuides, onSelectGuide }: Props) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
 
   const connectedCount = Object.values(connections).filter(Boolean).length;
   const activeGuidesCount = activeGuides.filter(g => g.status === "active").length;
+
+  const handleWhatsAppClick = () => {
+    if (whatsappService.isWhatsAppConnected()) {
+      // Si ya está conectado, desconectar
+      whatsappService.disconnectWhatsApp();
+      toggleConnection("whatsapp");
+    } else {
+      // Si no está conectado, abrir modal
+      setShowWhatsAppModal(true);
+    }
+  };
+
+  const handleWhatsAppConnect = () => {
+    setShowWhatsAppModal(false);
+    toggleConnection("whatsapp");
+  };
 
   return (
     <div
@@ -111,7 +130,7 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
             </p>
             <div className="space-y-1">
               <button
-                onClick={() => toggleConnection("whatsapp")}
+                onClick={handleWhatsAppClick}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-200 ${connections.whatsapp
                   ? "bg-green-50 text-green-700 hover:bg-green-100"
                   : "text-gray-600 hover:bg-gray-50"
@@ -119,7 +138,14 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
               >
                 <div className="flex items-center gap-2">
                   <MessageCircle className="w-4 h-4" />
-                  <span className="font-medium">WhatsApp</span>
+                  <div className="flex flex-col items-start">
+                    <span className="font-medium">WhatsApp</span>
+                    {connections.whatsapp && (
+                      <span className="text-xs opacity-75">
+                        {whatsappService.getWhatsAppStatus().phoneNumber || "Conectado"}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {connections.whatsapp && (
                   <div className="w-2 h-2 bg-green-500 rounded-full" />
@@ -239,7 +265,7 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
                             {guide.progress}%
                           </span>
                         </div>
-                        
+
                         {guide.status !== "completed" && (
                           <button className="w-full px-3 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold text-xs rounded-lg transition-all duration-200">
                             Continuar
@@ -262,6 +288,14 @@ export default function Sidebar({ connections, toggleConnection, activeGuides, o
           </div>
         )}
       </div>
+
+      {/* WhatsApp Connection Modal */}
+      {showWhatsAppModal && (
+        <WhatsAppConnectModal
+          onConnect={handleWhatsAppConnect}
+          onClose={() => setShowWhatsAppModal(false)}
+        />
+      )}
     </div>
   );
 }
