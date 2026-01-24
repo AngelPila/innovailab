@@ -1,10 +1,187 @@
 import { tramitesService } from './tramitesService';
 
+type GrupoTramites =
+  | 'identidadMovilidad'
+  | 'seguridadSocialBienestar'
+  | 'fiscalMunicipalLegal';
+
 class AIService {
   private conversationHistory: Array<{ role: string; parts: string }> = [];
 
+  private gruposRecomendaciones: Record<GrupoTramites, {
+    titulo: string;
+    descripcionInstituciones: string;
+    keywords: string[];
+    tramites: string[];
+  }> = {
+    identidadMovilidad: {
+      titulo: 'Identidad y movilidad',
+      descripcionInstituciones: 'Registro Civil, Embajada/Consulados EE.UU., ANT/centros autorizados, operadoras de transporte público',
+      keywords: [
+        'registro civil',
+        'identidad',
+        'cedula',
+        'cédula',
+        'pasaporte',
+        'embajada',
+        'consulado',
+        'visa americana',
+        'ant',
+        'licencia',
+        'movilidad',
+        'transporte',
+      ],
+      tramites: [
+        'renovacion_cedula',
+        'obtener_pasaporte',
+        'visa_americana',
+        'licencia_conducir',
+        'transporte_preferente_adulto_mayor',
+        'exoneracion_matricula_vehicular_adulto_mayor',
+      ],
+    },
+    seguridadSocialBienestar: {
+      titulo: 'Seguridad social y bienestar',
+      descripcionInstituciones: 'IESS, MIES',
+      keywords: [
+        'iess',
+        'seguridad social',
+        'salud',
+        'mies',
+        'bono',
+        'pension',
+        'pensión',
+        'jubilacion',
+        'jubilación',
+        'afiliacion',
+        'afiliación',
+      ],
+      tramites: [
+        'jubilacion_vejez_iess',
+        'atencion_medica_preferente_iess',
+        'afiliacion_voluntaria_iess',
+        'bono_adulto_mayor_mies',
+      ],
+    },
+    fiscalMunicipalLegal: {
+      titulo: 'Fiscal, municipal y legal',
+      descripcionInstituciones: 'SRI, gobiernos/empresas municipales, notarías',
+      keywords: [
+        'sri',
+        'impuesto',
+        'tribut',
+        'iva',
+        'predial',
+        'municipio',
+        'municipal',
+        'servicios basicos',
+        'servicios básicos',
+        'notaria',
+        'notaría',
+        'legal',
+        'ruc',
+        'clave',
+        'reclamo',
+        'certificado',
+      ],
+      tramites: [
+        'exoneracion_predial_adulto_mayor',
+        'exoneracion_servicios_basicos',
+        'devolucion_iva_adulto_mayor',
+        'inscripcion_ruc_persona_natural',
+        'actualizacion_ruc',
+        'clave_sri_en_linea',
+        'certificado_cumplimiento_tributario',
+        'declaracion_impuesto_renta',
+        'convenio_pago_sri',
+        'reclamo_administrativo_sri',
+        'testamento_notarial',
+        'poder_notarial_adulto_mayor',
+      ],
+    },
+  };
+
   constructor() {
     console.log('🚀 AI Service inicializado (modo local sin IA)');
+  }
+
+  private detectarGrupoRecomendaciones(mensajeLower: string): GrupoTramites | null {
+    for (const [clave, grupo] of Object.entries(this.gruposRecomendaciones)) {
+      if (grupo.keywords.some((keyword) => mensajeLower.includes(keyword))) {
+        return clave as GrupoTramites;
+      }
+    }
+    return null;
+  }
+
+  private esPreguntaInstituciones(mensajeLower: string): boolean {
+    const patrones = [
+      'institucion',
+      'institución',
+      'instituciones',
+      'que tramites tienen',
+      'qué tramites tienen',
+      'que tramites hay',
+      'qué tramites hay',
+      'recomendaciones de tramites',
+      'recomendaciones de trámites',
+      'lista de tramites',
+      'lista de trámites',
+    ];
+    return patrones.some((patron) => mensajeLower.includes(patron));
+  }
+
+  // Exponer datos estructurados para la UI
+  getGrupoRecomendacion(mensaje: string): {
+    titulo: string;
+    descripcionInstituciones: string;
+    tramites: Array<{ id: string; nombre: string; categoria?: string; costo?: number; estimadoDias?: number }>;
+  } | null {
+    const mensajeLower = mensaje.toLowerCase();
+    const clave = this.detectarGrupoRecomendaciones(mensajeLower);
+    if (!clave) return null;
+
+    const grupo = this.gruposRecomendaciones[clave];
+    const tramites = grupo.tramites
+      .map((id) => tramitesService.getPorId(id))
+      .filter((t): t is NonNullable<typeof t> => Boolean(t))
+      .map((t) => ({
+        id: t.id,
+        nombre: t.nombre,
+        categoria: t.categoria,
+        costo: typeof t.costo === 'number' ? t.costo : undefined,
+        estimadoDias: typeof t.estimadoDias === 'number' ? t.estimadoDias : undefined,
+      }));
+
+    return {
+      titulo: grupo.titulo,
+      descripcionInstituciones: grupo.descripcionInstituciones,
+      tramites,
+    };
+  }
+
+  private getResponseForGrupo(clave: GrupoTramites): string {
+    const grupo = this.gruposRecomendaciones[clave];
+    const listado = grupo.tramites
+      .map((id) => tramitesService.getPorId(id))
+      .filter((t) => Boolean(t))
+      .map((t) => `• ${(t as any).nombre}`)
+      .join('\n');
+
+    return `Te muestro opciones de ${grupo.titulo} (${grupo.descripcionInstituciones}):\n\n${listado}\n\nDime cuál necesitas y te guío paso a paso.`;
+  }
+
+  private getResumenGrupos(): string {
+    const secciones = Object.values(this.gruposRecomendaciones).map((grupo) => {
+      const nombres = grupo.tramites
+        .map((id) => tramitesService.getPorId(id))
+        .filter((t) => Boolean(t))
+        .map((t) => (t as any).nombre);
+      const listado = nombres.map((nombre) => `• ${nombre}`).join('\n');
+      return `${grupo.titulo} (${grupo.descripcionInstituciones}):\n${listado}`;
+    });
+
+    return `Estas son las recomendaciones de trámites agrupadas:\n\n${secciones.join('\n\n')}\n\nPídeme cualquiera y lo abrimos.`;
   }
 
   // Sistema de respuestas predeterminadas por trámite
@@ -57,6 +234,204 @@ Este es un trámite importante. Vamos a verificar tus requisitos. ¿Tienes tiemp
 • Tipo: Licencia tipo B (vehículos livianos)
 
 Verificaremos tus requisitos. ¿Comenzamos?`,
+
+  jubilacion_vejez_iess: `TRAMITE_DETECTADO: jubilacion_vejez_iess
+
+¡Entendido! Vamos a gestionar tu jubilación por vejez del IESS.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días hábiles
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Beneficio: Pensión mensual vitalicia
+
+Revisemos tu historial de aportes y la cuenta de acreditación. ¿Listo para validar requisitos?`,
+
+  atencion_medica_preferente_iess: `TRAMITE_DETECTADO: atencion_medica_preferente_iess
+
+Puedo activar tu atención médica preferente en el IESS.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Cobertura: Consultas, medicinas y hospitalización con prioridad
+
+Solo necesitamos validar tu cédula y, si lo tienes, tu carné de jubilado. ¿Continuamos?`,
+
+  afiliacion_voluntaria_iess: `TRAMITE_DETECTADO: afiliacion_voluntaria_iess
+
+Te guío para afiliarte voluntariamente al IESS (salud + pensión).
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Pago: Débito mensual de tus aportes
+
+Confirmemos tu cédula, cuenta bancaria y declaración de salud. ¿Empezamos?`,
+
+  bono_adulto_mayor_mies: `TRAMITE_DETECTADO: bono_adulto_mayor_mies
+
+Voy a ayudarte con el bono para adultos mayores del MIES.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Pago: Transferencia mensual
+
+Validemos cédula, Registro Social y, si tienes, cuenta bancaria para depósito. ¿Seguimos?`,
+
+  exoneracion_predial_adulto_mayor: `TRAMITE_DETECTADO: exoneracion_predial_adulto_mayor
+
+Gestionemos tu exoneración o descuento del impuesto predial.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Requisito clave: Ser titular del inmueble
+
+Revisemos cédula, escritura y certificado de pensión/ingresos. ¿Listo para validarlos?`,
+
+  exoneracion_servicios_basicos: `TRAMITE_DETECTADO: exoneracion_servicios_basicos
+
+Te ayudo a solicitar el descuento en servicios básicos.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Cobertura: Agua, alcantarillado, recolección
+
+Confirmemos tu cédula, planilla y certificado de pensión. ¿Continuamos?`,
+
+  transporte_preferente_adulto_mayor: `TRAMITE_DETECTADO: transporte_preferente_adulto_mayor
+
+Configuramos tu beneficio de transporte preferente.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Beneficio: Pasajes gratuitos o con descuento mostrando la cédula
+
+Solo validaré tu cédula. ¿Avanzamos?`,
+
+  devolucion_iva_adulto_mayor: `TRAMITE_DETECTADO: devolucion_iva_adulto_mayor
+
+Tramitemos la devolución del IVA para adulto mayor.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Periodicidad: Devolución mensual
+
+Necesito validar tus facturas a tu cédula y, si quieres abono, la cuenta bancaria. ¿Listo?`,
+
+  exoneracion_matricula_vehicular_adulto_mayor: `TRAMITE_DETECTADO: exoneracion_matricula_vehicular_adulto_mayor
+
+Vamos por la exoneración de matrícula vehicular para adulto mayor.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Alcance: Tasas municipales y ANT
+
+Validemos cédula, matrícula vigente y certificado de propiedad. ¿Seguimos?`,
+
+  testamento_notarial: `TRAMITE_DETECTADO: testamento_notarial
+
+Te guío para preparar tu testamento en notaría.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: ~$${Number(tramite.costo ?? 0).toFixed(2)}
+• Requisito: Presencia para firma ante notario
+
+Confirmemos cédula y, si tienes, listado de bienes y certificado médico. ¿Avanzamos?`,
+
+  poder_notarial_adulto_mayor: `TRAMITE_DETECTADO: poder_notarial_adulto_mayor
+
+Te ayudo a otorgar un poder notarial.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: ~$${Number(tramite.costo ?? 0).toFixed(2)}
+• Uso: Delegar trámites a un familiar o apoderado
+
+Revisemos cédulas (tuya y del apoderado) y, si aplica, el certificado médico. ¿Empezamos?`,
+
+  inscripcion_ruc_persona_natural: `TRAMITE_DETECTADO: inscripcion_ruc_persona_natural
+
+Te ayudo a inscribirte en el RUC como persona natural.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Modalidad: En línea o presencial en oficinas SRI
+
+Necesario para: trabajar, arrendar bienes, emitir facturas o recibir ingresos. Revisemos cédula, certificado de votación y documento de domicilio. ¿Comenzamos?`,
+
+  actualizacion_ruc: `TRAMITE_DETECTADO: actualizacion_ruc
+
+Vamos a actualizar tu RUC (dirección, actividad, estado civil o contacto).
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Modalidad: En línea
+
+Confirmemos tu cédula y el documento que respalde el cambio. ¿Listo?`,
+
+  clave_sri_en_linea: `TRAMITE_DETECTADO: clave_sri_en_linea
+
+Te guío para obtener o recuperar tu clave del SRI en Línea.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Uso: Acceso a todos los servicios digitales del SRI
+
+Con esta clave podrás hacer trámites, consultas y declaraciones en línea. Un familiar puede ayudarte. Validemos cédula, correo y celular. ¿Continuamos?`,
+
+  certificado_cumplimiento_tributario: `TRAMITE_DETECTADO: certificado_cumplimiento_tributario
+
+Descarga tu certificado de cumplimiento tributario (para verificar si tienes deudas).
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} día
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Uso: Trámites bancarios, legales, contratos
+
+Muy solicitado para créditos y escrituras. Solo necesitas tu clave SRI. ¿Tienes tu clave?`,
+
+  declaracion_impuesto_renta: `TRAMITE_DETECTADO: declaracion_impuesto_renta
+
+Te ayudo con la declaración anual del Impuesto a la Renta.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Período: Marzo-abril de cada año
+
+Aplica si tienes ingresos gravados (pensiones altas, arriendos, actividades económicas). Revisemos clave SRI y comprobantes de ingresos/gastos. ¿Comenzamos?`,
+
+  convenio_pago_sri: `TRAMITE_DETECTADO: convenio_pago_sri
+
+Gestionemos un convenio de pago para fraccionar tu deuda tributaria.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Beneficio: Evita embargos y coactivas
+
+Podrás pagar en cuotas según el monto. Confirmemos tu cédula y estado de obligaciones. ¿Listo?`,
+
+  reclamo_administrativo_sri: `TRAMITE_DETECTADO: reclamo_administrativo_sri
+
+Te asisto para presentar un reclamo administrativo ante el SRI.
+
+📋 **Información rápida:**
+• Tiempo: ~${tramite.estimadoDias} días
+• Costo: $${Number(tramite.costo ?? 0).toFixed(2)}
+• Plazo: 20 días desde la notificación
+
+Primera instancia para impugnar multas, liquidaciones o resoluciones. Validemos cédula, notificación y pruebas. ¿Avanzamos?`,
     };
 
     return responses[tramiteId] || '';
@@ -67,6 +442,7 @@ Verificaremos tus requisitos. ¿Comenzamos?`,
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('📨 MENSAJE DEL USUARIO:', userMessage);
     console.log('🤖 Modo: Detección local (sin IA)');
+    const mensajeLower = userMessage.toLowerCase();
 
     // Detectar trámite
     const tramiteDetectado = tramitesService.detectarIntencion(userMessage);
@@ -89,14 +465,38 @@ Verificaremos tus requisitos. ¿Comenzamos?`,
       return respuesta;
     }
 
+    // Detectar pregunta o interés por instituciones/grupos de trámites
+    const grupoDetectado = this.detectarGrupoRecomendaciones(mensajeLower);
+    if (grupoDetectado) {
+      const respuesta = this.getResponseForGrupo(grupoDetectado);
+      this.conversationHistory.push({ role: 'user', parts: userMessage });
+      this.conversationHistory.push({ role: 'assistant', parts: respuesta });
+      if (this.conversationHistory.length > 20) {
+        this.conversationHistory = this.conversationHistory.slice(-20);
+      }
+      console.log('💬 Respuesta por grupo de instituciones');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      return respuesta;
+    }
+
+    if (this.esPreguntaInstituciones(mensajeLower)) {
+      const respuesta = this.getResumenGrupos();
+      this.conversationHistory.push({ role: 'user', parts: userMessage });
+      this.conversationHistory.push({ role: 'assistant', parts: respuesta });
+      if (this.conversationHistory.length > 20) {
+        this.conversationHistory = this.conversationHistory.slice(-20);
+      }
+      console.log('💬 Respuesta general de instituciones');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+      return respuesta;
+    }
+
     // Si no se detecta trámite, respuesta genérica
     const respuestasGenericas = [
       '¡Hola! Soy Govly, tu asistente para trámites gubernamentales. ¿En qué puedo ayudarte?\n\nPuedo guiarte en:\n• Renovación de cédula\n• Obtener pasaporte\n• Visa americana\n• Licencia de conducir',
       'Entiendo. ¿Cuál de estos trámites necesitas?\n\n📋 Renovación de cédula\n📋 Pasaporte\n📋 Visa americana\n📋 Licencia de conducir',
       'Estoy aquí para ayudarte. ¿Cuál es tu trámite?',
     ];
-
-    const mensajeLower = userMessage.toLowerCase();
     let respuesta = respuestasGenericas[0];
 
     if (mensajeLower.includes('hola') || mensajeLower.includes('buenos') || mensajeLower.includes('buenas')) {

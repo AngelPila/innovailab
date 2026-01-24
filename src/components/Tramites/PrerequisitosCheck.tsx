@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { CheckCircle2, AlertCircle, SkipForward, Lock, ChevronLeft } from 'lucide-react';
+import { CheckCircle2, AlertCircle, SkipForward, Lock, ChevronLeft, ExternalLink } from 'lucide-react';
 import type { Prerequisito } from '../../types/tramite.types';
 import { ValidacionDocumento, AlertaFaltante } from '../Validaciones';
+import { prerequisiteLinksService } from '../../services/prerequisiteLinksService';
 
 interface Props {
   prerequisitos: Prerequisito[];

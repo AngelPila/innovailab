@@ -9,20 +9,12 @@
       "costo": 16.00,
       "prerequisitos": [
         {
-          "id": "foto_actualizada",
-          "nombre": "Foto tipo carnet actualizada",
-          "tipo": "archivo",
-          "esOpcional": false,
-          "preguntaValidacion": "¿Tienes una foto tipo carnet reciente (últimos 6 meses)?",
-          "descripcion": "Fondo blanco, sin lentes, medida 3x4 cm"
-        },
-        {
           "id": "cedula_anterior",
           "nombre": "Cédula anterior",
           "tipo": "documento",
           "esOpcional": true,
           "preguntaValidacion": "¿Tienes tu cédula anterior física?",
-          "descripcion": "Si la perdiste, necesitarás una denuncia"
+          "descripcion": "Si la perdiste, necesitarás una denuncia. La foto se toma en el Registro Civil."
         }
       ],
       "pasos": [
@@ -40,7 +32,9 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Verifica que tengas todos los documentos requeridos",
-          "validaciones": ["foto_actualizada", "cedula_anterior"]
+          "validaciones": [
+            "cedula_anterior"
+          ]
         },
         {
           "id": "doc_cedula",
@@ -109,7 +103,9 @@
           "preguntaValidacion": "¿Tienes tu pasaporte anterior en buen estado?",
           "descripcion": "Necesario para renovación",
           "condicional": {
-            "tipoTramite": ["renovacion"]
+            "tipoTramite": [
+              "renovacion"
+            ]
           }
         },
         {
@@ -120,7 +116,9 @@
           "preguntaValidacion": "¿Tienes la denuncia de pérdida o robo de tu pasaporte?",
           "descripcion": "Debe ser reciente y emitida por autoridad competente",
           "condicional": {
-            "tipoTramite": ["perdida-robo"]
+            "tipoTramite": [
+              "perdida-robo"
+            ]
           }
         },
         {
@@ -131,7 +129,9 @@
           "preguntaValidacion": "¿Tienes la autorización notariada de tus padres o tutores?",
           "descripcion": "Ambos padres deben firmar ante notario con cédulas vigentes",
           "condicional": {
-            "categoria": ["menor-edad"]
+            "categoria": [
+              "menor-edad"
+            ]
           }
         },
         {
@@ -142,7 +142,9 @@
           "preguntaValidacion": "¿Tienes el acta de nacimiento actualizada?",
           "descripcion": "Emitida recientemente por el Registro Civil",
           "condicional": {
-            "categoria": ["menor-edad"]
+            "categoria": [
+              "menor-edad"
+            ]
           }
         },
         {
@@ -172,7 +174,11 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Asegúrate de tener todos los requisitos",
-          "validaciones": ["cedula_vigente_pasaporte", "certificado_votacion", "foto_pasaporte"]
+          "validaciones": [
+            "cedula_vigente_pasaporte",
+            "certificado_votacion",
+            "foto_pasaporte"
+          ]
         },
         {
           "id": "doc_pasaporte",
@@ -258,7 +264,12 @@
           "fase": "requisitos",
           "titulo": "Documentos Necesarios",
           "descripcion": "Revisa todos los requisitos para la visa",
-          "validaciones": ["pasaporte_vigente_visa", "cedula_vigente_visa", "foto_visa", "comprobante_economico"]
+          "validaciones": [
+            "pasaporte_vigente_visa",
+            "cedula_vigente_visa",
+            "foto_visa",
+            "comprobante_economico"
+          ]
         },
         {
           "id": "doc_visa",
@@ -335,7 +346,11 @@
           "fase": "requisitos",
           "titulo": "Requisitos Previos",
           "descripcion": "Completa todos los requisitos",
-          "validaciones": ["cedula_vigente_licencia", "tipo_sangre", "curso_conduccion"]
+          "validaciones": [
+            "cedula_vigente_licencia",
+            "tipo_sangre",
+            "curso_conduccion"
+          ]
         },
         {
           "id": "doc_licencia",
@@ -360,6 +375,1117 @@
           "titulo": "Examen Práctico",
           "descripcion": "Agenda y rinde tu examen de conducción",
           "contenido": "Aprobación: 80% o más. Retiro de licencia en 5 días hábiles"
+        }
+      ]
+    },
+    {
+      "id": "jubilacion_vejez_iess",
+      "nombre": "Jubilación por Vejez (IESS)",
+      "descripcion": "Pensión mensual vitalicia para adultos mayores",
+      "categoria": "social",
+      "estimadoDias": 45,
+      "costo": 15.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_jubilacion",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Documento de identidad actualizado"
+        },
+        {
+          "id": "historial_aportes_iess",
+          "nombre": "Historial de aportes IESS",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu historial de aportes descargado del IESS?",
+          "descripcion": "Certificado de aportes acumulados"
+        },
+        {
+          "id": "cuenta_bancaria_jubilacion",
+          "nombre": "Cuenta bancaria para acreditación",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una cuenta bancaria activa a tu nombre?",
+          "descripcion": "Cuenta de ahorros o corriente para recibir la pensión"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_jubilacion",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "La pensión se calcula con tus aportes y edad (desde 60 años con aportes suficientes, 65 años con menos aportes)",
+          "contenido": "Tiempo estimado: 45 días\nCosto: $15.00 (tasas administrativas)\nVigencia: Vitalicia"
+        },
+        {
+          "id": "req_jubilacion",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Verifica tus requisitos",
+          "descripcion": "Confirma identidad, aportes y cuenta para pago",
+          "validaciones": [
+            "cedula_vigente_jubilacion",
+            "historial_aportes_iess",
+            "cuenta_bancaria_jubilacion"
+          ]
+        },
+        {
+          "id": "doc_jubilacion",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Cargar respaldos",
+          "descripcion": "Sube tu historial de aportes y datos bancarios",
+          "contenido": "Formatos: PDF/JPG. Asegura que el titular coincide con la cédula"
+        },
+        {
+          "id": "seguimiento_jubilacion",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Seguimiento de calificación",
+          "descripcion": "Revisa el estado de aprobación y fecha del primer pago",
+          "contenido": "Notificaciones vía correo/SMS del IESS"
+        }
+      ]
+    },
+    {
+      "id": "atencion_medica_preferente_iess",
+      "nombre": "Atención Médica Preferente IESS",
+      "descripcion": "Acceso prioritario a salud, medicinas y hospitalización",
+      "categoria": "salud",
+      "estimadoDias": 1,
+      "costo": 3.50,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_salud",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Documento de identidad"
+        },
+        {
+          "id": "carnet_jubilado_iess",
+          "nombre": "Carné de jubilado IESS",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes tu carné de jubilado del IESS?",
+          "descripcion": "Acelera la atención, pero no es obligatorio"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_salud_preferente",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Consultas, medicinas y hospitalización con prioridad",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $3.50 (emisión de carné)\nCobertura: Nacional"
+        },
+        {
+          "id": "req_salud_preferente",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos básicos",
+          "descripcion": "Confirma tu identidad y condición de jubilado/afiliado",
+          "validaciones": [
+            "cedula_vigente_salud",
+            "carnet_jubilado_iess"
+          ]
+        },
+        {
+          "id": "seguimiento_salud_preferente",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Cómo usar tu prioridad",
+          "descripcion": "Presenta cédula en hospitales y farmacias IESS",
+          "contenido": "Recibirás turnos preferentes y stock garantizado de medicinas"
+        }
+      ]
+    },
+    {
+      "id": "afiliacion_voluntaria_iess",
+      "nombre": "Afiliación Voluntaria IESS",
+      "descripcion": "Seguro de salud y pensión sin relación laboral",
+      "categoria": "salud",
+      "estimadoDias": 5,
+      "costo": 8.50,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_av",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Documento de identidad"
+        },
+        {
+          "id": "cuenta_bancaria_av",
+          "nombre": "Cuenta bancaria para débitos",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una cuenta bancaria para débito de aportes?",
+          "descripcion": "Débito mensual del aporte voluntario"
+        },
+        {
+          "id": "declaracion_salud",
+          "nombre": "Declaración de salud",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Completaste la declaración simple de salud?",
+          "descripcion": "Formato del IESS para afiliación voluntaria"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_afiliacion_voluntaria",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Cobertura médica y aportes mensuales voluntarios",
+          "contenido": "Tiempo estimado: 5 días\nCosto: $8.50 (inscripción)\nPago: Débito mensual"
+        },
+        {
+          "id": "req_afiliacion_voluntaria",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma identidad, cuenta bancaria y declaración de salud",
+          "validaciones": [
+            "cedula_vigente_av",
+            "cuenta_bancaria_av",
+            "declaracion_salud"
+          ]
+        },
+        {
+          "id": "seguimiento_afiliacion_voluntaria",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Activación de cobertura",
+          "descripcion": "Verifica la fecha de inicio y el valor de tu aporte",
+          "contenido": "El débito inicia el siguiente mes calendario"
+        }
+      ]
+    },
+    {
+      "id": "bono_adulto_mayor_mies",
+      "nombre": "Bono para Adultos Mayores (MIES)",
+      "descripcion": "Transferencia económica mensual para adultos mayores vulnerables",
+      "categoria": "social",
+      "estimadoDias": 30,
+      "costo": 5.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_bono",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Identificación obligatoria"
+        },
+        {
+          "id": "registro_social",
+          "nombre": "Registro Social del MIES",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Estás registrado en el Registro Social del MIES?",
+          "descripcion": "Se valida en visitas domiciliarias"
+        },
+        {
+          "id": "cuenta_bancaria_bono",
+          "nombre": "Cuenta bancaria para pago",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes cuenta bancaria para recibir el bono?",
+          "descripcion": "Opcional, también puedes cobrar en ventanilla"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_bono",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Aplica a adultos mayores en pobreza o extrema pobreza",
+          "contenido": "Tiempo estimado: 30 días\nCosto: $5.00 (validación de datos)\nPago: Mensual"
+        },
+        {
+          "id": "req_bono",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Verifica elegibilidad",
+          "descripcion": "Revisa cédula, registro social y cuenta bancaria",
+          "validaciones": [
+            "cedula_vigente_bono",
+            "registro_social",
+            "cuenta_bancaria_bono"
+          ]
+        },
+        {
+          "id": "seguimiento_bono",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Estado de pago",
+          "descripcion": "Consulta fechas y puntos de cobro",
+          "contenido": "Notificaciones SMS y web del MIES"
+        }
+      ]
+    },
+    {
+      "id": "exoneracion_predial_adulto_mayor",
+      "nombre": "Exoneración de Impuesto Predial",
+      "descripcion": "Descuento o exoneración del impuesto a la vivienda",
+      "categoria": "municipal",
+      "estimadoDias": 10,
+      "costo": 12.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_predial",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para acreditar edad y titularidad"
+        },
+        {
+          "id": "escritura_inmueble",
+          "nombre": "Escritura o certificado del inmueble",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Eres propietario del inmueble?",
+          "descripcion": "Documento que respalde la propiedad"
+        },
+        {
+          "id": "certificado_pension",
+          "nombre": "Certificado de pensión o ingresos",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu certificado de pensión o ingresos?",
+          "descripcion": "Sirve para calcular el beneficio"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_predial",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Aplica para mayores de 65 años con vivienda propia",
+          "contenido": "Tiempo estimado: 10 días\nCosto: $12.00 (certificaciones)\nCobertura: Según ordenanza municipal"
+        },
+        {
+          "id": "req_predial",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula, propiedad y certificado de ingresos",
+          "validaciones": [
+            "cedula_vigente_predial",
+            "escritura_inmueble",
+            "certificado_pension"
+          ]
+        },
+        {
+          "id": "seguimiento_predial",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Aplicación del descuento",
+          "descripcion": "Verifica el porcentaje aplicado en tu predial",
+          "contenido": "Consulta en línea o en ventanilla municipal"
+        }
+      ]
+    },
+    {
+      "id": "exoneracion_servicios_basicos",
+      "nombre": "Exoneración de Servicios Básicos",
+      "descripcion": "Descuento en agua, alcantarillado y recolección de basura",
+      "categoria": "municipal",
+      "estimadoDias": 15,
+      "costo": 8.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_servicios",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para acreditar edad"
+        },
+        {
+          "id": "planilla_servicios",
+          "nombre": "Planilla de servicios",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la planilla del servicio a tu nombre?",
+          "descripcion": "Planilla de agua/luz o barrido"
+        },
+        {
+          "id": "certificado_pension_servicios",
+          "nombre": "Certificado de pensión o ingresos",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu certificado de pensión?",
+          "descripcion": "Para calcular porcentaje de descuento"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_servicios",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Descuentos para adultos mayores titulares del servicio",
+          "contenido": "Tiempo estimado: 15 días\nCosto: $8.00 (trámites y certificaciones)\nCobertura: Agua, alcantarillado, recolección"
+        },
+        {
+          "id": "req_servicios",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula, planilla y certificado de ingresos",
+          "validaciones": [
+            "cedula_vigente_servicios",
+            "planilla_servicios",
+            "certificado_pension_servicios"
+          ]
+        },
+        {
+          "id": "seguimiento_servicios",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Aplicación del descuento",
+          "descripcion": "Verifica el porcentaje en tus próximas planillas",
+          "contenido": "Consulta en la empresa prestadora o portal municipal"
+        }
+      ]
+    },
+    {
+      "id": "transporte_preferente_adulto_mayor",
+      "nombre": "Transporte Público Preferente",
+      "descripcion": "Pasajes gratuitos o con descuento para adultos mayores",
+      "categoria": "transporte",
+      "estimadoDias": 3,
+      "costo": 2.50,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_transporte",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Único requisito"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_transporte",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Descuento o gratuidad en transporte urbano e interprovincial",
+          "contenido": "Tiempo estimado: 3 días\nCosto: $2.50 (credencial)\nRequisito: Presentar cédula"
+        },
+        {
+          "id": "req_transporte",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Verifica tu cédula",
+          "descripcion": "Solo necesitas la cédula vigente",
+          "validaciones": [
+            "cedula_vigente_transporte"
+          ]
+        },
+        {
+          "id": "seguimiento_transporte",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Uso del beneficio",
+          "descripcion": "Muestra tu cédula al comprar el pasaje",
+          "contenido": "Aplicable en boleterías y al abordar"
+        }
+      ]
+    },
+    {
+      "id": "devolucion_iva_adulto_mayor",
+      "nombre": "Devolución de IVA Adulto Mayor",
+      "descripcion": "Recupera el IVA pagado en compras básicas",
+      "categoria": "tributario",
+      "estimadoDias": 20,
+      "costo": 5.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_iva",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para validar edad"
+        },
+        {
+          "id": "facturas_iva",
+          "nombre": "Facturas con tu número de cédula",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes facturas electrónicas o físicas a tu nombre?",
+          "descripcion": "Facturas de bienes de primera necesidad"
+        },
+        {
+          "id": "cuenta_bancaria_iva",
+          "nombre": "Cuenta bancaria para devolución",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes cuenta bancaria para el abono?",
+          "descripcion": "Opcional, puedes solicitar pago en ventanilla"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_iva",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Puedes recuperar el IVA de tus consumos básicos",
+          "contenido": "Tiempo estimado: 20 días\nCosto: $5.00 (validación de facturas)\nPeriodicidad: Mensual"
+        },
+        {
+          "id": "req_iva",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma facturas y cuenta para devolución",
+          "validaciones": [
+            "cedula_vigente_iva",
+            "facturas_iva",
+            "cuenta_bancaria_iva"
+          ]
+        },
+        {
+          "id": "doc_iva",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Carga de facturas",
+          "descripcion": "Sube facturas electrónicas o fotos claras",
+          "contenido": "Formato PDF/JPG. Asegura que conste tu cédula"
+        },
+        {
+          "id": "seguimiento_iva",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Estado de devolución",
+          "descripcion": "Consulta el abono o fecha de pago",
+          "contenido": "Notificaciones por correo del SRI"
+        }
+      ]
+    },
+    {
+      "id": "exoneracion_matricula_vehicular_adulto_mayor",
+      "nombre": "Exoneración de Matricula Vehicular",
+      "descripcion": "Descuento o exoneración en matriculación de vehículo",
+      "categoria": "tributario",
+      "estimadoDias": 7,
+      "costo": 10.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_matricula",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para acreditar edad"
+        },
+        {
+          "id": "matricula_vigente",
+          "nombre": "Matrícula del vehículo",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la matrícula del vehículo a tu nombre?",
+          "descripcion": "Debe estar a nombre del solicitante"
+        },
+        {
+          "id": "certificado_propiedad",
+          "nombre": "Certificado de propiedad",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Eres propietario del vehículo?",
+          "descripcion": "Emitido por el Registro de la Propiedad Vehicular"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_matricula_exoneracion",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Beneficio para vehículos a nombre de adultos mayores",
+          "contenido": "Tiempo estimado: 7 días\nCosto: $10.00 (certificados)\nCobertura: Tasas municipales y ANT"
+        },
+        {
+          "id": "req_matricula_exoneracion",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula, matrícula y propiedad",
+          "validaciones": [
+            "cedula_vigente_matricula",
+            "matricula_vigente",
+            "certificado_propiedad"
+          ]
+        },
+        {
+          "id": "seguimiento_matricula_exoneracion",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Aplicación del beneficio",
+          "descripcion": "Revisa el valor actualizado de tu matrícula",
+          "contenido": "Consulta en portal ANT o municipal"
+        }
+      ]
+    },
+    {
+      "id": "testamento_notarial",
+      "nombre": "Testamento en Notaría",
+      "descripcion": "Declaración formal de voluntad sobre bienes",
+      "categoria": "legal",
+      "estimadoDias": 2,
+      "costo": 120,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_testamento",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Identificación obligatoria"
+        },
+        {
+          "id": "lista_bienes",
+          "nombre": "Listado de bienes",
+          "tipo": "archivo",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes un listado preliminar de tus bienes?",
+          "descripcion": "Facilita la redacción del testamento"
+        },
+        {
+          "id": "certificado_medico_testamento",
+          "nombre": "Certificado médico (si aplica)",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes un certificado médico de capacidad?",
+          "descripcion": "Recomendado en casos de salud delicada"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_testamento",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Previene conflictos y asegura tu voluntad",
+          "contenido": "Tiempo estimado: 2 días\nCosto: $120 - $150 (notarial)\nRequiere presencia en notaría"
+        },
+        {
+          "id": "req_testamento",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y define beneficiarios",
+          "validaciones": [
+            "cedula_vigente_testamento",
+            "lista_bienes",
+            "certificado_medico_testamento"
+          ]
+        },
+        {
+          "id": "seguimiento_testamento",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Firma y protocolización",
+          "descripcion": "Agenda cita y firma ante notario",
+          "contenido": "Recibe copia certificada del testamento"
+        }
+      ]
+    },
+    {
+      "id": "poder_notarial_adulto_mayor",
+      "nombre": "Poder Notarial",
+      "descripcion": "Autoriza a un familiar para realizar trámites a tu nombre",
+      "categoria": "legal",
+      "estimadoDias": 2,
+      "costo": 75.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_poder",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Identificación del otorgante"
+        },
+        {
+          "id": "cedula_apoderado",
+          "nombre": "Cédula del apoderado",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la cédula de la persona que te representará?",
+          "descripcion": "Identificación del apoderado"
+        },
+        {
+          "id": "certificado_medico_poder",
+          "nombre": "Certificado médico (si aplica)",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes un certificado médico que avale tu capacidad?",
+          "descripcion": "Recomendado si hay condiciones de salud"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_poder",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Permite delegar trámites a un familiar",
+          "contenido": "Tiempo estimado: 2 días\nCosto: $75.00 (tarifa notarial)\nRequiere firma en notaría"
+        },
+        {
+          "id": "req_poder",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma identidades y alcance del poder",
+          "validaciones": [
+            "cedula_vigente_poder",
+            "cedula_apoderado",
+            "certificado_medico_poder"
+          ]
+        },
+        {
+          "id": "seguimiento_poder",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Firma y entrega",
+          "descripcion": "Firma ante notario y recibe copia certificada",
+          "contenido": "Define duración y facultades del poder"
+        }
+      ]
+    },
+    {
+      "id": "inscripcion_ruc_persona_natural",
+      "nombre": "Inscripción en el RUC - Persona Natural",
+      "descripcion": "Registro obligatorio para realizar actividades económicas",
+      "categoria": "tributario",
+      "estimadoDias": 2,
+      "costo": 4.50,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_ruc",
+          "nombre": "Cédula de identidad vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula de identidad vigente?",
+          "descripcion": "Documento de identificación"
+        },
+        {
+          "id": "certificado_votacion_ruc",
+          "nombre": "Certificado de votación",
+          "tipo": "documento",
+          "esOpcional": true,
+          "preguntaValidacion": "¿Tienes tu certificado de votación actualizado?",
+          "descripcion": "Del último proceso electoral"
+        },
+        {
+          "id": "documento_domicilio",
+          "nombre": "Documento que acredite domicilio",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes una planilla de servicios o contrato a tu nombre?",
+          "descripcion": "Planilla de luz, agua, teléfono o contrato de arriendo"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_ruc",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "El RUC es necesario para trabajar, arrendar bienes, emitir facturas o recibir ingresos",
+          "contenido": "Tiempo estimado: 2 días\nCosto: $4.50 (certificaciones)\nModalidad: En línea o presencial"
+        },
+        {
+          "id": "req_ruc",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma tus documentos de identidad y domicilio",
+          "validaciones": [
+            "cedula_vigente_ruc",
+            "certificado_votacion_ruc",
+            "documento_domicilio"
+          ]
+        },
+        {
+          "id": "doc_ruc",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Registro en línea",
+          "descripcion": "Completa el formulario en SRI en Línea",
+          "contenido": "Necesitarás cédula, correo electrónico y número de celular"
+        },
+        {
+          "id": "seguimiento_ruc",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Activación",
+          "descripcion": "Recibirás tu número de RUC de inmediato",
+          "contenido": "Guarda tu certificado digital del RUC"
+        }
+      ]
+    },
+    {
+      "id": "actualizacion_ruc",
+      "nombre": "Actualización del RUC",
+      "descripcion": "Cambiar dirección, actividad económica o datos de contacto",
+      "categoria": "tributario",
+      "estimadoDias": 2,
+      "costo": 3.50,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_act_ruc",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para validar identidad"
+        },
+        {
+          "id": "documento_respaldo_cambio",
+          "nombre": "Documento que respalde el cambio",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes el documento que justifica el cambio?",
+          "descripcion": "Nueva planilla, contrato, certificado, etc."
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_act_ruc",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Actualiza tu RUC cuando cambies domicilio, actividad o estado civil",
+          "contenido": "Tiempo estimado: 2 días\nCosto: $3.50 (validación de documentos)\nModalidad: En línea"
+        },
+        {
+          "id": "req_act_ruc",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y documento de respaldo",
+          "validaciones": [
+            "cedula_vigente_act_ruc",
+            "documento_respaldo_cambio"
+          ]
+        },
+        {
+          "id": "seguimiento_act_ruc",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Confirmación",
+          "descripcion": "Descarga tu nuevo certificado actualizado",
+          "contenido": "Cambios efectivos de inmediato"
+        }
+      ]
+    },
+    {
+      "id": "clave_sri_en_linea",
+      "nombre": "Obtención de Clave SRI en Línea",
+      "descripcion": "Clave para acceder a todos los servicios digitales del SRI",
+      "categoria": "tributario",
+      "estimadoDias": 1,
+      "costo": 2.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_clave_sri",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para registro"
+        },
+        {
+          "id": "correo_celular",
+          "nombre": "Correo electrónico y número de celular",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes un correo y celular activos?",
+          "descripcion": "Para recibir la clave y notificaciones"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_clave_sri",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Con tu clave SRI podrás hacer trámites, consultas y declaraciones en línea",
+          "contenido": "Tiempo estimado: 1 día\nCosto: $2.00 (activación)\nNota: Un familiar puede ayudar"
+        },
+        {
+          "id": "req_clave_sri",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y contactos",
+          "validaciones": [
+            "cedula_vigente_clave_sri",
+            "correo_celular"
+          ]
+        },
+        {
+          "id": "seguimiento_clave_sri",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Activación",
+          "descripcion": "Recibirás tu clave por correo o SMS",
+          "contenido": "Guarda tu clave en un lugar seguro"
+        }
+      ]
+    },
+    {
+      "id": "certificado_cumplimiento_tributario",
+      "nombre": "Certificado de Cumplimiento Tributario",
+      "descripcion": "Documento que indica si tienes o no deudas tributarias",
+      "categoria": "tributario",
+      "estimadoDias": 3,
+      "costo": 4.00,
+      "prerequisitos": [
+        {
+          "id": "clave_sri_certificado",
+          "nombre": "Clave SRI en Línea",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu clave del SRI?",
+          "descripcion": "Para descargar el certificado"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_cert_cumplimiento",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Muy solicitado para trámites bancarios y legales",
+          "contenido": "Tiempo estimado: 3 días\nCosto: $4.00 (emisión certificado)\nModalidad: En línea"
+        },
+        {
+          "id": "req_cert_cumplimiento",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisito",
+          "descripcion": "Solo necesitas tu clave SRI",
+          "validaciones": [
+            "clave_sri_certificado"
+          ]
+        },
+        {
+          "id": "seguimiento_cert_cumplimiento",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Descarga",
+          "descripcion": "Descarga tu certificado en formato PDF",
+          "contenido": "Válido por 3 meses"
+        }
+      ]
+    },
+    {
+      "id": "declaracion_impuesto_renta",
+      "nombre": "Declaración del Impuesto a la Renta",
+      "descripcion": "Declaración anual de ingresos gravados",
+      "categoria": "tributario",
+      "estimadoDias": 7,
+      "costo": 6.50,
+      "prerequisitos": [
+        {
+          "id": "clave_sri_declaracion",
+          "nombre": "Clave SRI en Línea",
+          "tipo": "validacion",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu clave del SRI?",
+          "descripcion": "Para realizar la declaración"
+        },
+        {
+          "id": "comprobantes_ingresos",
+          "nombre": "Comprobantes de ingresos y gastos",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tus comprobantes del año fiscal?",
+          "descripcion": "Facturas, recibos, certificados laborales"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_declaracion_renta",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Aplica si tienes ingresos gravados (pensiones altas, arriendos, actividades económicas)",
+          "contenido": "Tiempo estimado: 7 días\nCosto: $6.50 (asesoría si es necesaria)\nPeríodo: Marzo-abril"
+        },
+        {
+          "id": "req_declaracion_renta",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma clave y comprobantes",
+          "validaciones": [
+            "clave_sri_declaracion",
+            "comprobantes_ingresos"
+          ]
+        },
+        {
+          "id": "doc_declaracion_renta",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Llenar formulario",
+          "descripcion": "Completa el formulario 102A o 102 según corresponda",
+          "contenido": "Ingresa tus ingresos, gastos y retenciones"
+        },
+        {
+          "id": "seguimiento_declaracion_renta",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Confirmación",
+          "descripcion": "Recibe comprobante de declaración",
+          "contenido": "Guarda el comprobante como respaldo"
+        }
+      ]
+    },
+    {
+      "id": "convenio_pago_sri",
+      "nombre": "Convenio de Pago con el SRI",
+      "descripcion": "Fraccionar deudas tributarias para evitar coactivas",
+      "categoria": "tributario",
+      "estimadoDias": 5,
+      "costo": 15.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_convenio",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para identificación"
+        },
+        {
+          "id": "estado_obligaciones",
+          "nombre": "Estado de obligaciones tributarias",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Conoces el monto de tu deuda?",
+          "descripcion": "Puedes consultarlo en SRI en Línea"
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_convenio",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Evita embargos y coactivas fraccionando tu deuda",
+          "contenido": "Tiempo estimado: 5 días\nCosto: $15.00 (análisis y certificaciones)\nPlazos: Según monto"
+        },
+        {
+          "id": "req_convenio",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula y estado de deuda",
+          "validaciones": [
+            "cedula_vigente_convenio",
+            "estado_obligaciones"
+          ]
+        },
+        {
+          "id": "seguimiento_convenio",
+          "orden": 3,
+          "fase": "seguimiento",
+          "titulo": "Aprobación",
+          "descripcion": "Recibe plan de pagos y fechas",
+          "contenido": "Cumple con las cuotas para evitar reversión"
+        }
+      ]
+    },
+    {
+      "id": "reclamo_administrativo_sri",
+      "nombre": "Reclamo Administrativo ante el SRI",
+      "descripcion": "Impugnar valores, multas o decisiones del SRI",
+      "categoria": "tributario",
+      "estimadoDias": 45,
+      "costo": 25.00,
+      "prerequisitos": [
+        {
+          "id": "cedula_vigente_reclamo",
+          "nombre": "Cédula vigente",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes tu cédula vigente?",
+          "descripcion": "Para identificación"
+        },
+        {
+          "id": "notificacion_sri",
+          "nombre": "Notificación o resolución del SRI",
+          "tipo": "documento",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes la notificación que quieres impugnar?",
+          "descripcion": "Multa, liquidación o resolución"
+        },
+        {
+          "id": "pruebas_reclamo",
+          "nombre": "Pruebas y argumentos",
+          "tipo": "archivo",
+          "esOpcional": false,
+          "preguntaValidacion": "¿Tienes documentos que respalden tu reclamo?",
+          "descripcion": "Facturas, contratos, certificados, etc."
+        }
+      ],
+      "pasos": [
+        {
+          "id": "info_reclamo",
+          "orden": 1,
+          "fase": "informacion",
+          "titulo": "Información General",
+          "descripcion": "Primera instancia para impugnar decisiones del SRI",
+          "contenido": "Tiempo estimado: 45 días\nCosto: $25.00 (documentación y notificaciones)\nPlazo: 20 días desde notificación"
+        },
+        {
+          "id": "req_reclamo",
+          "orden": 2,
+          "fase": "requisitos",
+          "titulo": "Requisitos",
+          "descripcion": "Confirma cédula, notificación y pruebas",
+          "validaciones": [
+            "cedula_vigente_reclamo",
+            "notificacion_sri",
+            "pruebas_reclamo"
+          ]
+        },
+        {
+          "id": "doc_reclamo",
+          "orden": 3,
+          "fase": "documentacion",
+          "titulo": "Presentar reclamo",
+          "descripcion": "Redacta y presenta tu solicitud fundamentada",
+          "contenido": "Puedes hacerlo en línea o presencial"
+        },
+        {
+          "id": "seguimiento_reclamo",
+          "orden": 4,
+          "fase": "seguimiento",
+          "titulo": "Resolución",
+          "descripcion": "Espera la resolución del SRI",
+          "contenido": "Si no estás de acuerdo, puedes apelar"
         }
       ]
     }

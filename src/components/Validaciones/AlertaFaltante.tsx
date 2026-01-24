@@ -1,5 +1,6 @@
-import { AlertTriangle, Plus, SkipForward } from 'lucide-react';
+import { AlertTriangle, Plus, SkipForward, ExternalLink } from 'lucide-react';
 import type { Prerequisito } from '../../types/tramite.types';
+import { prerequisiteLinksService } from '../../services/prerequisiteLinksService';
 
 interface Props {
   prerequisito: Prerequisito;
@@ -8,6 +9,12 @@ interface Props {
 }
 
 export function AlertaFaltante({ prerequisito, onAbrirRama, onOmitir }: Props) {
+  const enlace = prerequisiteLinksService.getPrerequisiteLink(prerequisito.id, prerequisito.tramiteRelacionado);
+  
+  const handleAbrirEnlace = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mt-2 mb-4">
       <div className="flex items-start gap-3">
@@ -37,7 +44,23 @@ export function AlertaFaltante({ prerequisito, onAbrirRama, onOmitir }: Props) {
             </div>
           )}
 
-          {!prerequisito.tramiteRelacionado && (
+          {!prerequisito.tramiteRelacionado && enlace && enlace.url && (
+            <div className="bg-blue-50 border border-blue-300 rounded-lg p-3 mb-3">
+              <p className="text-xs text-gray-600 mb-3 flex items-center gap-1">
+                <span className="text-blue-600 font-bold">→</span>
+                {enlace.descripcion || 'Puedes solicitar este documento en el siguiente enlace'}
+              </p>
+              <button
+                onClick={() => handleAbrirEnlace(enlace.url!)}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold text-sm transition-colors"
+              >
+                <ExternalLink className="w-4 h-4" />
+                {enlace.nombre}
+              </button>
+            </div>
+          )}
+
+          {!prerequisito.tramiteRelacionado && !enlace?.url && (
             <div className="bg-gray-100 border border-gray-300 rounded-lg p-3 mb-3">
               <p className="text-sm text-gray-700 italic">
                 📌 Deberás obtener este documento por tu cuenta. Una vez lo tengas, marca la opción "Sí" arriba.
